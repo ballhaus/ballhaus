@@ -1,0 +1,37 @@
+<form ng-controller="EditPersonController">
+  <table class="cms-table table table-striped table-bordered table-condensed">
+    <tbody>
+      <tr>
+        <th>Name</th>
+        <td><input class="input-xxlarge" ng-model="person.name"/></td>
+      </tr>
+      <tr>
+        <th>Link</th>
+        <td colspan="2">
+          <input type="text" class="input-xlarge" ng-model="person.link"/><br/>
+          <span type="link-demo">http://ballhausnaunynstrasse.de/leute/{{person.link}}</span>
+        </td>
+      </tr>
+      <tr>
+        <th>Bild</th>
+        <td>
+          <image-gallery-uploader images="person.images"/>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <th>deutsch</th>
+        <th>english</th>
+      </tr>
+      <tr>
+        <th>Bio</th>
+        <td><optional-text model="person.bio.de" rows="20"/></td>
+        <td><optional-text model="person.bio.en" rows="20"/></td>
+      </tr>
+      <tr data-bind="appearence">
+        <th>Mitwirkung</th>
+        <td colspan="2"></td>
+      </tr>
+    </tbody>
+  </table>
+</form>

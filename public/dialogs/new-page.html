@@ -1,0 +1,15 @@
+<div class="modal-header"><h2>Neue Seite</h2></div>
+<div class="modal-body control-group">
+  <form class="form-horizontal" validate>
+    <div class="control-group">
+      <label class="control-label" for="name">Titel</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" ng-model="data.name" required/>
+      </div>
+    </div>
+    <div class="control-group">
+      <button type="submit" ng-click="close(data)" class="submit btn btn-small btn-primary">Anlegen</button>
+      <button class="submit btn btn-small btn-primary" disabled>Anlegen</button>
+    </div>
+  </form>
+</div>

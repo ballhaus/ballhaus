@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" ng-app="cmsApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ballhaus Naunynstraße CMS</title>
+    <link rel="stylesheet" href="/css/fineuploader-3.3.0.css"/>
+    <link rel="stylesheet" href="/css/jquery-ui-1.10.1.custom.min.css"/>
+    <link rel="stylesheet" href="/css/angular-ui.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-combined.min.css"/>
+    <link rel="stylesheet" href="/css/codemirror.css"/>
+    <link rel="stylesheet" href="/lib/angular-strap/vendor/bootstrap-datepicker.css"/>
+    <link rel="stylesheet" href="/lib/angular-strap/vendor/bootstrap-timepicker.css"/>
+    <link rel="stylesheet" href="/css/cms.css"/>
+  </head>
+  <body ng-controller="CmsController">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <menu-link to="home">CMS</menu-link></li>
+              <menu-link to="events" subs="event|enactment">Veranstaltungen</menu-link>
+              <menu-link to="repertoire" subs="piece">Repertoire</menu-link>
+              <menu-link to="people" subs="person">Leute</menu-link>
+              <menu-link to="pages" subs="page">Seiten</menu-link>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#">Resourcen <b class="caret"></b></a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                  <menu-link to="videos">Videos</menu-link>
+                  <menu-link to="tickets">Tickets</menu-link>
+                  <menu-link to="flickr-sets">Flickr Sets</menu-link>
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+      <img id="logo" src="/img/bn_logo.gif" width="140" height="132"/>
+    </div>
+
+    <div ng-view></div>
+
+    <div id=version ng-cloak>Prototyp 2, Version: <span>{{db.version}}</span></div>
+
+    <!-- In production use:
+         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+         -->
+    <script src="/lib/jquery-1.9.1.min.js"></script>
+    <script src="/lib/jquery-ui-1.10.1.custom.min.js"></script>
+    <script src="/lib/tiny_mce/jquery.tinymce.js"></script>
+    <script src="/lib/tiny_mce/tiny_mce.js"></script>
+    <script src="/lib/codemirror.js"></script>
+    <script src="/lib/codemirror-xml-mode.js"></script>
+    <script src="/lib/codemirror-javascript-mode.js"></script>
+    <script src="/lib/angular/angular.js"></script>
+    <script src="/lib/angular/angular-resource.js"></script>
+    <script src="/lib/angular-ui.min.js"></script>
+    <script src="/lib/ui-bootstrap-tpls-0.2.0.min.js"></script>
+    <script src="/lib/bootstrap-dropdown.js"></script>
+    <script src="/lib/angular-strap/dist/angular-strap.js"></script>
+    <script src="/lib/angular-strap/vendor/bootstrap-datepicker.js"></script>
+    <script src="/lib/angular-strap/vendor/bootstrap-timepicker.js"></script>
+    <script src="/lib/fineuploader-3.3.0.min.js"></script>
+    <script src="/lib/moment.min.js"></script>
+    <script src="/lib/moment.langs.min.js"></script>
+    <script>moment.lang('de')</script>
+    <script src="/lib/icebox.js"></script>
+    <script src="/lib/super.min.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/cms.js"></script>
+    <script src="/js/db.js"></script>
+  </body>
+</html>

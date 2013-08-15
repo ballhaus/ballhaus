@@ -1,0 +1,9 @@
+<div class="actions">
+  Suchen: <input ng-model="query">
+</div>
+<ul class="data">
+  <li ng-repeat="person in db.people() | emptyPerson | orderBy:'name'">
+    <ref type="person" object="person"/>
+  </li>
+</ul>
+

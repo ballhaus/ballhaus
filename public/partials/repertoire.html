@@ -1,0 +1,11 @@
+<ul class="repertoire">
+  <li class="piece" ng-repeat="piece in db.pieces() | orderBy:'name'">
+    <a href="/stueck/{{piece.link}}">
+      <div>
+      	<img ng-src="/image/{{piece.images[0].name}}?thumbnail=1"/>
+      	<div class="name">»{{piece.name}}«</div>
+      	<div class="by" ng-bind-html-unsafe="piece.by.de"></div>
+      </div>
+    </a>
+  </li>
+</ul>

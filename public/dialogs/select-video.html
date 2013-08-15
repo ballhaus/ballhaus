@@ -1,0 +1,13 @@
+<div class="modal-header"><h2>Video auswählen</h2></div>
+<div class="modal-body">
+  <table>
+    <tbody>
+      <tr ng-click="close(video)"
+          class="clickable"
+          ng-repeat="video in videos | orderBy:'name'">
+        <td><img ng-src="{{video.thumbnail_small}}"/></td>
+        <td>{{video.title}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

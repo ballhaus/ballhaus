@@ -1,0 +1,184 @@
+body {
+    padding: 60px 25px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+    color: #00B7FF;
+}
+
+fieldset > legend {
+    font-size: 20px;
+}
+
+#logo {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+footer {
+    padding-top: 10px;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+section#main li {
+    position: relative;
+    font-size: 24px;
+    padding: 3px;
+}
+
+label, span.label {
+    min-width: 10em;
+    display: inline-block;
+}
+
+th {
+    text-align: left;
+    vertical-align: top;
+}
+
+section#cms > section {
+    display: none;
+}
+
+.actions {
+    margin-bottom: 1em;
+}
+
+section#events .dateTime {
+    min-width: 8em;
+    display: inline-block;
+    text-align: right;
+    font-size: 80%;
+    margin-right: 0.5em;
+}
+
+a.create {
+    font-size: 150%;
+    padding: 5px;
+    margin-right: 2em;
+}
+
+section#person ul.role > ul, section#event ul.role > ul {
+    margin-left: 2em;
+}
+
+#version {
+    margin-top: 1em;
+    padding-top: 5px;
+    border-top: 0.1em solid black;
+}
+
+.menu {
+    list-style: none;
+    border-bottom: 0.1em solid black;
+    margin-bottom: 2em;
+    padding: 0 0 0.5em;
+}
+
+.menu:before {
+    content: "[";
+}
+
+.menu:after {
+    content: "]";
+}
+
+.menu > li {
+    display: inline;
+}
+
+.menu > li:before {
+    content: "|";
+    padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+    content: "";
+    padding: 0;
+}
+
+.person-hasBio-false {
+   padding-right: 18px;
+   background: transparent url(../img/attention-icon.png) no-repeat center right;
+}
+
+td {
+    vertical-align: top;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.cms-table { table-layout: fixed; }
+.cms-table th, .cms-table td { overflow: hidden; }
+.cms-table tr > :first-child { width: 15% }
+
+.image-gallery {
+    overflow: auto;
+    width: 100%;
+}
+
+.image-gallery li {
+    float: left;
+    padding: 5px;
+}
+
+.thumbnail-image {
+    position: relative;
+    cursor: move;
+    width: 120px;
+    height: 120px;
+    background: #eee;
+}
+
+.thumbnail-image div.actions {
+    z-index: 2;
+    position: absolute;
+}
+
+.thumbnail-image > img {
+    z-index: 1;
+    position: absolute;
+    top: 4px;
+    left: 0px;
+}
+
+form .submit, form.ng-valid .submit[disabled] {
+  display: none;
+}
+
+form.ng-invalid .submit[disabled], form.ng-valid .submit {
+  display: inline-block;
+}
+
+image-button {
+    border: none;
+    color: transparent;
+}
+
+.tag-selector li {
+    background: #eee;
+    color: #22a;
+    display: inline-block;
+    margin: 3px;
+    padding: 3px 7px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tag-selector .selected {
+    background: #000;
+    color: #eef;
+}
+
+.CodeMirror {
+    height: auto;
+}

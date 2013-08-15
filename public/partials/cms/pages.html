@@ -1,0 +1,10 @@
+<div>
+  <div class="actions control-group">
+    <button ng-click="newPage()" class="btn btn-small btn-primary">Neue Seite</button>
+  </div>
+  <ul class="data">
+    <li ng-repeat="page in db.pages() | orderBy:'name'">
+      {{page.path}} <ref object="page"/>
+    </li>
+  </ul>
+</div>

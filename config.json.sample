@@ -1,0 +1,9 @@
+{
+  "flickr": {
+    "apiKey": "",
+    "userId": ""
+  },
+  "cookieSecret": "",
+  "vimeoUserName": "",
+  "reservixApiKey": ""
+}

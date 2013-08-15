@@ -1,0 +1,103 @@
+<form>
+  <div id="piece">
+    <table class="cms-table table table-striped table-bordered table-condensed">
+      <tbody>
+        <tr>
+          <th>Titel</th>
+          <td><input class="input-xxlarge" ng-model="piece.name"/></td>
+        </tr>
+        <tr>
+          <th>Link</th>
+          <td colspan="2">
+            <input type="text" class="input-xlarge" ng-model="piece.link"/><br/>
+            <span type="link-demo">http://ballhausnaunynstrasse.de/stueck/{{piece.link}}</span>
+          </td>
+        </tr>
+        <tr data-bind="category">
+          <th>Kategorie</th>
+          <td colspan="2">
+            <tag-selector model="piece.tags"/>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <th>deutsch</th>
+          <th>english</th>
+        </tr>
+        <tr>
+          <th>Von</th>
+          <td><optional-text model="piece.by.de"/></td>
+          <td><optional-text model="piece.by.en"/></td>
+        </tr>
+        <tr>
+          <th>Uraufführung</th>
+          <td colspan="2">
+            <date-input model="piece.premiere"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Aufführungen</th>
+          <td colspan="2">
+            <ul>
+              <li ng-repeat="enactment in piece.enactments | orderBy:'date'">
+                <ref object="enactment" title="enactment.date | date:'dd.MM.yyyy HH:mm'"/>
+              </li>
+            </ul>
+            <button ng-click="newEnactment(piece)" class="btn btn-small btn-primary">Aufführung planen</button>
+          </td>
+        </tr>
+        <tr>
+          <th>Fotos</th>
+          <td colspan="2">
+            <image-gallery-uploader images="piece.images"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Flickr Set</th>
+          <td colspan="2">
+            <flickr-set-selector set="piece.flickrSet" images="piece.images"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Trailer/Video</th>
+          <td colspan="2">
+            <video-selector model="piece.video"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Text/Beschreibung</th>
+          <td><optional-text model="piece.description.de" rows="20"/></td>
+          <td><optional-text model="piece.description.en" rows="20"/></td>
+        </tr>
+        <tr>
+          <th>Mitwirkende</th>
+          <td colspan="2">
+            <participant-editor model="piece.participants"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Förderer/Partner</th>
+          <td><optional-text model="piece.sponsors.de"/></td>
+          <td><optional-text model="piece.sponsors.en"/></td>
+        </tr>
+        <tr>
+          <th>Presse</th>
+          <td colspan="2">
+            <div id="main-picture" class="one-image-upload">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>Intern</th>
+          <td><optional-text model="piece.intern" rows="10"/></td>
+        </tr>
+      </tbody>
+    </table>
+    <br/>
+  </div>
+  <div id="enactment">
+  </div>
+  <div>
+    <button class="btn btn-small btn-danger" ng-click="deletePiece()">Stück löschen</button>
+  </div>
+</form>

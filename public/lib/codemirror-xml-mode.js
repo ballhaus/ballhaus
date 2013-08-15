@@ -1,0 +1,1 @@
+CodeMirror/mode/xml/xml.js

@@ -1,0 +1,16 @@
+<div class="spielplan">
+  <ul class="months">
+    <li ng-repeat="month in months"><a href="/spielplan/{{month.key}}">{{month.name}}</a></li>
+  </ul>
+  <ul class="events">
+    <li class="event" ng-repeat="event in events">
+      <a ng-href="{{event.link}}">
+        <div>
+          <div class="date">{{event.weekday}}<br/>{{event.date}}<br/>{{event.time}} Uhr</div>
+          <div class="event-name">»{{event.name}}«</div>
+          <div class="by" ng-bind-html-unsafe="translate(event.by)"></div>
+        </div>
+      </a>
+    </li>
+  </ul>
+</div>

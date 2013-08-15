@@ -1,0 +1,41 @@
+<fieldset>
+  <legend>An- und Abmeldung</legend>
+  <form ng-controller="LoginController" class="login">
+    <div style="display: {{lockedDisplay}}">
+      Datenbank wird derzeit von {{lockedBy}} bearbeitet.
+    </div>
+    <div  style="display: {{loggedOutDisplay}}">
+      <div class="control-group">
+        <label class="control-label" for="name">Name</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" ng-model="name" required/>
+        </div>
+        <label class="control-label" for="password">Passwort</label>
+        <div class="controls">
+          <input type="password" class="input-xlarge" ng-model="password" required/>
+        </div>
+        <p>
+          <button ng-click="login()" class="btn btn-primary btn-large">Anmelden</button>
+        </p>
+      </div>
+    </div>
+    <div  style="display: {{loggedInDisplay}}">
+      <p>
+        <button ng-click="saveChanges()" class="btn btn-primary btn-large">Abmelden und neue Version online stellen</button>
+      </p>
+      <p>
+        <button ng-click="discardChanges()" class="btn btn-danger btn-large">Abmelden und alle Änderungen verwerfen</button>
+      </p>
+    </div>
+  </form>
+</fieldset>
+<fieldset>
+  <legend>Konfiguration</legend>
+  <form ng-controller="ConfigurationController">
+    <label for="editor">Texteditor</label>
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary" ng-model="editor" ng-click='changeEditor("tinymce")' btn-radio="'tinymce'">WYSIWYG</button>
+      <button type="button" class="btn btn-primary" ng-model="editor" ng-click='changeEditor("codemirror")' btn-radio="'codemirror'">HTML</button>
+    </div>
+  </form>
+</fieldset>

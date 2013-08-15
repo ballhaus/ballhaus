@@ -1,0 +1,8 @@
+<div class="modal-header"><h2>Flickr Set auswählen</h2></div>
+<div class="modal-body">
+  <ul ng-click="close(flickrSet)"
+      class="clickable"
+      ng-repeat="flickrSet in flickrSets | orderBy:'title._content'">
+    <li>{{flickrSet.title._content}}</li>
+  </ul>
+</div>

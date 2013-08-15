@@ -1,0 +1,6 @@
+[submodule "public/lib/angular-strap"]
+	path = public/lib/angular-strap
+	url = git://github.com/mgcrea/angular-strap.git
+[submodule "public/lib/CodeMirror"]
+	path = public/lib/CodeMirror
+	url = git@github.com:marijnh/CodeMirror.git

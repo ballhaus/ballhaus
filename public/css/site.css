@@ -1,0 +1,352 @@
+/* The following rules courtesy of ryanfait.com
+ * (http://stackoverflow.com/questions/7527152/div-with-dynamic-min-height-based-on-browser-window-height)
+ * always make the main content area in the middle fill the full
+ * browser window height.  */
+
+* {
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+#container {
+  min-height: 100%;
+  height: auto !important /*min-height hack*/
+  height: 100%;           /*min-height hack*/
+  margin-bottom: -0em;    /*Negates #push on longer pages*/
+}
+
+#footer, #push {
+    clear: both;
+    height: 0em;
+}
+
+/* Ballhaus rules */
+
+a:link, a:visited, a:hover, a:active { color: black; text-decoration: none; }
+a:hover { color: white; }
+a:hover * { color: white; background-color: black; }
+
+body {
+    padding: 0;
+    border: 0;
+    margin: 0;
+    font: 13pt Cillop-Light, "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-attachment: fixed;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-image: url(/img/background.jpg);
+    background-color: #bcbcbc;
+}
+
+a {
+    color: #00B7FF;
+}
+
+h1 {
+    font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
+}
+
+h2, h3, h4 {
+    font-family: Cillop-Light, Helvetica, Arial, sans-serif;
+}
+
+h1 { font-size: 24pt; }
+h2 { font-size: 18pt; }
+h3 { font-size: 16pt; }
+h4 { font-size: 14pt; }
+
+#container {
+    margin: auto;
+    width: 1000px;
+    background-color: #fff;
+}
+
+#main {
+    width: 640px;
+    float: left;
+    margin: 4px 15px 5px 50px;
+    border-top: 3px solid black;
+    padding-top: 1em;
+}
+
+#main a {
+    color: #aaa;
+}
+
+#main a:hover {
+    color: #888;
+}
+
+#right {
+    width: 280px;
+    float: right;
+    margin-top: 4px;
+    border-top: 3px solid black;
+    padding-top: 1em;
+}
+
+#right > div {
+    width: 230px;
+    margin: 0 1em 1em 0;
+    border-bottom: 3px solid black;
+}
+
+#header {
+    width: 1000px;
+    height: 110px;
+    position: relative;
+    border-bottom: solid black 3px;
+}
+
+#ada-logo {
+    position: absolute;
+    bottom: 5px;
+    right: 80px;
+}
+
+#site-menu-street {
+    width: 1000px;
+    height: 120px;
+    position: relative;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-image: url(/img/street-banner.jpg);
+}
+
+#today-link {
+    position: absolute;
+    top: 3px;
+    left: 50px;
+}
+
+#today-link a {
+    background-color: #636466;
+    color: #ffffff;
+    display: inline;
+    padding: 4px 8px 2px 8px;
+}
+
+#site-menu {
+    position: absolute;
+    top: 84px;
+    left: 50px;
+    font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
+    z-index: 1000;
+}
+
+#site-menu > nav ul ul {
+    margin-top: 10px;
+}
+
+#site-menu > nav ul {
+    list-style: none;
+    display: inline-table;
+}
+
+#site-menu > nav > ul > li {
+    position: absolute;
+    top: 9px;
+}
+
+#site-menu > nav > ul > li:nth-child(1) { left: 0px; }
+#site-menu > nav > ul > li:nth-child(2) { left: 125px; }
+#site-menu > nav > ul > li:nth-child(3) { left: 289px; }
+#site-menu > nav > ul > li:nth-child(4) { left: 372px; }
+#site-menu > nav > ul > li:nth-child(5) { left: 475px; }
+
+#site-menu > nav li {
+    vertical-align: top;
+}
+
+#site-menu > nav > ul > li {
+    display: inline-block;
+}
+
+#site-menu > nav li > a > span {
+    background-color: rgba(255,255,255,0.8);
+    padding: 0.5em 1em;
+    margin: 0em 1em 0em 0em;
+    text-transform: uppercase;
+}
+
+#site-menu > nav li:hover > a > span {
+    background-color: black;
+    color: white;
+}
+
+#site-menu nav ul ul {
+    margin-left: -17px;
+}
+
+#site-menu nav li li {
+    margin-top: 0.3em;
+    padding: 0.5em 1em;
+    margin: 0em 1em 0em 0em;
+}
+
+#site-menu > nav ul ul {
+    display: none;
+}
+
+#site-menu > nav ul > li:hover > ul {
+    display: block;
+}
+
+#logo {
+    position: absolute;
+    right: 0px;
+    bottom: 3px;
+}
+
+.event-name {
+    font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
+    padding-top: 1em;
+    font-size: 18pt;
+}
+
+.repertoire {
+    list-style: none;
+}
+
+.repertoire .piece img {
+    float: left;
+    margin-right: 8px;
+}
+
+.repertoire .piece {
+    clear: both;
+    display: block;
+    height: 6em;
+    margin-top: 1em;
+    border-bottom: solid black 3px;
+}
+
+.repertoire .piece > a > div {
+    height: 6em;
+    color: black;
+}
+
+.media-browser {
+    background: black;
+    color: white;
+    width: 620px;
+    height: 500px;
+    position: relative;
+    margin-bottom: 1em;
+}
+
+.media-browser .display {
+    position: absolute;
+/*    background: #555; */
+    color: white;
+    width: 600px;
+    height: 450px;
+    top: 10px;
+    left: 10px;
+    cursor: e-resize;
+}
+
+.media-browser > .nav {
+    position: absolute;
+/*    background: #505; */
+    color: white;
+    width: 600px;
+    height: 20px;
+    top: 470px;
+    left: 10px;
+}
+
+.media-browser ul {
+    list-style: none;
+    margin: 0;
+}
+
+.media-browser li {
+    display: inline-block;
+    margin: 0 5px 0 5px;
+}
+
+.media-browser ul.right li {
+    float: right;
+}
+
+.media-browser ul.left li {
+    float: left;
+}
+
+.media-browser .display img {
+    position: absolute;
+}
+
+.media-browser ul li span {
+    display: inline-block;
+    width: 13px;
+}
+
+/* from bootstrap.css */
+.media-browser .icon-video {
+  background-position: -432px -48px;
+}
+
+.media-browser .icon-picture {
+  background-position: -456px -48px;
+}
+
+.media-browser .icon-left {
+  background-position: -432px -72px;
+}
+
+.media-browser .icon-right {
+  background-position: -456px -72px;
+}
+
+.spielplan ul {
+    list-style: none;
+    margin: 0;
+}
+
+.spielplan .months {
+    border-bottom: solid black 3px;
+}
+
+.spielplan .months li {
+    display: inline-table;
+    margin: 0.5em;
+    font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
+    font-size: 16pt;
+}
+
+.spielplan .events li {
+    clear: both;
+}
+
+.spielplan .date {
+    float: left;
+    width: 7em;
+    margin: 1em 0 0em 0.5em;
+}
+
+.spielplan .event {
+    height: 5em;
+    margin-top: 1em;
+    border-bottom: solid black 3px;
+}
+
+.spielplan a {
+    color: black !important;
+}
+
+.spielplan > ul.events li:hover {
+    background: black;
+}
+
+.spielplan > ul.events li:hover * {
+    color: white;
+}
+
+.spielplan > ul.events li {
+    margin: 0;
+}

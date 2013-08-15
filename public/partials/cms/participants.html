@@ -1,0 +1,13 @@
+<div>
+  <div ng-repeat="rolePeople in rolePeoples()">
+    <b>{{rolePeople.role}}</b>
+    <br/>
+    <ul>
+      <li ng-repeat="person in rolePeople.people">
+        <a ng-click="ensurePerson(person)" ng-href="/cms/person/{{person.link}}">{{person.name}}</a>
+      </li>
+    </ul>
+  </div>
+  <br/>
+  <button ng-click="openEditor()" class="btn"><div class="icon-pencil"></div></button>
+</div>

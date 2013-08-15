@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" ng-app="siteApp" include-db>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title ng-cloak>Ballhaus Naunynstraße - {{title}}</title>
+    <link rel="stylesheet" href="/css/bootstrap-combined.min.css"/>
+    <link rel="stylesheet" href="/css/MyFontsWebfontsKit.css"/>
+    <link rel="stylesheet" href="/css/site.css"/>
+  </head>
+  <body>
+    <div id="container">
+      <div id="header">
+        <a href="/"><img id="logo" src="/img/logo-banner.gif" width="950" height="100"/></a>
+      </div>
+      <div id="site-menu-street">
+        <today-link/>
+        <div id="site-menu" ng-cloak>
+          <menu>
+            <sub-menu name="Programm">
+              <menu-item>Spielplan</menu-item>
+              <menu-item>Repertoire</menu-item>
+              <menu-item>Reihen</menu-item>
+              <menu-item>Archiv</menu-item>
+            </sub-menu>
+            <menu-item to='kuenstlerinnen'>Künstlerinnen</menu-item>
+            <sub-menu name="Haus">
+              <menu-item>Geschichte</menu-item>
+              <menu-item>Team</menu-item>
+              <menu-item>On Tour</menu-item>
+              <menu-item>Partner</menu-item>
+            </sub-menu>
+            <menu-item>Tickets</menu-item>
+            <menu-item>Presse</menu-item>
+          </menu>
+        </div>
+        <div id="ada-logo">
+          <a href="http://akademie-der-autodidakten.de"><img src="/img/ada_logo.png" width="150" height="62"/></a>
+        </div>
+      </div>
+      <div>
+        <div id="main" ng-view>
+        </div>
+        <div id="right">
+          <div>
+            <form action="#">
+              <h2>Newsletter bestellen</h2>
+              <input type="text" class="input-large" type="email" placeholder="Email-Addresse" required>
+            </form>
+          </div>
+          <div>
+            <p>
+              <a href="http://akademie-der-autodidakten.de"><img src="/img/ada_logo.png" width="230" height="95"/></a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div id="push"></div>
+    </div>
+    <div id="footer">
+    </div>
+
+    <script src="/lib/jquery-1.9.1.min.js"></script>
+    <script src="/lib/angular/angular.js"></script>
+    <script src="/lib/angular/angular-resource.js"></script>
+    <script src="/lib/angular/angular-sanitize.js"></script>
+    <script src="/lib/ui-bootstrap-tpls-0.2.0.min.js"></script>
+    <script src="/lib/bootstrap-dropdown.js"></script>
+    <script src="/lib/angular-strap/dist/angular-strap.js"></script>
+    <script src="/lib/angular-strap/vendor/bootstrap-datepicker.js"></script>
+    <script src="/lib/angular-strap/vendor/bootstrap-timepicker.js"></script>
+    <script src="/lib/moment.min.js"></script>
+    <script src="/lib/moment.langs.min.js"></script>
+    <script>moment.lang('de')</script>
+    <script src="/lib/icebox.js"></script>
+    <script src="/lib/super.min.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/site.js"></script>
+    <script src="/js/db.js"></script>
+  </body>
+</html>

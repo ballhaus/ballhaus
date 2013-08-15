@@ -1,0 +1,1 @@
+CodeMirror/mode/javascript/javascript.js

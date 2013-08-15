@@ -1,0 +1,5 @@
+<ul class="data">
+  <li ng-repeat="flickrSet in db.flickrSets | orderBy:'title._content'">
+    {{flickrSet.title._content}}
+  </li>
+</ul>

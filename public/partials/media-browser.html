@@ -1,0 +1,14 @@
+<div class="media-browser">
+  <span href="#" ng-click="gotoMedium(1)"><div class="display"></div></span>
+  <div class="nav">
+    <ul class="left">
+      <li><a href="#" ng-click="gotoMedium(-1)"><span ng-class="previousIconClass()"></span></a></li>
+      <li><a href="#" ng-click="gotoMedium(1)"><span ng-class="nextIconClass()"></span></a></li>
+    </ul>
+    <ul class="right">
+      <li ng-repeat="medium in media | reverse">
+        <a href="#" ng-click="clickMedium()"><span ng-class="mediumClass()"></span></a>
+      </li>
+    </ul>
+  </div>
+</div>

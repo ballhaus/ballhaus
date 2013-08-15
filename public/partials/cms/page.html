@@ -1,0 +1,33 @@
+<form>
+  <div id="page">
+    <table class="cms-table table table-striped table-bordered table-condensed">
+      <tbody>
+        <tr>
+          <th>Titel</th>
+          <td><input type="text" class="input-xxlarge" ng-model="page.name"/></td>
+        </tr>
+        <tr>
+          <th>Link</th>
+          <td colspan="2">
+            <input type="text" class="input-xlarge" ng-model="page.link"/><br/>
+            <span type="link-demo">http://ballhausnaunynstrasse.de/{{page.link}}</span>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <th>deutsch</th>
+          <th>english</th>
+        </tr>
+        <tr>
+          <th>Text</th>
+          <td><optional-text model="page.contents.de" rows="20"/></td>
+          <td><optional-text model="page.contents.en" rows="20"/></td>
+        </tr>
+      </tbody>
+    </table>
+    <br/>
+  </div>
+  <div>
+    <button class="btn btn-small btn-danger" ng-click="deletePage()">Seite löschen</button>
+  </div>
+</form>

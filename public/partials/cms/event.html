@@ -1,0 +1,90 @@
+<form>
+  <div id="event">
+    <table class="cms-table table table-striped table-bordered table-condensed">
+      <tbody>
+        <tr>
+          <th>Titel</th>
+          <td><input type="text" class="input-xxlarge" ng-model="event.name"/></td>
+        </tr>
+        <tr>
+          <th>Link</th>
+          <td colspan="2">
+            <input type="text" class="input-xlarge" ng-model="event.link"/><br/>
+            <span type="link-demo">http://ballhausnaunynstrasse.de/veranstaltung/{{event.link}}</span>
+          </td>
+        </tr>
+        <tr data-bind="category">
+          <th>Kategorie</th>
+          <td colspan="2">
+            <tag-selector model="event.tags"/>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <th>deutsch</th>
+          <th>english</th>
+        </tr>
+        <tr>
+          <th>Von</th>
+          <td><optional-text model="event.by.de"/></td>
+          <td><optional-text model="event.by.en"/></td>
+        </tr>
+        <tr>
+          <th>Wann</th>
+          <td colspan="2">
+            <span>{{event.date | date:'dd.MM.yyyy HH:mm'}}</span>
+          </td>
+        </tr>
+        <tr>
+          <th>Eintrittspreise</th>
+          <td colspan="2">
+            Normal: <input type="text" ng-model="event.priceNormal" class="input-mini">€, Ermäßigt: <input type="text" ng-model="event.priceReduced" class="input-mini">€
+          </td>
+        </tr>
+        <tr>
+          <th>Fotos</th>
+          <td colspan="2">
+            <image-gallery-uploader images="event.images"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Trailer/Video</th>
+          <td colspan="2">
+            <video-selector model="event.video"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Text/Beschreibung</th>
+          <td><optional-text model="event.description.de" rows="20"/></td>
+          <td><optional-text model="event.description.en" rows="20"/></td>
+        </tr>
+        <tr>
+          <th>Mitwirkende</th>
+          <td colspan="2">
+            <participant-editor model="event.participants"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Förderer/Partner</th>
+          <td><optional-text model="event.sponsors.de"/></td>
+          <td><optional-text model="event.sponsors.en"/></td>
+        </tr>
+        <tr>
+          <th>Presse</th>
+          <td colspan="2">
+            <div id="main-picture" class="one-image-upload">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>Intern</th>
+          <td><optional-text model="event.intern" rows="10"/></td>
+        </tr>
+      </tbody>
+    </table>
+    <br/>
+  </div>
+  <div>
+    <button class="btn btn-small btn-danger" ng-click="deleteEvent()">Veranstaltung löschen</button>
+  </div>
+</form>

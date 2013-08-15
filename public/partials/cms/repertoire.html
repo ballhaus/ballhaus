@@ -1,0 +1,8 @@
+<div class="actions">
+  <button ng-click="newPiece()" class="btn btn-small btn-primary">Neues Stück</button>
+</div>
+<ul class="data">
+  <li ng-repeat="piece in db.pieces() | orderBy:'name'">
+    <ref object="piece"/>
+  </li>
+</ul>

@@ -1,0 +1,5 @@
+<ul class="data">
+  <li ng-repeat="video in db.videos | orderBy:'-upload_date'">
+    {{video.upload_date | date:'dd.MM.yyyy HH:mm'}} <img ng-src="{{video.thumbnail_small}}"/> <ref object="video"/>
+  </li>
+</ul>

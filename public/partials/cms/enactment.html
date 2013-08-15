@@ -1,0 +1,43 @@
+<form>
+  <div id="event">
+    <table class="cms-table table table-striped table-bordered table-condensed">
+      <tbody>
+        <tr>
+          <th>Titel</th>
+          <td><ref object="enactment.piece"/></td>
+        </tr>
+        <tr>
+          <th>Wann</th>
+          <td colspan="2">
+            <span>{{enactment.date | date:'dd.MM.yyyy HH:mm'}}</span>
+          </td>
+        </tr>
+        <tr>
+          <th>Eintrittspreise</th>
+          <td colspan="2">
+            Normal: <input ng-model="enactment.priceNormal" class="input-mini">€, Ermäßigt: <input ng-model="enactment.priceReduced" class="input-mini">€
+          </td>
+        </tr>
+        <tr>
+          <th>Text/Beschreibung</th>
+          <td><optional-text model="enactment.description.de" rows="20"/></td>
+          <td><optional-text model="enactment.description.en" rows="20"/></td>
+        </tr>
+        <tr>
+          <th>Mitwirkende</th>
+          <td colspan="2">
+            <participant-editor model="enactment.participants"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Intern</th>
+          <td><optional-text model="enactment.intern" rows="10"/></td>
+        </tr>
+      </tbody>
+    </table>
+    <br/>
+  </div>
+  <div>
+    <button class="btn btn-small btn-danger" ng-click="deleteEnactment()">Aufführung löschen</button>
+  </div>
+</form>
