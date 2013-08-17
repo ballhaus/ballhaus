@@ -1,10 +1,10 @@
 <fieldset>
   <legend>An- und Abmeldung</legend>
   <form ng-controller="LoginController" class="login">
-    <div style="display: {{lockedDisplay}}">
-      Datenbank wird derzeit von {{lockedBy}} bearbeitet.
+    <div style="display: {{displayState('locked')}}">
+      Datenbank wird derzeit von {{loggedInUser}} bearbeitet.
     </div>
-    <div  style="display: {{loggedOutDisplay}}">
+    <div style="display: {{displayState('loggedOut')}}">
       <div class="control-group">
         <label class="control-label" for="name">Name</label>
         <div class="controls">
@@ -14,12 +14,15 @@
         <div class="controls">
           <input type="password" class="input-xlarge" ng-model="password" required/>
         </div>
+        <div style="display: {{loginFailure}}">
+          <alert type="error">Ungültiger Benutzername oder ungültiges Passwort.</alert>
+        </div>
         <p>
           <button ng-click="login()" class="btn btn-primary btn-large">Anmelden</button>
         </p>
       </div>
     </div>
-    <div  style="display: {{loggedInDisplay}}">
+    <div  style="display: {{displayState('loggedIn')}}">
       <p>
         <button ng-click="saveChanges()" class="btn btn-primary btn-large">Abmelden und neue Version online stellen</button>
       </p>

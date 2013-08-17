@@ -20,6 +20,7 @@ var gm = require('gm');
 var Flickr = require('flickr').Flickr;
 var uuid = require('node-uuid');
 var config = require('./config.json');
+var sha1 = require('./public/lib/sha1.js');
 
 var flickr = new Flickr(config.flickr.apiKey, '');
 
@@ -229,27 +230,65 @@ app.get('/tickets',
             getNextPage();
         });
 
-var lockedBy = {};
-app.get('/locked-by',
+var loginStatus = {};
+var bogusUserSalts = {};
+
+function loadUser(name) {
+    var userPath = path.resolve('users/' + name + '.json');
+    if (fs.existsSync(userPath)) {
+        return require(userPath);
+    }
+}
+
+app.get('/login-status',
         function (req, res) {
-            res.json(lockedBy);
+            res.json(loginStatus);
         });
+
+app.get('/user-salt/:name',
+        function (req, res) {
+            var name = req.params.name;
+            var user = loadUser(name);
+            var userSalt;
+            if (user) {
+                userSalt = user.salt;
+            } else {
+                if (!bogusUserSalts[name]) {
+                    bogusUserSalts[name] = uuid.v1();
+                }
+                userSalt = bogusUserSalts[name];
+            }
+            req.session.salt = uuid.v1();
+            req.session.user = user;
+            res.json({ userSalt: userSalt,
+                       sessionSalt: req.session.salt
+                     });
+        });
+
 app.post('/login',
          function (req, res) {
-             console.log('name', req.body.name, 'password', req.body.password);
-             if (lockedBy.name) {
-                 res.send(400, 'Daten werden gerade von ' + lockedBy.name + ' bearbeitet');
+             if (loginStatus.name) {
+                 res.send(400, 'Daten werden gerade von ' + loginStatus.name + ' bearbeitet');
+             } else if (!req.body.name.match(/^[a-z0-9]+$/)) {
+                 res.send(400, 'Ungültiger Benutzername');
+             } else if (req.session.user && (req.body.password == sha1.sha1(req.session.user.password + req.session.salt))) {
+                 loginStatus = { name: req.body.name,
+                                 uuid: uuid.v1() };
+                 req.session.loggedIn = true;
+                 res.json(loginStatus);
              } else {
-                 lockedBy = { name: req.body.name,
-                              uuid: uuid.v1() };
-                 res.json(lockedBy);
+                 res.send(401, 'Invalid login');
              }
          });
+
 app.post('/logout',
          function (req, res) {
-             // fixme: check session?
-             lockedBy = {};
-             res.json({});
+             if (!req.session.loggedIn) {
+                 res.send(400, 'Nicht angemeldet');
+             } else {
+                 loginStatus = {};
+                 res.json({});
+             }
          });
 
 http.createServer(app).listen(app.get('port'), function() {

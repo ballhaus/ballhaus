@@ -18,6 +18,7 @@
 	"super": "*",
         "http-get": "*",
         "flickr": "*",
-        "node-uuid": "*"
+        "node-uuid": "*",
+        "read": "*"
     }
 }

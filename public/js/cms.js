@@ -96,7 +96,7 @@ app.value('ui.config', {
     }
 });
 
-function CmsController($scope, $dialog, db) {
+function CmsController($scope, $rootScope, $dialog, db) {
     $scope.db = db;
     $scope.newPiece = function () {
         $dialog
@@ -157,43 +157,76 @@ function CmsController($scope, $dialog, db) {
                 }
             });
     }
-}
-CmsController.$inject = ['$scope', '$dialog', 'db'];
 
-function LoginController($scope, $dialog, $http, db) {
-    $scope.state = 'loggedOut';
-    function showState () {
-        ['locked', 'loggedIn', 'loggedOut'].forEach(function (state) {
-            $scope[state + 'Display'] = ($scope.state == state) ? 'block' : 'none';
-        });
+    $rootScope.loginStatus = function () {
+        switch ($rootScope.state) {
+        case 'loggedOut': return "Nicht angemeldet";
+        case 'loggedIn': return "Angemeldet";
+        case 'locked': return $rootScope.loggedInUser + " ist angemeldet";
+        }
     }
-    showState();
+}
+CmsController.$inject = ['$scope', '$rootScope', '$dialog', 'db'];
 
-    $http
-        .get('/locked-by')
-        .success(function (lockedBy) {
-            if (lockedBy.uuid) {
-                if (lockedBy.uuid == localStorage.lockId) {
-                    db.editMode = true;
-                    $scope.state = 'loggedIn';
+function LoginController($scope, $rootScope, $dialog, $http, db) {
+    $rootScope.state = 'loggedOut';
+    $scope.loginFailure = 'none';
+
+    $scope.displayState = function(state) {
+        if ($rootScope.state == state) {
+            return "block";
+        } else {
+            return "none";
+        }
+    }
+
+    function pollLoginStatus() {
+        $http
+            .get('/login-status')
+            .success(function (loginStatus) {
+                if (loginStatus.uuid) {
+                    if (loginStatus.uuid == localStorage.lockId) {
+                        db.editMode = true;
+                        $rootScope.state = 'loggedIn';
+                    } else {
+                        $rootScope.state = 'locked';
+                        db.editMode = false;
+                        $rootScope.loggedInUser = loginStatus.name;
+                    }
                 } else {
+                    $rootScope.state = 'loggedOut';
                     db.editMode = false;
-                    $scope.state = 'locked';
-                    $scope.lockedBy = lockedBy.name;
                 }
-            }
-            showState();
-        });
-                  
+                setTimeout(pollLoginStatus, 1000);
+            });
+    }
+    
+    if (!LoginController.initialized) {
+        LoginController.initialized = true;
+
+        pollLoginStatus();
+    }
 
     $scope.login = function () {
+        $scope.loginFailure = 'none';
         $http
-            .post('/login', { name: $scope.name, password: $scope.password })
-            .success(function (lockedBy) {
-                $scope.state = 'loggedIn';
-                localStorage.lockId = lockedBy.uuid;
-                db.editMode = true;
-                showState();
+            .get('/user-salt/' + $scope.name)
+            .success(function (muffineer) {
+                $http
+                    .post('/login', { name: $scope.name,
+                                      password: sha1(sha1($scope.password + muffineer.userSalt) + muffineer.sessionSalt) })
+                    .success(function (loginStatus) {
+                        $rootScope.state = 'loggedIn';
+                        localStorage.lockId = loginStatus.uuid;
+                        db.editMode = true;
+                    })
+                    .error(function (message, status) {
+                        if (status == 401) {
+                            $scope.loginFailure = 'block';
+                        } else {
+                            console.log(message, rest);
+                        }
+                    });
             });
     }
 
@@ -242,7 +275,7 @@ function LoginController($scope, $dialog, $http, db) {
             });
     }
 }
-LoginController.$inject = ['$scope', '$dialog', '$http', 'db'];
+LoginController.$inject = ['$scope', '$rootScope', '$dialog', '$http', 'db'];
 
 function EventsController($scope) {
     $scope.archived = (location.hash == '#archiv');
