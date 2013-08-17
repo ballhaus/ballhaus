@@ -207,8 +207,12 @@ function LoginController($scope, $rootScope, $dialog, $http, db) {
         pollLoginStatus();
     }
 
-    $scope.login = function () {
+    $scope.clearLoginFailure = function () {
         $scope.loginFailure = 'none';
+    }
+
+    $scope.login = function () {
+        $scope.clearLoginFailure();
         $http
             .get('/user-salt/' + $scope.name)
             .success(function (muffineer) {
