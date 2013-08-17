@@ -273,7 +273,7 @@ app.post('/login',
          function (req, res) {
              if (loginStatus.name) {
                  res.send(400, 'Daten werden gerade von ' + loginStatus.name + ' bearbeitet');
-             } else if (!req.body.name.match(/^[a-z0-9]+$/)) {
+             } else if (req.body.name && !req.body.name.match(/^[a-z0-9]+$/)) {
                  res.send(400, 'Ungültiger Benutzername');
              } else if (req.session.user && (req.body.password == sha1.sha1(req.session.user.password + req.session.salt))) {
                  loginStatus = { name: req.body.name,
