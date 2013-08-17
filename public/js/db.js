@@ -278,7 +278,16 @@ app.factory('db',
                      db.pieces = db.findObjects.bind(this, db.Piece);
                      db.images = db.findObjects.bind(this, db.Image);
                      db.pages = db.findObjects.bind(this, db.Page);
-                     db.tags = function () { return [ { name: 'akademie' }, { name: 'tanz' }, { name: 'theater' } ] };
+                     db.tags = function () { return [ { name: 'Theater' },
+                                                      { name: 'Tanz' },
+                                                      { name: 'Film' },
+                                                      { name: 'Musik' },
+                                                      { name: 'Literatur' },
+                                                      { name: 'Denken' },
+                                                      { name: 'akademie der autodidakten' },
+                                                      { name: 'project in/out' },
+                                                      { name: 'Festival Black Lux' }
+                                                    ] };
                      db.loaded = true;
                  }
                  if (localStorage.data) {
