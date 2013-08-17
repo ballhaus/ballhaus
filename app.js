@@ -233,6 +233,9 @@ app.get('/tickets',
 var loginStatus = {};
 var bogusUserSalts = {};
 
+# CMS user passwords are hashed on the client side and only the hashes are stored on the server.
+# This is done to prevent sending and storing cleartext passwords.
+
 function loadUser(name) {
     var userPath = path.resolve('users/' + name + '.json');
     if (fs.existsSync(userPath)) {
