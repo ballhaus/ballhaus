@@ -159,10 +159,18 @@ function CmsController($scope, $rootScope, $dialog, db) {
     }
 
     $rootScope.loginStatus = function () {
-        switch ($rootScope.state) {
+        switch (this.state) {
         case 'loggedOut': return "Nicht angemeldet";
         case 'loggedIn': return "Angemeldet";
         case 'locked': return $rootScope.loggedInUser + " ist angemeldet";
+        }
+    }
+
+    $rootScope.menuDisplay = function () {
+        if (this.state == 'loggedIn') {
+            return "inherit";
+        } else {
+            return "hidden";
         }
     }
 }
@@ -746,6 +754,13 @@ angular.module('cmsApp.directives', [])
             restrict: 'E',
             templateUrl: '/dialogs/image-gallery-uploader.html',
             scope: { images: '=images' }
+        }
+    })
+    .directive("priceInputs", function () {
+        return {
+            restrict: 'E',
+            templateUrl: '/partials/cms/price-inputs.html',
+            scope: { object: '=model' }
         }
     })
     .directive('dateInput', function () {
