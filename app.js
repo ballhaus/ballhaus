@@ -233,6 +233,10 @@ app.get('/tickets',
 var loginStatus = {};
 var bogusUserSalts = {};
 
+// CMS user passwords are hashed on the client side and only the
+// hashes are stored on the server.  This is done to prevent sending
+// and storing cleartext passwords.
+
 function loadUser(name) {
     var userPath = path.resolve('users/' + name + '.json');
     if (fs.existsSync(userPath)) {
@@ -269,7 +273,7 @@ app.post('/login',
          function (req, res) {
              if (loginStatus.name) {
                  res.send(400, 'Daten werden gerade von ' + loginStatus.name + ' bearbeitet');
-             } else if (!req.body.name.match(/^[a-z0-9]+$/)) {
+             } else if (req.body.name && !req.body.name.match(/^[a-z0-9]+$/)) {
                  res.send(400, 'Ungültiger Benutzername');
              } else if (req.session.user && (req.body.password == sha1.sha1(req.session.user.password + req.session.salt))) {
                  loginStatus = { name: req.body.name,
