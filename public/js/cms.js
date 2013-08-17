@@ -158,6 +158,8 @@ function CmsController($scope, $rootScope, $dialog, db) {
             });
     }
 
+    $rootScope.state = 'loggedOut';
+
     $rootScope.loginStatus = function () {
         switch (this.state) {
         case 'loggedOut': return "Nicht angemeldet";
@@ -177,7 +179,6 @@ function CmsController($scope, $rootScope, $dialog, db) {
 CmsController.$inject = ['$scope', '$rootScope', '$dialog', 'db'];
 
 function LoginController($scope, $rootScope, $dialog, $http, db) {
-    $rootScope.state = 'loggedOut';
     $scope.loginFailure = 'none';
 
     $scope.displayState = function(state) {
