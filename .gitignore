@@ -5,7 +5,6 @@ nbproject
 manifest.mf
 build.xml
 node_modules
-users
 .project
 .settings
 .idea/*
