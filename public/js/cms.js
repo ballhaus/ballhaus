@@ -224,7 +224,7 @@ function LoginController($scope, $rootScope, $dialog, $http, db) {
                         if (status == 401) {
                             $scope.loginFailure = 'block';
                         } else {
-                            console.log(message, rest);
+                            console.log(message, status);
                         }
                     });
             });
