@@ -60,14 +60,14 @@ h4 { font-size: 14pt; }
 
 #container {
     margin: auto;
-    width: 1000px;
+    width: 1024px;
     background-color: #fff;
 }
 
 #main {
-    width: 640px;
+    width: 670px;
     float: left;
-    margin: 4px 15px 5px 50px;
+    margin: 47px 15px 5px 32px;
     border-top: 3px solid black;
     padding-top: 1em;
 }
@@ -81,58 +81,41 @@ h4 { font-size: 14pt; }
 }
 
 #right {
-    width: 280px;
+    width: 260px;
     float: right;
-    margin-top: 4px;
-    border-top: 3px solid black;
-    padding-top: 1em;
+    margin-top: 47px;
+    margin-right: 32px;
 }
 
 #right > div {
-    width: 230px;
-    margin: 0 1em 1em 0;
-    border-bottom: 3px solid black;
+    margin: 0 0 1em 0;
+    border-top: 3px solid black;
+}
+
+.sidebar-content {
+    padding: 1em 11px 0;
 }
 
 #header {
-    width: 1000px;
-    height: 110px;
+    width: 1024px;
+    height: 153px;
     position: relative;
-    border-bottom: solid black 3px;
-}
-
-#ada-logo {
-    position: absolute;
-    bottom: 5px;
-    right: 80px;
 }
 
 #site-menu-street {
-    width: 1000px;
-    height: 120px;
+    width: 1024px;
+    height: 116px;
     position: relative;
     background-size: 100%;
     background-repeat: no-repeat;
-    background-image: url(/img/street-banner.jpg);
-}
-
-#today-link {
-    position: absolute;
-    top: 3px;
-    left: 50px;
-}
-
-#today-link a {
-    background-color: #636466;
-    color: #ffffff;
-    display: inline;
-    padding: 4px 8px 2px 8px;
+    background-image: url(/img/ballh_header-strip.png);
+    border-bottom: 3px solid black;
 }
 
 #site-menu {
     position: absolute;
     top: 84px;
-    left: 50px;
+    left: 32px;
     font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
     z-index: 1000;
 }
@@ -197,8 +180,8 @@ h4 { font-size: 14pt; }
 
 #logo {
     position: absolute;
-    right: 0px;
-    bottom: 3px;
+    left: 34px;
+    bottom: 5px;
 }
 
 .event-name {
