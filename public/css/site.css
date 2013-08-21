@@ -344,65 +344,28 @@ input.search-input:focus {
     background-size: 100%;
     background-repeat: no-repeat;
     background-image: url(/img/ballh_header-strip.png);
-    border-bottom: 3px solid black;
+    border-bottom: 2px solid black;
 }
 
 #site-menu {
     position: absolute;
-    top: 84px;
+    top: 81px;
     left: 32px;
     font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
     z-index: 1000;
 }
 
-#site-menu > nav ul ul {
-    margin-top: 10px;
-}
-
 #site-menu > nav ul {
     list-style: none;
-    display: inline-table;
+    margin: 0;
 }
 
 #site-menu > nav > ul > li {
-    position: absolute;
-    top: 9px;
+    float: left;
 }
-
-#site-menu > nav > ul > li:nth-child(1) { left: 0px; }
-#site-menu > nav > ul > li:nth-child(2) { left: 125px; }
-#site-menu > nav > ul > li:nth-child(3) { left: 289px; }
-#site-menu > nav > ul > li:nth-child(4) { left: 372px; }
-#site-menu > nav > ul > li:nth-child(5) { left: 475px; }
 
 #site-menu > nav li {
     vertical-align: top;
-}
-
-#site-menu > nav > ul > li {
-    display: inline-block;
-}
-
-#site-menu > nav li > a > span {
-    background-color: rgba(255,255,255,0.8);
-    padding: 0.5em 1em;
-    margin: 0em 1em 0em 0em;
-    text-transform: uppercase;
-}
-
-#site-menu > nav li:hover > a > span {
-    background-color: black;
-    color: white;
-}
-
-#site-menu nav ul ul {
-    margin-left: -17px;
-}
-
-#site-menu nav li li {
-    margin-top: 0.3em;
-    padding: 0.5em 1em;
-    margin: 0em 1em 0em 0em;
 }
 
 #site-menu > nav ul ul {
@@ -411,6 +374,157 @@ input.search-input:focus {
 
 #site-menu > nav ul > li:hover > ul {
     display: block;
+}
+
+#site-menu > nav > ul > li > ul > li {
+    margin-top: 5px;
+}
+
+.site-menuitem-Programm {
+    background: url(/img/menu/programm-inaktiv.png);
+    width: 143px;
+    height: 37px;
+    display: block;
+}
+
+.site-menuitem-Programm:hover,.site-menuitem-Programm:active,.site-menuitem-Programm:focus {
+    background: url(/img/menu/programm-aktiv.png);
+}
+
+.site-menuitem-kuenstlerinnen {
+    background: url(/img/menu/kuenstlerinnen-inaktiv.png);
+    width: 189px;
+    height: 37px;
+    display: block;
+}
+
+.site-menuitem-kuenstlerinnen:hover,.site-menuitem-kuenstlerinnen:active,.site-menuitem-kuenstlerinnen:focus {
+    background: url(/img/menu/kuenstlerinnen-aktiv.png);
+}
+
+.site-submenu-Haus {
+    width: 91px;
+}
+
+.site-menuitem-Haus {
+    background: url(/img/menu/haus-inaktiv.png);
+    width: 91px;
+    height: 37px;
+    display: block;
+}
+
+.site-menuitem-Haus:hover,.site-menuitem-Haus:active,.site-menuitem-Haus:focus {
+    background: url(/img/menu/haus-aktiv.png);
+}
+
+.site-menuitem-tickets {
+    background: url(/img/menu/tickets-inaktiv.png);
+    width: 116px;
+    height: 37px;
+    display: block;
+}
+
+.site-menuitem-tickets:hover,.site-menuitem-tickets:active,.site-menuitem-tickets:focus {
+    background: url(/img/menu/tickets-aktiv.png);
+}
+
+.site-menuitem-presse {
+    background: url(/img/menu/presse-inaktiv.png);
+    width: 110px;
+    height: 37px;
+    display: block;
+}
+
+.site-menuitem-presse:hover,.site-menuitem-presse:active,.site-menuitem-presse:focus {
+    background: url(/img/menu/presse-aktiv.png);
+}
+
+.site-menuitem-spielplan {
+    background: url(/img/menu/spielplan-inaktiv.png);
+    width: 143px;
+    height: 41px;
+    display: block;
+}
+
+.site-menuitem-spielplan:hover,.site-menuitem-spielplan:active,.site-menuitem-spielplan:focus {
+    background: url(/img/menu/spielplan-aktiv.png);
+}
+
+.site-menuitem-repertoire {
+    background: url(/img/menu/repertoire-inaktiv.png);
+    width: 140px;
+    height: 41px;
+    display: block;
+}
+
+.site-menuitem-repertoire:hover,.site-menuitem-repertoire:active,.site-menuitem-repertoire:focus {
+    background: url(/img/menu/repertoire-aktiv.png);
+}
+
+.site-menuitem-reihen {
+    background: url(/img/menu/reihen-inaktiv.png);
+    width: 106px;
+    height: 41px;
+    display: block;
+}
+
+.site-menuitem-reihen:hover,.site-menuitem-reihen:active,.site-menuitem-reihen:focus {
+    background: url(/img/menu/reihen-aktiv.png);
+}
+
+.site-menuitem-archiv {
+    background: url(/img/menu/archiv-inaktiv.png);
+    width: 112px;
+    height: 41px;
+    display: block;
+}
+
+.site-menuitem-archiv:hover,.site-menuitem-archiv:active,.site-menuitem-archiv:focus {
+    background: url(/img/menu/archiv-aktiv.png);
+}
+
+.site-menuitem-geschichte {
+    background: url(/img/menu/geschichte-inaktiv.png);
+    width: 155px;
+    height: 41px;
+    display: block;
+}
+
+.site-menuitem-geschichte:hover,.site-menuitem-geschichte:active,.site-menuitem-geschichte:focus {
+    background: url(/img/menu/geschichte-aktiv.png);
+}
+
+.site-menuitem-team {
+    background: url(/img/menu/team-inaktiv.png);
+    width: 93px;
+    height: 41px;
+    display: block;
+}
+
+.site-menuitem-team:hover,.site-menuitem-team:active,.site-menuitem-team:focus {
+    background: url(/img/menu/team-aktiv.png);
+}
+
+.site-menuitem-on_tour {
+    background: url(/img/menu/on_tour-inaktiv.png);
+    width: 143px;
+    height: 41px;
+    display: block;
+}
+
+.site-menuitem-on_tour:hover,.site-menuitem-on_tour:active,.site-menuitem-on_tour:focus {
+    background: url(/img/menu/on_tour-aktiv.png);
+}
+
+.site-menuitem-partner {
+    background: url(/img/menu/partner-inaktiv.png);
+    width: 143px;
+    height: 41px;
+    display: block;
+}
+
+.site-menuitem-partner:hover,.site-menuitem-partner:active,.site-menuitem-partner:focus {
+    background: url(/img/menu/partner-aktiv.png);
 }
 
 #logo {
