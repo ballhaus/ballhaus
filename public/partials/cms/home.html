@@ -1,44 +1,48 @@
-<fieldset>
-  <legend>An- und Abmeldung</legend>
-  <form ng-controller="LoginController" class="login">
-    <div style="display: {{displayState('locked')}}">
-      Datenbank wird derzeit von {{loggedInUser}} bearbeitet.
-    </div>
-    <div style="display: {{displayState('loggedOut')}}">
-      <div class="control-group">
-        <label class="control-label" for="name">Name</label>
-        <div class="controls">
-          <input type="text" class="input-xlarge" ng-model="name" required/>
+<form name='login'>
+  <fieldset ng-controller="LoginController">
+    <div name="login" class="login">
+      <div style="display: {{displayState('locked')}}">
+        <legend>System ist gesperrt</legend>
+        Datenbank wird derzeit von {{loggedInUser}} bearbeitet.
+      </div>
+      <div style="display: {{displayState('loggedOut')}}">
+        <legend>Anmeldung</legend>
+        <div class="control-group">
+          <label class="control-label" for="name">Name</label>
+          <div class="controls">
+            <input type="text" class="input-xlarge" ng-model="name" required/>
+          </div>
+          <label class="control-label" for="password">Passwort</label>
+          <div class="controls">
+            <input type="password" class="input-xlarge" ng-model="password" required/>
+          </div>
+          <div style="display: {{loginFailure}}">
+            <alert type="error">Ungültiger Benutzername oder ungültiges Passwort.</alert>
+          </div>
+          <p>
+            <button ng-click="login()" class="btn btn-primary">Anmelden</button>
+          </p>
         </div>
-        <label class="control-label" for="password">Passwort</label>
-        <div class="controls">
-          <input type="password" class="input-xlarge" ng-model="password" required/>
-        </div>
-        <div style="display: {{loginFailure}}">
-          <alert type="error">Ungültiger Benutzername oder ungültiges Passwort.</alert>
-        </div>
+      </div>
+      <div style="display: {{displayState('loggedIn')}}">
+        <legend>Abmeldung</legend>
         <p>
-          <button ng-click="login()" class="btn btn-primary btn-large">Anmelden</button>
+          <button ng-click="logout()" class="btn btn-primary">Abmelden</button>
+          &nbsp;&nbsp;&nbsp;<input type="checkbox" ng-model="saveChanges"/> Änderungen online stellen
         </p>
       </div>
     </div>
-    <div  style="display: {{displayState('loggedIn')}}">
-      <p>
-        <button ng-click="saveChanges()" class="btn btn-primary btn-large">Abmelden und neue Version online stellen</button>
-      </p>
-      <p>
-        <button ng-click="discardChanges()" class="btn btn-danger btn-large">Abmelden und alle Änderungen verwerfen</button>
-      </p>
-    </div>
-  </form>
-</fieldset>
-<fieldset>
-  <legend>Konfiguration</legend>
-  <form ng-controller="ConfigurationController">
-    <label for="editor">Texteditor</label>
-    <div class="btn-group">
-      <button type="button" class="btn btn-primary" ng-model="editor" ng-click='changeEditor("tinymce")' btn-radio="'tinymce'">WYSIWYG</button>
-      <button type="button" class="btn btn-primary" ng-model="editor" ng-click='changeEditor("codemirror")' btn-radio="'codemirror'">HTML</button>
-    </div>
-  </form>
-</fieldset>
+  </fieldset>
+  <div style="display: {{superuserDisplay()}}">
+    <fieldset>
+      <legend>Konfiguration</legend>
+      <form ng-controller="ConfigurationController">
+        <label for="editor">Texteditor</label>
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" ng-model="editor" ng-click='changeEditor("tinymce")' btn-radio="'tinymce'">WYSIWYG</button>
+          <button type="button" class="btn btn-primary" ng-model="editor" ng-click='changeEditor("codemirror")' btn-radio="'codemirror'">HTML</button>
+        </div>
+      </form>
+    </fieldset>
+  </div>
+</form>

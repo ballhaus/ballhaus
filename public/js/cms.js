@@ -110,7 +110,35 @@ app.value('ui.config', {
     }
 });
 
-function CmsController($scope, $rootScope, $dialog, db) {
+function CmsController($scope, $rootScope, $dialog, $http, db) {
+    function pollLoginStatus() {
+        $http
+            .get('/login-status')
+            .success(function (loginStatus) {
+                if (loginStatus.uuid) {
+                    if (loginStatus.uuid == localStorage.lockId) {
+                        db.editMode = true;
+                        $rootScope.state = 'loggedIn';
+                    } else {
+                        $rootScope.state = 'locked';
+                        db.editMode = false;
+                        $rootScope.loggedInUser = loginStatus.name;
+                        $rootScope.superuser = loginStatus.superuser;
+                    }
+                } else {
+                    $rootScope.state = 'loggedOut';
+                    db.editMode = false;
+                }
+                setTimeout(pollLoginStatus, 1000);
+            });
+    }
+    
+    if (!CmsController.initialized) {
+        CmsController.initialized = true;
+
+        pollLoginStatus();
+    }
+
     $scope.db = db;
     $scope.newPiece = function () {
         $dialog
@@ -189,8 +217,12 @@ function CmsController($scope, $rootScope, $dialog, db) {
             return "hidden";
         }
     }
+
+    $scope.superuserDisplay = function () {
+        return $rootScope.superuser ? "block" : "none";
+    }
 }
-CmsController.$inject = ['$scope', '$rootScope', '$dialog', 'db'];
+CmsController.$inject = ['$scope', '$rootScope', '$dialog', '$http', 'db'];
 
 function LoginController($scope, $rootScope, $dialog, $http, db) {
     $scope.loginFailure = 'none';
@@ -201,33 +233,6 @@ function LoginController($scope, $rootScope, $dialog, $http, db) {
         } else {
             return "none";
         }
-    }
-
-    function pollLoginStatus() {
-        $http
-            .get('/login-status')
-            .success(function (loginStatus) {
-                if (loginStatus.uuid) {
-                    if (loginStatus.uuid == localStorage.lockId) {
-                        db.editMode = true;
-                        $rootScope.state = 'loggedIn';
-                    } else {
-                        $rootScope.state = 'locked';
-                        db.editMode = false;
-                        $rootScope.loggedInUser = loginStatus.name;
-                    }
-                } else {
-                    $rootScope.state = 'loggedOut';
-                    db.editMode = false;
-                }
-                setTimeout(pollLoginStatus, 1000);
-            });
-    }
-    
-    if (!LoginController.initialized) {
-        LoginController.initialized = true;
-
-        pollLoginStatus();
     }
 
     $scope.clearLoginFailure = function () {
@@ -257,49 +262,18 @@ function LoginController($scope, $rootScope, $dialog, $http, db) {
             });
     }
 
-    function logout () {
-        localStorage.data = '';
-        localStorage.lockId = '';
-        $http.post('/logout')
-        .success(function () {
-            location = '/cms';
+    $scope.saveChanges = true;
+
+    $scope.logout = function () {
+        console.log('db', db);
+        db.pushToServer(function () {
+            localStorage.data = '';
+            localStorage.lockId = '';
+            $http.post('/logout')
+                .success(function () {
+                    location = '/cms';
+                });
         });
-    }
-
-    $scope.saveChanges = function () {
-        $dialog
-            .messageBox('Änderungen online stellen',
-                        'Alle Änderungen auf den Server laden?',
-                        [ { label: 'Ja',
-                            result: true,
-                            cssClass: 'btn-danger' },
-                          { label: 'Nein',
-                            cssClass: 'btn-primary' } ])
-            .open()
-            .then(function(result) {
-                if (result) {
-                    console.log('db', db);
-                    db.pushToServer(logout);
-                }
-            });
-    }
-
-    $scope.discardChanges = function () {
-        $dialog
-            .messageBox('Änderungen verwerfen',
-                        'Alle Änderungen verwerfen?',
-                        [ { label: 'Ja',
-                            result: true,
-                            cssClass: 'btn-danger' },
-                          { label: 'Nein',
-                            cssClass: 'btn-primary' } ])
-            .open()
-            .then(function(result) {
-                if (result) {
-                    $http.post('/logout')
-                        .success(logout);
-                }
-            });
     }
 }
 LoginController.$inject = ['$scope', '$rootScope', '$dialog', '$http', 'db'];
@@ -677,7 +651,7 @@ angular.module('cmsApp.directives', [])
                     },
                     callbacks: { 
                         onComplete: function(id, fileName, response) {
-                            console.log('upload complete', id, 'response', response);
+                            console.log('upload complete', id, 'fileName', fileName, 'response', JSON.stringify(response));
                             if (response.success) {
                                 if (!$scope.model) {
                                     $scope.model = [];

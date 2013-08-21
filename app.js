@@ -277,6 +277,7 @@ app.post('/login',
                  res.send(400, 'Ungültiger Benutzername');
              } else if (req.session.user && (req.body.password == sha1.sha1(req.session.user.password + req.session.salt))) {
                  loginStatus = { name: req.body.name,
+                                 superuser: req.session.user.superuser,
                                  uuid: uuid.v1() };
                  req.session.loggedIn = true;
                  res.json(loginStatus);
