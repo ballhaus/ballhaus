@@ -148,7 +148,7 @@ app
             replace: true,
             transclude: true,
             scope: true,
-            template: '<li><a href="/{{to}}"<span ng-transclude></span></a></li>',
+            template: '<li><a class="site-menuitem-{{to}} ir" href="/{{to}}" ng-transclude></a></li>',
             link: function ($scope, element, attributes) {
                 $scope.to = attributes.to || utils.urlify(element.text());
             }
