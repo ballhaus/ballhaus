@@ -111,7 +111,7 @@ h4 { font-size: 14pt; }
     width: 670px;
     float: left;
     margin: 47px 15px 5px 32px;
-    border-top: 3px solid black;
+    border-top: 2px solid black;
     padding-top: 1em;
 }
 
@@ -134,10 +134,7 @@ h4 { font-size: 14pt; }
 
 #right > div {
     margin: 0 0 1em 0;
-    border-top: 3px solid black;
-}
-
-.sidebar-content {
+    border-top: 2px solid black;
     padding: 1em 11px 0;
 }
 
@@ -183,7 +180,7 @@ input.newsletter-address {
 .service-bar > li {
     display: inline-block;
     border-right: 2px solid #666;
-    padding: 12px 20px 0;
+    padding: 18px 18px 0;
     vertical-align: top;
     height: 23px;
 }
@@ -442,7 +439,7 @@ input.search-input:focus {
     display: block;
     height: 6em;
     margin-top: 1em;
-    border-bottom: solid black 3px;
+    border-bottom: solid black 2px;
 }
 
 .repertoire .piece > a > div {
@@ -530,7 +527,7 @@ input.search-input:focus {
 }
 
 .spielplan .months {
-    border-bottom: solid black 3px;
+    border-bottom: solid black 2px;
 }
 
 .spielplan .months li {
@@ -553,7 +550,7 @@ input.search-input:focus {
 .spielplan .event {
     height: 5em;
     margin-top: 1em;
-    border-bottom: solid black 3px;
+    border-bottom: solid black 2px;
 }
 
 .spielplan a {
