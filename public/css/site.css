@@ -43,6 +43,28 @@ html, body {
     height: 150%;
 }
 
+/*
+ * General overwrite for some Bootstrap styles
+ */
+
+input[type="text"], input[type="email"], input[type="submit"],
+input[type="text"]:focus, input[type="email"]:focus,
+input[type="text"]:invalid:focus, input[type="email"]:invalid:focus {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    border: solid 1px;
+    margin-bottom: 0;
+    background-color: white;
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    font-family: inherit;
+    color: inherit;
+}
+
 /* Ballhaus rules */
 
 a:link, a:visited, a:hover, a:active { color: black; text-decoration: none; }
@@ -59,6 +81,7 @@ body {
     background-repeat: no-repeat;
     background-image: url(/img/background.jpg);
     background-color: #bcbcbc;
+    border-top: 4px solid black;
 }
 
 a {
@@ -100,6 +123,8 @@ h4 { font-size: 14pt; }
     color: #888;
 }
 
+/* Sidebar */
+
 #right {
     width: 260px;
     float: right;
@@ -115,6 +140,32 @@ h4 { font-size: 14pt; }
 .sidebar-content {
     padding: 1em 11px 0;
 }
+
+input.newsletter-address {
+    background-image: url(/img/newsletterfeld.png);
+    width: 173px;
+    height: 16px;
+    border: none !important;
+    padding: 4px 6px;
+}
+
+.newsletter-submit {
+    float: right;
+    border: 0;
+    text-indent: -100px;
+    overflow: hidden;
+    width: 46px;
+    height: 24px;
+    background-image: url(/img/ok-inaktiv.png);
+}
+
+.newsletter-submit:active,
+.newsletter-submit:hover,
+.newsletter-submit:focus {
+    background-image: url(/img/ok-aktiv.png);
+}
+
+/* Header */
 
 #header {
     width: 1024px;
@@ -136,9 +187,9 @@ h4 { font-size: 14pt; }
     height: 23px;
 }
 
-.service-bar > li:hover,
-.service-bar > li:active,
-.service-bar > li:focus {
+.service-bar-icon:hover,
+.service-bar-icon:active,
+.service-bar-icon:focus {
     color: black;
 }
 
@@ -262,21 +313,9 @@ h4 { font-size: 14pt; }
 }
 
 .search-button,
+.search-button:focus,
 input.search-input,
 input.search-input:focus {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
-    border: solid 1px;
-    margin-bottom: 0;
-    background-color: white;
-    box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    font-family: inherit;
-
     color: #666;
     border-color: #666;
     font-size: 1em;
@@ -288,14 +327,15 @@ input.search-input:focus {
 }
 
 .search-button {
-padding-top: 3px;
-padding-bottom: 2px;
+    padding-top: 3px;
+    padding-bottom: 2px;
 }
 
 .search-button:active,
 .search-button:hover,
 .search-button:focus {
     background-color: #666;
+    border-color: #666;
     color: white;
 }
 
