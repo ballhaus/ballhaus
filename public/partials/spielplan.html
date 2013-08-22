@@ -8,7 +8,7 @@
       <a class="ticket-shop ir">Ticket kaufen</a>
       <a ng-href="{{event.link}}">
         <div class="date">{{event.weekday}}<br/>{{event.date}}<br/>{{event.time}} Uhr</div>
-        <div class="tags">{{event.tags}}&nbsp;</div>
+        <div class="tags">{{event.tags | join:" / " }}&nbsp;</div>
         <div class="event-name">{{event.name}}</div>
         <div class="by"><span ng-bind-html-unsafe="translate(event.by)"></span>&nbsp;</div>
       </a>

@@ -1,4 +1,9 @@
-var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.directives', 'ngSanitize']);
+var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.directives', 'ngSanitize'])
+.filter('join', function () {
+    return function (input, arg) {
+      return input && input.join(arg);
+    };
+});
 
 var language = 'de';
 
@@ -44,7 +49,7 @@ function ScheduleController($scope, $routeParams, db) {
             month: date.format('MMMM'),
             monthKey: date.format('MM-YYYY'),
             epochSeconds: event.date.getTime(),
-            tags: (event.tags || (event.piece && event.piece.tags && event.piece.tags) || []).join(' / ')
+            tags: event.tags || (event.piece && event.piece.tags && event.piece.tags)
         };
     });
     $scope.events = events.sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
