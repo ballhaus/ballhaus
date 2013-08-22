@@ -505,15 +505,15 @@ input.search-input:focus {
     background: url(/img/menu/team-aktiv.png);
 }
 
-.site-menuitem-on_tour {
-    background: url(/img/menu/on_tour-inaktiv.png);
+.site-menuitem-postmigranten_on_tour {
+    background: url(/img/menu/postmigranten_on_tour-inaktiv.png);
     width: 143px;
     height: 41px;
     display: block;
 }
 
-.site-menuitem-on_tour:hover,.site-menuitem-on_tour:active,.site-menuitem-on_tour:focus {
-    background: url(/img/menu/on_tour-aktiv.png);
+.site-menuitem-postmigranten_on_tour:hover,.site-menuitem-postmigranten_on_tour:active,.site-menuitem-postmigranten_on_tour:focus {
+    background: url(/img/menu/postmigranten_on_tour-aktiv.png);
 }
 
 .site-menuitem-partner {
@@ -525,6 +525,17 @@ input.search-input:focus {
 
 .site-menuitem-partner:hover,.site-menuitem-partner:active,.site-menuitem-partner:focus {
     background: url(/img/menu/partner-aktiv.png);
+}
+
+.site-menuitem-auszeichnungen {
+    background: url(/img/menu/auszeichnungen-inaktiv.png);
+    width: 208px;
+    height: 41px;
+    display: block;
+}
+
+.site-menuitem-auszeichnungen:hover,.site-menuitem-auszeichnungen:active,.site-menuitem-auszeichnungen:focus {
+    background: url(/img/menu/auszeichnungen-aktiv.png);
 }
 
 #logo {
