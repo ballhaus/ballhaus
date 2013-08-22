@@ -12,38 +12,40 @@ function translate(what) {
 }
 
 function ScheduleController($scope, $routeParams, db) {
+    $scope.translate = translate;
     if ($routeParams.month) {
         $scope.month = $routeParams.month;
     } else {
         $scope.month = moment().format('MM-YYYY');
     }
-    var events = [];
     var now = new Date;
-    db.events().forEach(function (event) {
-        if (event.date.getTime() > now.getTime()) {
-            var date = moment(event.date);
-            var by = event.by;
-            if (!event.by && event.piece) {
-                by = event.piece.by;
-            }
-            var link = event.link;
-            if (link) {
-                link = '/veranstaltung/' + event.link;
-            } else {
-                link = '/stueck/' + event.piece.link;
-            }
-            events.push({
-                name: event.name || event.piece.name,
-                link: link,
-                by: translate(by),
-                weekday: date.format('dddd'),
-                date: date.format('Do MMMM'),
-                time: date.format('H:mm'),
-                month: date.format('MMMM'),
-                monthKey: date.format('MM-YYYY'),
-                epochSeconds: event.date.getTime()
-            });
+    var events = db.events().filter(function (event) {
+      return event.date.getTime() > now.getTime();
+    }).map(function (event) {
+        console.log(event);
+        var date = moment(event.date);
+        var by = event.by;
+        if (!event.by && event.piece) {
+            by = event.piece.by;
         }
+        var link = event.link;
+        if (link) {
+            link = '/veranstaltung/' + event.link;
+        } else {
+            link = '/stueck/' + event.piece.link;
+        }
+        return {
+            name: event.name || event.piece.name,
+            link: link,
+            by: translate(by),
+            weekday: date.format('dddd'),
+            date: date.format('Do MMMM'),
+            time: date.format('H:mm'),
+            month: date.format('MMMM'),
+            monthKey: date.format('MM-YYYY'),
+            epochSeconds: event.date.getTime(),
+            tags: event.piece && event.piece.tags.join(' / ')
+        };
     });
     $scope.events = events.sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
 
