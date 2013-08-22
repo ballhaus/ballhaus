@@ -3,6 +3,11 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
     return function (input, arg) {
       return input && input.join(arg);
     };
+})
+.filter('orSpace', function () {
+    return function (input) {
+      return input || '\u00a0';
+    }
 });
 
 var language = 'de';

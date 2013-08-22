@@ -8,9 +8,9 @@
       <a class="ticket-shop ir">Ticket kaufen</a>
       <a ng-href="{{event.link}}">
         <div class="date">{{event.weekday}}<br/>{{event.date}}<br/>{{event.time}} Uhr</div>
-        <div class="piece-tags">{{event.tags | join:" / " }}&nbsp;</div>
+        <div class="piece-tags">{{event.tags | join:" / " | orSpace }}</div>
         <div class="event-name">{{event.name}}</div>
-        <div class="by"><span ng-bind-html-unsafe="translate(event.by)"></span>&nbsp;</div>
+        <div class="by" ng-bind-html-unsafe="translate(event.by) | orSpace"></div>
       </a>
     </li>
   </ul>
