@@ -69,7 +69,9 @@ input[type="text"]:invalid:focus, input[type="email"]:invalid:focus {
 
 a:link, a:visited, a:hover, a:active { color: black; text-decoration: none; }
 a:hover { color: white; }
+/*
 a:hover * { color: white; background-color: black; }
+*/
 
 body {
     padding: 0;
@@ -97,7 +99,14 @@ h2, h3, h4 {
 }
 
 h1 { font-size: 24pt; }
-h2 { font-size: 18pt; }
+h2 {
+    line-height: 1.2em;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: normal;
+    font-family: Cillop-Bold, Helvetica, Arial, sans-serif;
+}
 h3 { font-size: 16pt; }
 h4 { font-size: 14pt; }
 
@@ -111,8 +120,7 @@ h4 { font-size: 14pt; }
     width: 670px;
     float: left;
     margin: 47px 15px 5px 32px;
-    border-top: 2px solid black;
-    padding-top: 1em;
+/*    border-top: 2px solid black;*/
 }
 
 #main a {
@@ -646,6 +654,10 @@ input.search-input:focus {
     padding-left: 20px;
 }
 
+.spielplan h2 {
+    margin-top: 0;
+}
+
 .spielplan ul {
     list-style: none;
     margin: 0;
@@ -653,13 +665,14 @@ input.search-input:focus {
 
 .spielplan .months {
     border-bottom: solid black 2px;
+    font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    padding: 6px 0 20px 20px;
 }
 
 .spielplan .months li {
     display: inline-table;
-    margin: 0.5em 18px 0.5em 0;
-    font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
-    font-size: 16pt;
+    margin: 0.5em 14px 0.5em 0;
 }
 
 .spielplan .event {
@@ -672,20 +685,14 @@ input.search-input:focus {
     border-bottom: solid black 2px;
 }
 
-.spielplan .event:focus,
-.spielplan .event:hover,
-.spielplan .event:active {
-    background: black;
-}
-
-.spielplan .event:focus a,
-.spielplan .event:hover a,
-.spielplan .event:active a
+.spielplan a:focus,
+.spielplan a:hover,
+.spielplan a:active,
 /* Piece tags need to get the message twice */
-.spielplan .event:focus .piece-tags,
-.spielplan .event:hover .piece-tags,
-.spielplan .event:active .piece-tags {
-    color: white !important;
+.spielplan a:focus .piece-tags,
+.spielplan a:hover .piece-tags,
+.spielplan a:active .piece-tags {
+    color: #eb0033 !important;
 }
 
 .spielplan a {
@@ -717,10 +724,12 @@ input.search-input:focus {
 .spielplan .date {
     float: left;
     width: 7em;
+    font-size: 18px;
 }
 
 .spielplan .event-name {
     font-size: 18px;
+    font-family: Cillop-Bold, Helvetica, Arial, sans-serif;
     text-transform: uppercase;
 }
 
