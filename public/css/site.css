@@ -669,7 +669,11 @@ input.search-input:focus {
 
 .spielplan .event:focus a,
 .spielplan .event:hover a,
-.spielplan .event:active a {
+.spielplan .event:active a
+/* Piece tags need to get the message twice */
+.spielplan .event:focus .piece-tags,
+.spielplan .event:hover .piece-tags,
+.spielplan .event:active .piece-tags {
     color: white !important;
 }
 
