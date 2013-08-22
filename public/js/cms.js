@@ -841,9 +841,12 @@ angular.module('cmsApp.directives', [])
             scope: { model: '=model' },
             templateUrl: '/partials/cms/tag-selector.html',
             link: function ($scope, element, attrs, controller) {
+                if (!$scope.model) {
+                  $scope.model = [];
+                }
 
                 $scope.tagPosition = function (tagName) {
-                    return $scope.model && $scope.model.indexOf(tagName);
+                    return $scope.model.indexOf(tagName);
                 }
 
                 $scope.calculateTags = function () {
