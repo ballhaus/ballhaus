@@ -10,7 +10,7 @@
         <div class="date">{{event.weekday}}<br/>{{event.date}}<br/>{{event.time}} Uhr</div>
         <div class="tags">{{event.tags}}&nbsp;</div>
         <div class="event-name">{{event.name}}</div>
-        <div class="by" ng-bind-html-unsafe="translate(event.by) || &nbsp;">&nbsp;</div>
+        <div class="by"><span ng-bind-html-unsafe="translate(event.by)"></span>&nbsp;</div>
       </a>
     </li>
   </ul>
