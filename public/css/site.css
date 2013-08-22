@@ -657,7 +657,7 @@ input.search-input:focus {
     position: relative;
     clear: both;
     margin: 0;
-    padding: 16px 0 16px 20px;
+    padding: 16px 0 10px 20px; /* This should be 16 _ 16 _, but the line-height bleeds */
     border-bottom: solid black 2px;
 }
 
