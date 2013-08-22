@@ -75,7 +75,7 @@ body {
     padding: 0;
     border: 0;
     margin: 0;
-    font: 13pt Cillop-Light, "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 12px/1.6 Verdana, Geneva, sans-serif;
     background-attachment: fixed;
     background-size: 100%;
     background-repeat: no-repeat;
@@ -119,7 +119,7 @@ h4 { font-size: 14pt; }
     color: #aaa;
 }
 
-#main a:hover {
+#main a:hover, #main a:focus, #main a:active {
     color: #888;
 }
 
