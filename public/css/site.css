@@ -704,13 +704,13 @@ input.search-input:focus {
     width: 7em;
 }
 
-.spielplan .tags {
-    font-size: 14px;
-    color: #5f5f5f;
+.spielplan .event-name {
+    font-size: 18px;
     text-transform: uppercase;
 }
 
-.spielplan .event-name {
-    font-size: 18px;
+.piece-tags {
+    font-size: 14px;
+    color: #5f5f5f;
     text-transform: uppercase;
 }
