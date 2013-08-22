@@ -485,6 +485,19 @@ angular.module('cmsApp.directives', [])
             }
         };
     }])
+    .directive("pageEditRef", [ function ($compile, db) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: true,
+            template: '<a href="/cms/page/{{link}}">{{title}}</a>',
+            link: function ($scope, element, attributes) {
+                $scope.title = attributes.name;
+                $scope.link = utils.urlify(attributes.name);
+                console.log($scope);
+            }
+        };
+    }])
     .directive("menuLink", [ '$location', function ($location) {
         return {
             restrict: 'E',

@@ -1,10 +1,35 @@
 <div>
-  <div class="actions control-group">
-    <button ng-click="newPage()" class="btn btn-small btn-primary">Neue Seite</button>
-  </div>
-  <ul class="data">
-    <li ng-repeat="page in db.pages() | orderBy:'name'">
-      {{page.path}} <ref object="page"/>
-    </li>
+  <ul class="edit-menu">
+    <b>Programm</b><br/>
+    <ul>
+      <li><b>Spielplan</b></li>
+      <li><b>Repertoire</b></li>
+      <li><page-edit-ref name="Reihen"/></li>
+      <li><b>Archiv</b></li>
+    </ul>
+    <b>Künstlerinnen</b><br/>
+    <b>Haus</b><br/>
+    <ul>
+      <li><page-edit-ref name="Geschichte"/></li>
+      <li><page-edit-ref name="Team"/></li>
+      <li><page-edit-ref name="On Tour"/></li>
+      <li><page-edit-ref name="Partner"/></li>
+    </ul>    
+    <li><page-edit-ref name="Tickets"/></li>
+    <li><page-edit-ref name="Presse"/></li>
+    <br/>
+    <li><page-edit-ref name="Impressum"/></li>
+    <li><page-edit-ref name="Kontakt"/></li>
   </ul>
+</div>
+<hr/>
+<div class="actions control-group">
+  <button ng-click="newPage()" class="btn btn-small btn-primary">Neue Seite</button>
+</div>
+<h3>Alle Seiten</h3>
+<ul class="data">
+  <li ng-repeat="page in db.pages() | orderBy:'name'">
+    {{page.path}} <ref object="page"/>
+  </li>
+</ul>
 </div>

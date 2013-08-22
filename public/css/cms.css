@@ -27,6 +27,14 @@ ul {
     list-style: none;
 }
 
+ul.edit-menu {
+    list-style: bullet;
+    padding-left: 1em;
+}
+ul.edit-menu ul {
+    padding-left: 2em;
+}
+
 section#main li {
     position: relative;
     font-size: 24px;
