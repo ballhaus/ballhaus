@@ -106,6 +106,7 @@ h2 {
     letter-spacing: 1px;
     font-weight: normal;
     font-family: Cillop-Bold, Helvetica, Arial, sans-serif;
+    margin: 0 0 10px 0;
 }
 h3 { font-size: 16pt; }
 h4 { font-size: 14pt; }
@@ -120,7 +121,6 @@ h4 { font-size: 14pt; }
     width: 670px;
     float: left;
     margin: 47px 15px 5px 32px;
-/*    border-top: 2px solid black;*/
 }
 
 #main a {
@@ -142,8 +142,20 @@ h4 { font-size: 14pt; }
 
 #right > div {
     margin: 0 0 1em 0;
+    padding: 0 11px;
+}
+
+#right > div + div {
+    padding-top: 1em;
     border-top: 2px solid black;
-    padding: 1em 11px 0;
+}
+
+.newsletter-form {
+    color: #5f5f5f;
+}
+
+input.newsletter-address, .newsletter-submit {
+    margin: 15px 0 9px 0;
 }
 
 input.newsletter-address {
@@ -652,10 +664,6 @@ input.search-input:focus {
 .spielplan .months,
 .spielplan .event {
     padding-left: 20px;
-}
-
-.spielplan h2 {
-    margin-top: 0;
 }
 
 .spielplan ul {
