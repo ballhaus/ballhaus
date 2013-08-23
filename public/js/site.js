@@ -101,7 +101,8 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
       [ 'spielplan/:month', ScheduleController ],
       [ 'person/:personId', PersonPageController ],
       [ 'stueck/:pieceId', PiecePageController ],
-      [ 'veranstaltung/:eventId', EventPageController ]
+      [ 'veranstaltung/:eventId', EventPageController ],
+      [ 'kuenstlerinnen' ]
     ].forEach(function (pageDef) {
         var def = { name: pageDef[0],
                     templateUrl: '/partials/' + pageDef[0].replace(/\/.*$/, "") + '.html' };

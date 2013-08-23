@@ -701,6 +701,15 @@ input.search-input:focus {
     margin: 0; /* The backend wraps everything in a paragraph */
 }
 
+.big-list .image-container {
+    float: left;
+    margin-right: 16px;
+}
+
+.big-list .image-container img {
+    max-height: 100%;
+}
+
 /* Spielplan */
 
 .events .event {
@@ -737,12 +746,21 @@ input.search-input:focus {
 }
 
 .repertoire .piece .image-container {
-    float: left;
-    margin-right: 16px;
     width: 176px;
     height: 112px;
 }
 
 .repertoire .piece {
     height: 112px;
+}
+
+/* Künstlerinnen */
+
+.kuenstlerinnen .image-container {
+    width: 120px;
+    height: 80px;
+}
+
+.kuenstlerinnen > li {
+    height: 80px;
 }
