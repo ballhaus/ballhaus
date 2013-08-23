@@ -568,28 +568,6 @@ input.search-input:focus {
     bottom: 5px;
 }
 
-.repertoire {
-    list-style: none;
-}
-
-.repertoire .piece img {
-    float: left;
-    margin-right: 8px;
-}
-
-.repertoire .piece {
-    clear: both;
-    display: block;
-    height: 6em;
-    margin-top: 1em;
-    border-bottom: solid black 2px;
-}
-
-.repertoire .piece > a > div {
-    height: 6em;
-    color: black;
-}
-
 .media-browser {
     background: black;
     color: white;
@@ -664,19 +642,47 @@ input.search-input:focus {
   background-position: -456px -72px;
 }
 
-.spielplan h2,
-.spielplan .months,
-.spielplan .event {
+/* General page content styles */
+
+.page-title,
+.big-list > li,
+.spielplan .months {
     padding-left: 20px;
 }
 
-.spielplan ul {
+.hor-list, .big-list {
     list-style: none;
     margin: 0;
 }
 
-.spielplan .months {
+.big-list {
+    border-top: solid black 2px;
+}
+
+.big-list > li {
+    display: block;
+    margin: 0;
+    padding: 16px 0 10px 20px; /* This should be 16 _ 16 _, but the line-height bleeds */
     border-bottom: solid black 2px;
+    clear: both;
+    font: 16px/26px Cillop-Medium, Helvetica, Arial, sans-serif;
+}
+
+.item-tags {
+    font-size: 14px;
+    color: #5f5f5f;
+    text-transform: uppercase;
+}
+
+.item-name {
+    font-size: 18px;
+    font-family: Cillop-Bold, Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+}
+
+/* Spielplan */
+
+.spielplan .months {
     font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
     font-size: 18px;
     padding: 6px 0 20px 20px;
@@ -688,22 +694,16 @@ input.search-input:focus {
 }
 
 .spielplan .event {
-    font: 16px/26px Cillop-Medium, Helvetica, Arial, sans-serif;
-    display: block;
-    position: relative;
-    clear: both;
-    margin: 0;
-    padding: 16px 0 10px 20px; /* This should be 16 _ 16 _, but the line-height bleeds */
-    border-bottom: solid black 2px;
+    position: relative; /* For the ticket shop link */
 }
 
 .spielplan a:focus,
 .spielplan a:hover,
 .spielplan a:active,
 /* Piece tags need to get the message twice */
-.spielplan a:focus .piece-tags,
-.spielplan a:hover .piece-tags,
-.spielplan a:active .piece-tags {
+.spielplan a:focus .item-tags,
+.spielplan a:hover .item-tags,
+.spielplan a:active .item-tags {
     color: #eb0033 !important;
 }
 
@@ -739,14 +739,23 @@ input.search-input:focus {
     font-size: 18px;
 }
 
-.spielplan .event-name {
-    font-size: 18px;
-    font-family: Cillop-Bold, Helvetica, Arial, sans-serif;
-    text-transform: uppercase;
+/* Repertoire */
+
+.repertoire {
+    margin-top: 78px;
 }
 
-.piece-tags {
-    font-size: 14px;
-    color: #5f5f5f;
-    text-transform: uppercase;
+.repertoire a {
+    color: black !important;
+}
+
+.repertoire .piece .image-container {
+    float: left;
+    margin-right: 16px;
+    width: 176px;
+    height: 112px;
+}
+
+.repertoire .piece {
+    height: 112px;
 }
