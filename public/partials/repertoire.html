@@ -5,9 +5,9 @@
       <div class="image-container">
         <img ng-src="/image/{{piece.images[0].name}}?thumbnail=1"/>
       </div>
-      <div class="item-tags">{{piece.tags | join:" / "}}</div>
+      <div class="item-tags">{{piece.tags | join:" / " | orSpace}}</div>
       <div class="item-name">{{piece.name}}</div>
-      <div class="by" ng-bind-html-unsafe="piece.by.de"></div>
+      <div class="by" ng-bind-html-unsafe="piece.by.de | orSpace"></div>
     </a>
   </li>
 </ul>

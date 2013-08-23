@@ -124,11 +124,17 @@ h4 { font-size: 14pt; }
 }
 
 #main a {
-    color: #aaa;
+    color: black;
 }
 
-#main a:hover, #main a:focus, #main a:active {
-    color: #888;
+#main a:focus,
+#main a:hover,
+#main a:active,
+/* Tags need to get the message twice */
+#main a:focus .item-tags,
+#main a:hover .item-tags,
+#main a:active .item-tags {
+    color: #eb0033;
 }
 
 /* Sidebar */
@@ -646,13 +652,24 @@ input.search-input:focus {
 
 .page-title,
 .big-list > li,
-.spielplan .months {
+.hor-list {
     padding-left: 20px;
 }
 
 .hor-list, .big-list {
     list-style: none;
     margin: 0;
+}
+
+.hor-list {
+    font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    padding: 6px 0 20px 20px;
+}
+
+.hor-list > li {
+    display: inline-table;
+    margin: 0.5em 14px 0.5em 0;
 }
 
 .big-list {
@@ -680,73 +697,43 @@ input.search-input:focus {
     text-transform: uppercase;
 }
 
-/* Spielplan */
-
-.spielplan .months {
-    font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
-    font-size: 18px;
-    padding: 6px 0 20px 20px;
-}
-
-.spielplan .months li {
-    display: inline-table;
-    margin: 0.5em 14px 0.5em 0;
-}
-
-.spielplan .event {
-    position: relative; /* For the ticket shop link */
-}
-
-.spielplan a:focus,
-.spielplan a:hover,
-.spielplan a:active,
-/* Piece tags need to get the message twice */
-.spielplan a:focus .item-tags,
-.spielplan a:hover .item-tags,
-.spielplan a:active .item-tags {
-    color: #eb0033 !important;
-}
-
-.spielplan a {
-    color: black !important;
-}
-
-.spielplan .event p {
+.item-by p {
     margin: 0; /* The backend wraps everything in a paragraph */
 }
 
-.spielplan .ticket-shop {
+/* Spielplan */
+
+.events .event {
+    position: relative; /* For the ticket shop link */
+}
+
+.events .ticket-shop {
     position: absolute;
     right: -1px;
     top: -3px;
     height: 26px;
     width: 117px;
-
     display: block;
 
     background-image: url(/img/ticket-inaktiv.png);
 }
 
-.spielplan .ticket-shop:active,
-.spielplan .ticket-shop:focus,
-.spielplan .ticket-shop:hover {
+.events .ticket-shop:active,
+.events .ticket-shop:focus,
+.events .ticket-shop:hover {
     background-image: url(/img/ticket-aktiv.png);
 }
 
-.spielplan .date {
+.events .date {
     float: left;
-    width: 7em;
     font-size: 18px;
+    width: 7em;
 }
 
 /* Repertoire */
 
 .repertoire {
     margin-top: 78px;
-}
-
-.repertoire a {
-    color: black !important;
 }
 
 .repertoire .piece .image-container {
