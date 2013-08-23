@@ -400,6 +400,10 @@ input.search-input:focus {
     margin-top: 5px;
 }
 
+.site-submenu-Programm {
+    width: 143px;
+}
+
 .site-menuitem-Programm {
     background: url(/img/menu/programm-inaktiv.png);
     width: 143px;
@@ -472,7 +476,7 @@ input.search-input:focus {
 
 .site-menuitem-repertoire {
     background: url(/img/menu/repertoire-inaktiv.png);
-    width: 140px;
+    width: 150px;
     height: 41px;
     display: block;
 }
