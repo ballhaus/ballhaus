@@ -154,8 +154,8 @@ h4 { font-size: 14pt; }
     color: #5f5f5f;
 }
 
-input.newsletter-address, .newsletter-submit {
-    margin: 15px 0 9px 0;
+.newsletter-controls {
+    margin: 25px 0 29px 0;
 }
 
 input.newsletter-address {
