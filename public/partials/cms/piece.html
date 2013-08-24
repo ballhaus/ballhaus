@@ -3,8 +3,13 @@
     <table class="cms-table table table-striped table-bordered table-condensed">
       <tbody>
         <tr>
+          <th>Intern</th>
+          <td colspan="2"><input type="text" class="input-xxlarge" ng-model="event.intern"/><br/></td>
+        </tr>
+        <tr><td colspan="3"><hr/></td></tr>
+        <tr>
           <th>Titel</th>
-          <td><input class="input-xxlarge" ng-model="piece.name"/></td>
+          <td colspan="2"><input class="input-xxlarge" ng-model="piece.name"/></td>
         </tr>
         <tr>
           <th>Link</th>
@@ -86,10 +91,6 @@
             <div id="main-picture" class="one-image-upload">
             </div>
           </td>
-        </tr>
-        <tr>
-          <th>Intern</th>
-          <td><optional-text model="piece.intern" rows="10"/></td>
         </tr>
       </tbody>
     </table>
