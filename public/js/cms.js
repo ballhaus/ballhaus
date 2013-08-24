@@ -347,12 +347,19 @@ function EditEnactmentController($scope, $dialog, $routeParams, db) {
 }
 EditPieceController.$inject = ['$scope', '$dialog', '$routeParams', 'db'];
 
-function EditPersonController($scope, $routeParams, db) {
+function EditPersonController($scope, $dialog, $routeParams, db) {
     console.log('EditPersonController', $routeParams.personId);
     $scope.person = db.get(db.Person, $routeParams.personId);
     console.log('person', $scope.person);
+    $scope.deletePerson = function () {
+        confirm($dialog, 'Personeneintrag löschen', 'Den Personeneintrag wirklich löschen?',
+                function () {
+                    db.deleteObject($scope.person);
+                    window.history.back();
+                });
+    }
 }
-EditPersonController.$inject = ['$scope', '$routeParams', 'db'];
+EditPersonController.$inject = ['$scope', '$dialog', '$routeParams', 'db'];
 
 function EditDatabaseController($scope, $dialog, db) {
     $scope.editorOptions = {
