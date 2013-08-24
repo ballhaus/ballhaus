@@ -49,7 +49,7 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
     [ [ 'home' ],
       [ 'events' ],
       [ 'event/:eventId', EditEventController ],
-      [ 'repertoire' ],
+      [ 'pieces' ],
       [ 'piece/:pieceId', EditPieceController ],
       [ 'enactment/:enactmentId', EditEnactmentController ],
       [ 'people' ],
