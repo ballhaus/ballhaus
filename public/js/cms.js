@@ -389,8 +389,9 @@ function EditDatabaseController($scope, $dialog, db) {
 EditDatabaseController.$inject = ['$scope', '$dialog', 'db'];
 
 function EditPageController($scope, $dialog, $routeParams, db) {
-    console.log('EditPageController', $routeParams.pageName);
-    $scope.page = db.get(db.Page, $routeParams.pageName);
+    var pageName = $routeParams.pageName;
+    console.log('EditPageController', pageName);
+    $scope.page = db.get(db.Page, pageName) || new db.Page({ name: pageName, link: pageName });
     console.log('page', $scope.page);
 
     $scope.deletePage = function () {
