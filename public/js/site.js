@@ -47,7 +47,7 @@ function ScheduleController($scope, $routeParams, db) {
         if (link) {
             link = '/veranstaltung/' + event.link;
         } else {
-            link = '/stueck/' + event.piece.link;
+            link = '/auffuehrung/' + event.id;
         }
         return {
             name: event.name || event.piece.name,
@@ -96,6 +96,11 @@ function EventPageController($scope, $routeParams) {
 }
 EventPageController.$inject = ['$scope', '$routeParams'];
 
+function EnactmentPageController($scope, $routeParams) {
+    $scope.enactment = $scope.db.get($scope.db.Enactment, $routeParams.enactmentId);
+}
+EnactmentPageController.$inject = ['$scope', '$routeParams'];
+
 app.config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
 
     $locationProvider.html5Mode(true);
@@ -106,6 +111,7 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
       [ 'spielplan/:month', ScheduleController ],
       [ 'person/:personId', PersonPageController ],
       [ 'stueck/:pieceId', PiecePageController ],
+      [ 'auffuehrung/:enactmentId', EnactmentPageController ],
       [ 'veranstaltung/:eventId', EventPageController ],
       [ 'kuenstlerinnen' ]
     ].forEach(function (pageDef) {
@@ -215,11 +221,21 @@ app
             }
         };
     }])
-    .directive("todayLink", function (db) {
+    .directive("prices", function () {
         return {
             restrict: 'E',
             replace: true,
-            template: '<div id="today-link"><a href="#">Heute, 21.6.13</a></div>'
+            templateUrl: '/partials/prices.html',
+            scope: { for: '=' }
+        };
+    })
+    .directive("pieceBase", function () {
+        return {
+            restrict: 'E',
+            transclude: true,
+            replace: true,
+            templateUrl: '/partials/piece-base.html',
+            scope: { piece: '=' }
         };
     })
     .directive("mediaBrowser", function () {

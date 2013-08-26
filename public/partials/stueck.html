@@ -1,5 +1,3 @@
-<media-browser model="piece"></media-browser>
-<p class="item-tags" ng-bind-html-unsafe="piece.tags | join:' / '"></p>
-<h1 class="item-name">{{piece.name}}</h1>
-<p ng-bind-html-unsafe="piece.by.de"></p>
-<p ng-bind-html-unsafe="piece.description.de"></p>
+<piece-base piece="piece">
+  <p>Uraufführung {{piece.premiere | toDate}}</p>
+</piece-base>
