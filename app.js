@@ -35,7 +35,7 @@ app.configure(function() {
     app.use(express.bodyParser({ keepExtensions: true, uploadDir: __dirname + '/uploads' }));
     app.use(express.methodOverride());
     app.use(express.cookieParser(config.cookieSecret));
-    app.use(express.session());
+    app.use(express.session({cookie: { path: '/', httpOnly: true, maxAge: 14400 }}));
     app.use(function (req, res, next) {
         if (req.accepted && req.accepted.length && req.accepted[0].value == 'text/html') {
                 if (req.url.match('^/cms')) {
