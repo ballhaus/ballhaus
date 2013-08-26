@@ -1,4 +1,9 @@
 <media-browser model="event"></media-browser>
 <h1 class="item-name">{{event.name}}</h1>
 <p ng-bind-html-unsafe="event.by.de"></p>
+<p>{{event.date | toDate}}</p>
+<p>Eintritt <span class="ng-cloak">
+  <span ng-show="event.freeEntry">frei</span>
+  <span ng-hide="event.freeEntry">{{event.priceNormal}} € / {{event.priceReduced}} €</span>
+</span></p>
 <p ng-bind-html-unsafe="event.description.de"></p>

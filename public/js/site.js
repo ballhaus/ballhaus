@@ -8,6 +8,11 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
     return function (input) {
       return input || '\u00a0';
     }
+})
+.filter('toDate', function () {
+    return function (input) {
+      return moment(input).format('Do MMMM YYYY');
+    };
 });
 
 var language = 'de';
