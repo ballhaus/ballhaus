@@ -76,7 +76,7 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
 app.value('ui.config', {
     tinymce: {
         theme: 'advanced',
-        theme_advanced_buttons1: "bold,italic,|,h1,h2,h3,|,link,unlink,image",
+        theme_advanced_buttons1: "bold,italic,|,h1,h2,|,link,unlink,image",
         theme_advanced_statusbar_location: "none",
         content_css: "/css/tinymce_content.css",
         plugins: "paste,inlinepopups",
@@ -87,8 +87,7 @@ app.value('ui.config', {
                 editor.pasteAsPlainText = true;
             });
             [['h1', 'Titel'],
-             ['h2', 'Subtitel'],
-             ['h3', 'Extratitel']].forEach(function (def) {
+             ['h2', 'Subtitel']].forEach(function (def) {
                  var tag = def[0];
                  var title = def[1];
                  editor.addButton(tag,
