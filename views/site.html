@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" ng-app="siteApp" include-db>
+<html lang="en" ng-app="siteApp" include-db ng-controller="PageController">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title ng-cloak>Ballhaus Naunynstraße - {{title}}</title>
+    <title ng-cloak>Ballhaus Naunynstraße - {{Page.title()}}</title>
     <link rel="stylesheet" href="/css/bootstrap-combined.min.css"/>
     <link rel="stylesheet" href="/css/MyFontsWebfontsKit.css"/>
     <link rel="stylesheet" href="/css/site.css"/>
@@ -45,7 +45,7 @@
               <menu-item>Partner</menu-item>
             </sub-menu>
             <menu-item>Tickets</menu-item>
-            <sub-menu name="Presse">>
+            <sub-menu name="Presse">
               <menu-item>Pressemitteilungen</menu-item>
               <menu-item>Bildmaterial</menu-item>
             </sub-menu>
@@ -55,20 +55,23 @@
       <div>
         <div id="main" ng-view>
         </div>
-        <div id="right">
-          <div>
-            <form action="#" class="form-inline newsletter-form">
-              <h2>Newsletter bestellen</h2>
-              <div class="newsletter-controls">
-                <input type="text" class="newsletter-address" type="email" placeholder="Email-Adresse" required>
-                <button type="submit" class="newsletter-submit ir">OK</button>
-              </div>
-            </form>
-          </div>
-          <div>
-            <p>
-              <a href="http://akademie-der-autodidakten.de"><img src="/img/ada_logo.png" width="238" height="76"/></a>
-            </p>
+        <div id="right" ng-cloak>
+          <div ng-show="Page.customSidebar()" ng-bind-html-unsafe="Page.sidebarContent()" />
+          <div ng-hide="Page.customSidebar()">
+            <div>
+              <form action="#" class="form-inline newsletter-form">
+                <h2>Newsletter bestellen</h2>
+                <div class="newsletter-controls">
+                  <input type="text" class="newsletter-address" type="email" placeholder="Email-Adresse" required>
+                  <button type="submit" class="newsletter-submit ir">OK</button>
+                </div>
+              </form>
+            </div>
+            <div>
+              <p>
+                <a href="http://akademie-der-autodidakten.de"><img src="/img/ada_logo.png" width="238" height="76"/></a>
+              </p>
+            </div>
           </div>
         </div>
       </div>

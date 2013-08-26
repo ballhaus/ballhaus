@@ -1,6 +1,6 @@
 <h2 class="page-title">Repertoire</h2>
 <ul class="repertoire big-list">
-  <li class="piece" ng-repeat="piece in db.pieces() | orderBy:'name'">
+  <li class="piece" ng-repeat="piece in pieces | orderBy:'name'">
     <a href="/stueck/{{piece.link}}">
       <div class="image-container">
         <img ng-src="/image/{{piece.images[0].name}}?thumbnail=1"/>
