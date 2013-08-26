@@ -105,8 +105,7 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
 
     $locationProvider.html5Mode(true);
 
-    [ [ 'home' ],
-      [ 'repertoire' ],
+    [ [ 'repertoire' ],
       [ 'spielplan', ScheduleController ],
       [ 'spielplan/:month', ScheduleController ],
       [ 'person/:personId', PersonPageController ],
