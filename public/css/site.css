@@ -458,21 +458,21 @@ input.search-input:focus {
     background: url(/img/menu/tickets-aktiv.png);
 }
 
-.site-menuitem-presse {
+.site-menuitem-Presse {
     background: url(/img/menu/presse-inaktiv.png);
     width: 110px;
     height: 37px;
     display: block;
 }
 
-.site-menuitem-presse:hover,.site-menuitem-presse:active,.site-menuitem-presse:focus {
+.site-menuitem-Presse:hover,.site-menuitem-Presse:active,.site-menuitem-Presse:focus {
     background: url(/img/menu/presse-aktiv.png);
 }
 
 .site-menuitem-spielplan {
     background: url(/img/menu/spielplan-inaktiv.png);
-    width: 143px;
-    height: 41px;
+    width: 139px;
+    height: 42px;
     display: block;
 }
 
@@ -483,7 +483,7 @@ input.search-input:focus {
 .site-menuitem-repertoire {
     background: url(/img/menu/repertoire-inaktiv.png);
     width: 150px;
-    height: 41px;
+    height: 42px;
     display: block;
 }
 
@@ -494,7 +494,7 @@ input.search-input:focus {
 .site-menuitem-reihen {
     background: url(/img/menu/reihen-inaktiv.png);
     width: 106px;
-    height: 41px;
+    height: 42px;
     display: block;
 }
 
@@ -504,8 +504,8 @@ input.search-input:focus {
 
 .site-menuitem-archiv {
     background: url(/img/menu/archiv-inaktiv.png);
-    width: 112px;
-    height: 41px;
+    width: 108px;
+    height: 42px;
     display: block;
 }
 
@@ -516,7 +516,7 @@ input.search-input:focus {
 .site-menuitem-geschichte {
     background: url(/img/menu/geschichte-inaktiv.png);
     width: 155px;
-    height: 41px;
+    height: 42px;
     display: block;
 }
 
@@ -527,7 +527,7 @@ input.search-input:focus {
 .site-menuitem-team {
     background: url(/img/menu/team-inaktiv.png);
     width: 93px;
-    height: 41px;
+    height: 42px;
     display: block;
 }
 
@@ -535,10 +535,21 @@ input.search-input:focus {
     background: url(/img/menu/team-aktiv.png);
 }
 
+.site-menuitem-auszeichnungen {
+    background: url(/img/menu/auszeichnungen-inaktiv.png);
+    width: 208px;
+    height: 42px;
+    display: block;
+}
+
+.site-menuitem-auszeichnungen:hover,.site-menuitem-auszeichnungen:active,.site-menuitem-auszeichnungen:focus {
+    background: url(/img/menu/auszeichnungen-aktiv.png);
+}
+
 .site-menuitem-postmigranten_on_tour {
     background: url(/img/menu/postmigranten_on_tour-inaktiv.png);
-    width: 143px;
-    height: 41px;
+    width: 284px;
+    height: 42px;
     display: block;
 }
 
@@ -548,8 +559,8 @@ input.search-input:focus {
 
 .site-menuitem-partner {
     background: url(/img/menu/partner-inaktiv.png);
-    width: 143px;
-    height: 41px;
+    width: 127px;
+    height: 42px;
     display: block;
 }
 
@@ -557,15 +568,26 @@ input.search-input:focus {
     background: url(/img/menu/partner-aktiv.png);
 }
 
-.site-menuitem-auszeichnungen {
-    background: url(/img/menu/auszeichnungen-inaktiv.png);
-    width: 208px;
-    height: 41px;
+.site-menuitem-pressemitteilungen {
+    background: url(/img/menu/pressemitteilungen-inaktiv.png);
+    width: 228px;
+    height: 42px;
     display: block;
 }
 
-.site-menuitem-auszeichnungen:hover,.site-menuitem-auszeichnungen:active,.site-menuitem-auszeichnungen:focus {
-    background: url(/img/menu/auszeichnungen-aktiv.png);
+.site-menuitem-pressemitteilungen:hover,.site-menuitem-pressemitteilungen:active,.site-menuitem-pressemitteilungen:focus {
+    background: url(/img/menu/pressemitteilungen-aktiv.png);
+}
+
+.site-menuitem-bildmaterial {
+    background: url(/img/menu/bildmaterial-inaktiv.png);
+    width: 169px;
+    height: 42px;
+    display: block;
+}
+
+.site-menuitem-bildmaterial:hover,.site-menuitem-bildmaterial:active,.site-menuitem-bildmaterial:focus {
+    background: url(/img/menu/bildmaterial-aktiv.png);
 }
 
 #logo {
