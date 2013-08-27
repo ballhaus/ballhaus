@@ -770,11 +770,11 @@ h2 {
 .events .date {
     float: left;
     font-size: 18px;
-    width: 110px;
+    width: 120px;
 }
 
 .events .big-column {
-    padding-left: 120px;
+    padding-left: 130px;
 }
 
 /* Repertoire */
