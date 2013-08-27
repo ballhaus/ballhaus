@@ -30,9 +30,12 @@
           <th>english</th>
         </tr>
         <tr>
-          <th>Von</th>
+          <th rowspan=2>Was / von</th>
           <td><optional-text model="event.by.de"/></td>
           <td><optional-text model="event.by.en"/></td>
+        <tr>
+          <td colspan=2>Text bitte in einer Zeile laufen lassen, keinen Umbruch</td>
+        </tr>
         </tr>
         <tr>
           <th>Wann</th>
@@ -64,13 +67,13 @@
           <td><optional-text model="event.description.en" rows="20"/></td>
         </tr>
         <tr>
-          <th>Mitwirkende</th>
+          <th>Mitwirkende / Künstlerliste</th>
           <td colspan="2">
             <participant-editor model="event.participants"/>
           </td>
         </tr>
         <tr>
-          <th>Förderer/Partner</th>
+          <th>Credit-Text / Förderer / etc.</th>
           <td><optional-text model="event.sponsors.de"/></td>
           <td><optional-text model="event.sponsors.en"/></td>
         </tr>
