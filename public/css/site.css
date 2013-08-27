@@ -719,8 +719,6 @@ input.search-input:focus {
     text-transform: uppercase;
 }
 
-/* FIXME: Titel Spielplan */
-
 #main h2 {
     font: 16px/26px Cillop-Medium, Helvetica, Arial, sans-serif;
     margin: 15px 0 0 0;
