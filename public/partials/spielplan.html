@@ -9,7 +9,7 @@
       <div class="date">{{event.weekday}}<br/>{{event.date}}<br/>{{event.time}} Uhr</div>
       <div class="item-tags">{{event.tags | join:" / " | orSpace }}</div>
       <div class="item-name">{{event.name}}</div>
-      <div class="item-by" ng-bind-html-unsafe="translate(event.by) | orSpace"></div>
+      <div class="item-by" ng-bind-html-unsafe="event.by | translate | orSpace"></div>
     </a>
   </li>
 </ul>

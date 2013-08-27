@@ -8,6 +8,20 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
     return function (input) {
       return input || '\u00a0';
     }
+})
+.filter('toDate', function () {
+    return function (input) {
+      return moment(input).format('Do MMMM YYYY');
+    };
+})
+.filter('translate', function () {
+  return translate;
+})
+.filter('formatParticipants', function () {
+  return function(input) {
+    return input && input.replace(/^(.+): (.+)$/mg, '<p><em>$1</em><br/>$2</p>')
+      .replace(/,/g, '<br />');
+  };
 });
 
 var language = 'de';
@@ -21,8 +35,13 @@ function translate(what) {
     }
 }
 
-function ScheduleController($scope, $routeParams, db) {
-    $scope.translate = translate;
+function RepertoireController($scope, db, Page) {
+    $scope.pieces = db.pieces();
+    Page.setTitle('Repertoire');
+    Page.setSidebarContent('');
+}
+
+function ScheduleController($scope, $routeParams, db, Page) {
     if ($routeParams.month) {
         $scope.month = $routeParams.month;
     } else {
@@ -32,29 +51,24 @@ function ScheduleController($scope, $routeParams, db) {
     var events = db.events().filter(function (event) {
       return event.date.getTime() > now.getTime();
     }).map(function (event) {
-        console.log(event);
         var date = moment(event.date);
-        var by = event.by;
-        if (!event.by && event.piece) {
-            by = event.piece.by;
-        }
         var link = event.link;
         if (link) {
             link = '/veranstaltung/' + event.link;
         } else {
-            link = '/stueck/' + event.piece.link;
+            link = '/auffuehrung/' + event.id;
         }
         return {
-            name: event.name || event.piece.name,
+            name: event.name || (event.piece && event.piece.name),
             link: link,
-            by: translate(by),
+            by: event.by || (event.piece && event.piece.by),
             weekday: date.format('dddd'),
             date: date.format('Do MMMM'),
             time: date.format('H:mm'),
             month: date.format('MMMM'),
             monthKey: date.format('MM-YYYY'),
             epochSeconds: event.date.getTime(),
-            tags: event.tags || (event.piece && event.piece.tags && event.piece.tags)
+            tags: event.tags || (event.piece && event.piece.tags)
         };
     });
     $scope.events = events.sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
@@ -68,47 +82,71 @@ function ScheduleController($scope, $routeParams, db) {
             oldMonthKey = event.monthKey;
         }
     });
-    
-    console.log('events', events);
+    Page.setTitle('Spielplan');
+    Page.setSidebarContent('');
 }
-ScheduleController.$inject = ['$scope', '$routeParams', 'db'];
 
-function PersonPageController($scope, $routeParams) {
+function PersonPageController($scope, $routeParams, Page) {
     $scope.person = $scope.db.get($scope.db.Person, $routeParams.personId);
-
+    Page.setTitle($scope.person.name);
+    Page.setSidebarContent('');
 }
-PersonPageController.$inject = ['$scope', '$routeParams'];
 
-function PiecePageController($scope, $routeParams) {
+function PiecePageController($scope, $routeParams, Page, $compile) {
     $scope.piece = $scope.db.get($scope.db.Piece, $routeParams.pieceId);
-
+    Page.setTitle($scope.piece.name);
+    Page.setSidebarContent($compile('<piece-sidebar for="piece"/>')($scope));
 }
-PiecePageController.$inject = ['$scope', '$routeParams'];
 
-function EventPageController($scope, $routeParams) {
+function EventPageController($scope, $routeParams, Page, $compile) {
     $scope.event = $scope.db.get($scope.db.Event, $routeParams.eventId);
-
+    Page.setTitle($scope.event.name);
+    Page.setSidebarContent($compile('<piece-sidebar for="event"/>')($scope));
 }
-EventPageController.$inject = ['$scope', '$routeParams'];
+
+function EnactmentPageController($scope, $routeParams, Page, $compile) {
+    $scope.enactment = $scope.db.get($scope.db.Enactment, $routeParams.enactmentId);
+    Page.setTitle($scope.enactment.piece.name); //FIXME
+    Page.setSidebarContent($compile('<piece-sidebar for="enactment.piece"/>')($scope));
+}
+
+function KuenstlerinnenController($scope, Page, db) {
+    $scope.people = db.people();
+    Page.setTitle('Künstlerinnen');
+    Page.setSidebarContent('');
+}
+
+function PageController($scope, Page) {
+    $scope.Page = Page;
+}
+app.factory('Page', function () {
+    var title = '';
+    var sidebar = null;
+    return {
+        title: function() { return title; },
+        setTitle: function(newTitle) { title = newTitle; },
+        customSidebar: function () { return sidebar !== null && typeof sidebar !== 'undefined'; },
+        sidebarContent: function () { return sidebar; },
+        setSidebarContent: function (newSidebar) { sidebar = newSidebar; }
+    };
+});
 
 app.config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
 
     $locationProvider.html5Mode(true);
 
-    [ [ 'home' ],
-      [ 'repertoire' ],
+    [ [ 'repertoire', RepertoireController ],
       [ 'spielplan', ScheduleController ],
       [ 'spielplan/:month', ScheduleController ],
       [ 'person/:personId', PersonPageController ],
       [ 'stueck/:pieceId', PiecePageController ],
+      [ 'auffuehrung/:enactmentId', EnactmentPageController ],
       [ 'veranstaltung/:eventId', EventPageController ],
-      [ 'kuenstlerinnen' ]
+      [ 'kuenstlerinnen', KuenstlerinnenController ]
     ].forEach(function (pageDef) {
         var def = { name: pageDef[0],
-                    templateUrl: '/partials/' + pageDef[0].replace(/\/.*$/, "") + '.html' };
-        if (pageDef[1]) {
-            def.controller = pageDef[1];
-        }
+                    templateUrl: '/partials/' + pageDef[0].replace(/\/.*$/, "") + '.html',
+                    controller: pageDef[1] };
         $routeProvider.when('/' + pageDef[0], def);
     });
 
@@ -180,14 +218,16 @@ app
                         pageName = 'home';
                     }
 
+                    $scope.Page.setSidebarContent();
+
                     var page = db.get(db.Page, pageName);
 
                     var html;
                     if (page) {
-                        $scope.title = page.name;
+                        $scope.Page.setTitle(page.name);
                         html = '<div>' + translate(page.contents) + '</div>';
                     } else {
-                        $scope.title = 'Seite nicht gefunden';
+                        $scope.Page.setTitle('Seite nicht gefunden');
                         html = '<span>Die Seite "' + pageName + '" wurde nicht gefunden</span>';
                     }
                     var contents = angular.element(html);
@@ -210,11 +250,29 @@ app
             }
         };
     }])
-    .directive("todayLink", function (db) {
+    .directive("prices", function () {
         return {
             restrict: 'E',
             replace: true,
-            template: '<div id="today-link"><a href="#">Heute, 21.6.13</a></div>'
+            templateUrl: '/partials/prices.html',
+            scope: { for: '=' }
+        };
+    })
+    .directive("pieceSidebar", function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/partials/piece-sidebar.html',
+            scope: { for: '=' }
+        };
+    })
+    .directive("pieceBase", function () {
+        return {
+            restrict: 'E',
+            transclude: true,
+            replace: true,
+            templateUrl: '/partials/piece-base.html',
+            scope: { piece: '=' }
         };
     })
     .directive("mediaBrowser", function () {
