@@ -1,6 +1,8 @@
 <media-browser model="event"></media-browser>
 <h1 class="item-name">{{event.name}}</h1>
-<p ng-bind-html-unsafe="event.by.de"></p>
-<p>{{event.date | toDate}}</p>
-<prices for="event" />
+<p class="item-meta">
+    <span class="item-by" ng-bind-html-unsafe="event.by.de"></span>
+    {{event.date | toDate}}<br/>
+    <prices for="event" />
+</p>
 <p ng-bind-html-unsafe="event.description.de"></p>
