@@ -4,6 +4,13 @@
       <div style="display: {{displayState('locked')}}">
         <legend>System ist gesperrt</legend>
         Datenbank wird derzeit von {{loggedInUser}} bearbeitet.
+        <br/>
+        <br/>
+        <p>
+          <button ng-click="logout(true)" class="btn btn-primary btn-danger">Sperre aufheben</button>
+        </p>
+        <br/>
+        Achtung, Änderungen von {{loggedInUser}} gehen verloren!
       </div>
       <div style="display: {{displayState('loggedOut')}}">
         <legend>Anmeldung</legend>

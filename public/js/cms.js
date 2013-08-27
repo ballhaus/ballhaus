@@ -263,14 +263,14 @@ function LoginController($scope, $rootScope, $dialog, $http, db) {
 
     $scope.saveChanges = true;
 
-    $scope.logout = function () {
+    $scope.logout = function (force) {
         console.log('db', db);
         db.pushToServer(function () {
             localStorage.data = '';
             localStorage.lockId = '';
-            $http.post('/logout')
+            $http.post(force ? '/logout?force=1' : '/logout')
                 .success(function () {
-                    location = '/cms';
+                    window.location = '/cms';
                 });
         });
     }

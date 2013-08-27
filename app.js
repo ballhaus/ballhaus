@@ -288,7 +288,7 @@ app.post('/login',
 
 app.post('/logout',
          function (req, res) {
-             if (!req.session.loggedIn) {
+             if (!req.session.loggedIn && !req.query.force) {
                  res.send(400, 'Nicht angemeldet');
              } else {
                  loginStatus = {};
