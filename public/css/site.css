@@ -691,10 +691,16 @@ input.search-input:focus {
     text-transform: uppercase;
 }
 
-.item-name {
+.item-name, h1 {
     font-size: 18px;
     font-family: Cillop-Bold, Helvetica, Arial, sans-serif;
+    letter-spacing: 1px;
     text-transform: uppercase;
+}
+
+h2 {
+    font: 16px/26px Cillop-Medium, Helvetica, Arial, sans-serif;
+    margin-top: 15px;
 }
 
 .item-by p {
@@ -763,4 +769,10 @@ input.search-input:focus {
 
 .kuenstlerinnen > li {
     height: 80px;
+}
+
+/* Stück / Veranstaltung / Aufführung */
+.piece-sidebar {
+    font-size: 14px;
+    line-height: 2;
 }
