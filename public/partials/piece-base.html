@@ -3,7 +3,7 @@
   <p class="item-tags" ng-bind-html-unsafe="piece.tags | join:' / '"></p>
   <h1 class="item-name">{{piece.name}}</h1>
   <div class="item-meta">
-    <p ng-bind-html-unsafe="piece.by.de"></p>
+    <span class="item-by" ng-bind-html-unsafe="piece.by.de"></span>
     <span ng-transclude/>
   </div>
   <p ng-bind-html-unsafe="piece.description.de"></p>
