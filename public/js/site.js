@@ -63,7 +63,7 @@ function ScheduleController($scope, $routeParams, db, Page) {
             link: link,
             by: event.by || (event.piece && event.piece.by),
             weekday: date.format('dddd'),
-            date: date.format('DoMMMM'),
+            date: date.format('Do MMMM'),
             time: date.format('H:mm'),
             month: date.format('MMMM'),
             monthKey: date.format('MM-YYYY'),
