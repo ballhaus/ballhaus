@@ -166,7 +166,7 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
 app
     .filter('reverse', function() {
         return function(items) {
-            return items.slice().reverse();
+            return items && items.slice().reverse();
         };
     })
     .directive("includeDb", ['$rootScope', 'db', function ($rootScope, db) {
@@ -313,6 +313,8 @@ app
 
                 $scope.showMedium = function () {
                     var medium = $scope.media[$scope.mediumIndex];
+                    if (!medium) return;
+
                     var display = element.find('.display');
                     display.empty();
 
