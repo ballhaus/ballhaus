@@ -113,9 +113,10 @@ function EventPageController($scope, $routeParams, Page, $compile) {
 }
 
 function EnactmentPageController($scope, $routeParams, Page, $compile) {
-    $scope.enactment = $scope.db.get($scope.db.Enactment, $routeParams.enactmentId);
-    Page.setTitle($scope.enactment.piece.name); //FIXME
-    Page.setSidebarContent($compile('<piece-sidebar for="enactment.piece"/>')($scope));
+    var enactment = $scope.db.get($scope.db.Enactment, $routeParams.enactmentId);
+    $scope.enactment = angular.extend({}, enactment.piece, enactment);
+    Page.setTitle($scope.enactment.name);
+    Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
 }
 
 function KuenstlerinnenController($scope, Page, db) {
