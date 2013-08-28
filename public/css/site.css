@@ -601,33 +601,18 @@ input.search-input:focus {
 }
 
 .media-browser {
-    background: black;
-    color: white;
-    width: 620px;
-    height: 500px;
-    position: relative;
-    margin-bottom: 1em;
+    width: 670px;
 }
 
 .media-browser .display {
-    position: absolute;
-/*    background: #555; */
-    color: white;
-    width: 600px;
-    height: 450px;
-    top: 10px;
-    left: 10px;
+    width: 100%;
+    height: 376px;
     cursor: e-resize;
 }
 
 .media-browser > .nav {
-    position: absolute;
-/*    background: #505; */
-    color: white;
-    width: 600px;
-    height: 20px;
-    top: 470px;
-    left: 10px;
+    width: 100%;
+    margin: 16px 0;
 }
 
 .media-browser ul {
@@ -637,19 +622,7 @@ input.search-input:focus {
 
 .media-browser li {
     display: inline-block;
-    margin: 0 5px 0 5px;
-}
-
-.media-browser ul.right li {
-    float: right;
-}
-
-.media-browser ul.left li {
-    float: left;
-}
-
-.media-browser .display img {
-    position: absolute;
+    margin: 0 5px 0 0;
 }
 
 .media-browser ul li span {

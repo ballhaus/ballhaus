@@ -289,7 +289,7 @@ app
             restrict: 'E',
             replace: true,
             templateUrl: '/partials/media-browser.html',
-            scope: { model: '=model' },
+            scope: { model: '=' },
             link: function ($scope, element, attributes) {
 
                 $scope.media = $scope.model.images.slice();
@@ -301,28 +301,8 @@ app
                 }
                 $scope.mediumIndex = 0;
 
-                $scope.previousIconClass = function () {
-                    var iconClass = 'icon-left';
-                    if ($scope.mediumIndex != 0) {
-                        iconClass += " icon-white";
-                    }
-                    return iconClass;
-                }
-
-                $scope.nextIconClass = function () {
-                    var iconClass = 'icon-right';
-                    if ($scope.mediumIndex != ($scope.media.length - 1)) {
-                        iconClass += " icon-white";
-                    }
-                    return iconClass;
-                }
-
                 $scope.mediumClass = function () {
-                    var iconClass = "icon-" + this.medium.type;
-                    if ($scope.mediumIndex != $scope.media.indexOf(this.medium)) {
-                        iconClass += " icon-white";
-                    }
-                    return iconClass;
+                    return "icon-" + this.medium.type;
                 }
 
                 $scope.clickMedium = function () {
@@ -333,28 +313,28 @@ app
                 $scope.showMedium = function () {
                     var medium = $scope.media[$scope.mediumIndex];
                     var display = element.find('.display');
-                    display.children().remove();
+                    display.empty();
 
+                    var maxWidth = 670;
+                    var maxHeight = 376;
                     function showPicture() {
                         var image = medium;
                         var width, height;
-                        if (image.width < image.height) {
-                            width = image.width * (450 / image.height);
-                            height = 450;
+                        if (image.width / maxWidth < image.height / maxHeight) {
+                            width = image.width * (maxHeight / image.height);
+                            height = maxHeight;
                         } else {
-                            width = 600;
-                            height = image.height * (600 / image.width);
+                            width = maxWidth;
+                            height = image.height * (maxWidth / image.width);
                         }
-                        var left = (600 / 2) - (width / 2);
-                        var top = (450 / 2) - (height / 2);
                         display.append(angular.element('<img src="/image/' + image.name
                                                        + '" width="' + width + '" height="' + height
-                                                       + '" style="left: ' + left + 'px; top: ' + top + 'px;"/>'));
+                                                       + '" />'));
                     }
 
                     function showVideo() {
                         display.append(angular.element('<iframe src="http://player.vimeo.com/video/ ' + medium.id
-                                                       + '" width="' + 600 + '" height="' + 450
+                                                       + '" width="' + maxWidth + '" height="' + maxHeight
                                                        + '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));
                     }
 
