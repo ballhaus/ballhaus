@@ -190,6 +190,7 @@ app
             templateUrl: '/partials/submenu.html',
             link: function ($scope, element, attributes) {
                 $scope.title = attributes.name;
+                $scope.linkTarget = attributes.link;
             }
         }
     })
