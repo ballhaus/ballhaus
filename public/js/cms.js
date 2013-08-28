@@ -76,30 +76,12 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
 app.value('ui.config', {
     tinymce: {
         theme: 'advanced',
-        theme_advanced_buttons1: "bold,italic,|,h1,h2,|,link,unlink,image",
+        theme_advanced_buttons1: "bold,italic,|,h2,|,link,unlink,image",
         theme_advanced_statusbar_location: "none",
         content_css: "/css/tinymce_content.css",
-        plugins: "paste,inlinepopups",
+        plugins: "paste,inlinepopups,heading",
         paste_text_sticky: true,
         entity_encoding: 'raw',
-        setup: function (editor) {
-            editor.onInit.add(function(editor) {
-                editor.pasteAsPlainText = true;
-            });
-            [['h1', 'Titel'],
-             ['h2', 'Subtitel']].forEach(function (def) {
-                 var tag = def[0];
-                 var title = def[1];
-                 editor.addButton(tag,
-                                  {
-                                      title: title,
-                                      image: '/img/' + tag + '.png',
-                                      onclick: function() {
-                                          editor.execCommand('FormatBlock', false, tag);
-                                      }
-                                  });
-             });
-        }
     },
     codemirror: {
         lineWrapping: true
