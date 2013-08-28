@@ -77,11 +77,19 @@ function ScheduleController($scope, $routeParams, db, Page) {
     var oldMonthKey;
     $scope.events.forEach(function (event) {
         if (event.monthKey != oldMonthKey) {
-            $scope.months.push({ name: event.month,
-                                 key: event.monthKey });
+            $scope.months.push({
+                name: event.month,
+                key: event.monthKey,
+                curClass: event.monthKey === $scope.month ? 'active' : ''
+            });
             oldMonthKey = event.monthKey;
         }
     });
+
+    $scope.events = $scope.events.filter(function (event) {
+      return event.monthKey === $scope.month;
+    });
+
     Page.setTitle('Spielplan');
     Page.setSidebarContent('');
 }

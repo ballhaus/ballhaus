@@ -1,6 +1,8 @@
 <h1 class="page-title">Spielplan</h1>
 <ul class="hor-list">
-  <li ng-repeat="month in months"><a href="/spielplan/{{month.key}}">{{month.name}}</a></li>
+  <li ng-repeat="month in months">
+    <a class="{{month.curClass}}" href="/spielplan/{{month.key}}">{{month.name}}</a>
+  </li>
 </ul>
 <ul class="events big-list">
   <li class="event" ng-repeat="event in events">

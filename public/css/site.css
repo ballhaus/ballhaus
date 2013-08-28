@@ -122,10 +122,12 @@ h1 {
 #main a:focus,
 #main a:hover,
 #main a:active,
+#main a.active,
 /* Tags need to get the message twice */
 #main a:focus .item-tags,
 #main a:hover .item-tags,
-#main a:active .item-tags {
+#main a:active .item-tags,
+#main a.active {
     color: #eb0033;
 }
 
