@@ -410,6 +410,10 @@ input.search-input:focus {
     margin-top: 5px;
 }
 
+#site-menu > nav > ul > li {
+    margin-right: 5px;
+}
+
 .site-submenu-Programm {
     width: 143px;
 }
