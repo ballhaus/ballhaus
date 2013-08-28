@@ -787,5 +787,6 @@ input.search-input:focus {
 }
 
 /* Stück / Veranstaltung / Aufführung */
-.piece-sidebar {
+#right .piece-sidebar {
+    padding: 0;
 }
