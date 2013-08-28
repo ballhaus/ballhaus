@@ -190,3 +190,9 @@ image-button {
 .CodeMirror {
     height: auto;
 }
+
+.edit-note {
+    font-family: Times New Roman, Times, serif;
+    color: #005ace;
+    font-style: italic;
+}
