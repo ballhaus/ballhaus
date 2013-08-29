@@ -112,7 +112,7 @@ h1 {
 #main {
     width: 670px;
     float: left;
-    margin: 47px 15px 5px 32px;
+    margin: 47px 15px 45px 32px;
 }
 
 #main a {
@@ -703,7 +703,7 @@ input.search-input:focus {
 }
 
 #main h2 {
-    font: 16px/26px Verdana, Geneva, sans-serif;
+    font: 16px/20px Verdana, Geneva, sans-serif;
     margin: 15px 0 0 0;
 }
 
@@ -719,7 +719,7 @@ input.search-input:focus {
 }
 
 .piece-details .item-by, .item-meta {
-    line-height: 19px;
+    line-height: 20px;
     margin-bottom: 21px;
 }
 
