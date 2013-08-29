@@ -679,6 +679,10 @@ input.search-input:focus {
     margin: 0.5em 14px 0.5em 0;
 }
 
+#main .muted {
+    color: #5f5f5f;
+}
+
 .big-list {
     border-top: solid black 2px;
 }

@@ -1,31 +1,41 @@
 var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.directives', 'ngSanitize'])
 .filter('join', function () {
     return function (input, arg) {
-      return input && input.join(arg);
+        return input && input.join(arg);
+    };
+})
+.filter('or', function () {
+    return function (input, arg) {
+        return input || arg;
     };
 })
 .filter('orSpace', function () {
     return function (input) {
-      return input || '\u00a0';
-    }
+        return input || '\u00a0';
+    };
 })
 .filter('toDate', function () {
     return function (input) {
-      return moment(input).format('Do MMMM YYYY');
+        return moment(input).format('Do MMMM YYYY');
     };
 })
 .filter('translate', function () {
-  return translate;
+    return translate;
 })
 .filter('formatParticipants', function () {
-  return function(input) {
-    if (!input) { return ''; }
-    return input.map(function (role) {
-      return '<div><em>' + role.role + '</em><ul class="participants-list">' + role.people.map(function (person) {
-        return '<li><a href="/person/' + person.link + '">' + person.name + '</a></li>';
-      }).join('') + '</ul></div>';
-    }).join('');
-  };
+    return function(input) {
+        if (!input) { return ''; }
+        return input.map(function (role) {
+            return '<div><em>' + role.role + '</em><ul class="participants-list">' + role.people.map(function (person) {
+                return '<li><a href="/person/' + person.link + '">' + person.name + '</a></li>';
+            }).join('') + '</ul></div>';
+        }).join('');
+    };
+})
+.filter('fromCharCode', function () {
+    return function (input) {
+        return String.fromCharCode(input);
+    }
 });
 
 var language = 'de';
@@ -143,9 +153,26 @@ function EnactmentPageController($scope, $routeParams, Page, $compile) {
     Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
 }
 
-function KuenstlerinnenController($scope, Page, db) {
+function KuenstlerinnenController($scope, $routeParams, Page, db) {
     $scope.people = db.people();
-    Page.setTitle('Künstlerinnen');
+
+    $scope.letters = $scope.people.reduce(function (letters, person) {
+        var c = utils.urlify(person.name.charAt(0)).toUpperCase().charCodeAt(0);
+        letters[c] = 'letter-present';
+        return letters;
+    }, Array('Z'.charCodeAt(0) + 1));
+    $scope.letters.offset = 0;
+    while ($scope.letters[$scope.letters.offset++] !== 'letter-present' &&
+        $scope.letters.offset < 'A'.charCodeAt(0)) {
+    }
+
+    if ($routeParams.letter) {
+        $scope.people = $scope.people.filter(function (person) {
+            return utils.urlify(person.name.charAt(0)).toUpperCase() === $routeParams.letter;
+        });
+    }
+
+    Page.setTitle('Künstlerinnen' + ($routeParams.letter ? ' ' + $routeParams.letter : ''));
     Page.setSidebarContent('');
 }
 
@@ -175,7 +202,8 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
       [ 'stueck/:pieceId', PiecePageController ],
       [ 'auffuehrung/:enactmentId', EnactmentPageController ],
       [ 'veranstaltung/:eventId', EventPageController ],
-      [ 'kuenstlerinnen', KuenstlerinnenController ]
+      [ 'kuenstlerinnen', KuenstlerinnenController ],
+      [ 'kuenstlerinnen/:letter', KuenstlerinnenController ]
     ].forEach(function (pageDef) {
         var def = { name: pageDef[0],
                     templateUrl: '/partials/' + pageDef[0].replace(/\/.*$/, "") + '.html',
