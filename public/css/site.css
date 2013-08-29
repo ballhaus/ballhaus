@@ -92,14 +92,14 @@ a {
 
 h1 {
     margin: 10px 0;
+    color: black;
 }
 
 .item-name, h1 {
-    font-size: 18px;
+    font-size: 19px;
     line-height: 20px;
-    font-family: Cillop-Bold, Helvetica, Arial, sans-serif;
+    font-family: Verdana, Geneva, sans-serif;
     font-weight: normal;
-    letter-spacing: 1px;
     text-transform: uppercase;
 }
 
@@ -669,7 +669,7 @@ input.search-input:focus {
 }
 
 .hor-list {
-    font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
+    font-family: Verdana, Geneva, sans-serif;
     font-size: 18px;
     padding: 6px 0 20px 20px;
 }
@@ -686,26 +686,27 @@ input.search-input:focus {
 .big-list > li {
     display: block;
     margin: 0;
-    padding: 16px 0 10px 20px; /* This should be 16 _ 16 _, but the line-height bleeds */
+    padding: 16px 0 16px 20px;
     border-bottom: solid black 2px;
     clear: both;
-    font: 16px/26px Cillop-Medium, Helvetica, Arial, sans-serif;
+    font: 16px/24px Verdana, Geneva, sans-serif;
 }
 
 .item-tags {
-    font-size: 14px;
+    font-size: 16px;
     color: #5f5f5f;
     text-transform: uppercase;
 }
 
 #main h2 {
-    font: 16px/26px Cillop-Medium, Helvetica, Arial, sans-serif;
+    font: 16px/26px Verdana, Geneva, sans-serif;
     margin: 15px 0 0 0;
 }
 
 .item-meta {
-    font: 16px/26px Cillop-Medium, Helvetica, Arial, sans-serif;
+    font: 16px/26px Verdana, Geneva, sans-serif;
     margin-bottom: 26px;
+    color: #1b1b1b;
 }
 
 .item-by p {
@@ -713,8 +714,8 @@ input.search-input:focus {
 }
 
 .item-by, .item-meta {
-    line-height: 18px;
-    margin-bottom: 8px;
+    line-height: 19px;
+    margin-bottom: 21px;
 }
 
 .big-list .image-container {
@@ -751,17 +752,31 @@ input.search-input:focus {
 
 .events .date {
     float: left;
-    font-size: 18px;
-    width: 120px;
+    font-size: 16px;
+    width: 125px;
 }
 
 .events .big-column {
-    padding-left: 130px;
+    padding-left: 135px;
 }
 
 .events .item-name,
 .events .item-by {
-    line-height: 26px;
+    line-height: 24px;
+}
+
+.events .item-name {
+    font-size: 16px;
+}
+
+.events .item-tags {
+     font-size: 15px;
+}
+
+.events .item-by {
+    line-height: 21px;
+    padding-top: 3px;
+    font-size: 14px;
 }
 
 /* Repertoire */
