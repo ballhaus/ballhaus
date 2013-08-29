@@ -714,7 +714,7 @@ input.search-input:focus {
     margin: 0; /* The backend wraps everything in a paragraph */
 }
 
-.item-by, .item-meta {
+.piece-details .item-by, .item-meta {
     line-height: 19px;
     margin-bottom: 21px;
 }
