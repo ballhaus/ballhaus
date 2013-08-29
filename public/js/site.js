@@ -117,7 +117,7 @@ function ScheduleController($scope, $routeParams, db, Page) {
 
 function PersonPageController($scope, $routeParams, Page) {
     $scope.person = $scope.db.get($scope.db.Person, $routeParams.personId);
-    Page.setTitle($scope.person.name);
+    Page.setTitle($scope.person ? $scope.person.name : 'Person nicht gefunden');
     Page.setSidebarContent('');
 }
 
@@ -317,10 +317,10 @@ app
             scope: { model: '=' },
             link: function ($scope, element, attributes) {
 
-                $scope.media = $scope.model.images.slice();
+                $scope.media = ($scope.model && $scope.model.images || []).slice();
 
                 $scope.media.forEach(function (picture) { picture.type = 'picture' });
-                if ($scope.model.video) {
+                if ($scope.model && $scope.model.video) {
                     $scope.model.video.type = 'video';
                     $scope.media.push($scope.model.video);
                 }
