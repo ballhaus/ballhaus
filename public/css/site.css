@@ -810,3 +810,26 @@ input.search-input:focus {
 #right .piece-sidebar {
     padding: 0;
 }
+
+.piece-details .item-name-wrapper {
+    margin: 10px 0;
+}
+
+.piece-details .item-name {
+    display: inline;
+    padding-right: 36px;
+}
+
+.piece-details .ticket-shop {
+    display: inline-block;
+    margin-bottom: -3px;
+    background-image: url(/img/ticket-inaktiv-klein.png);
+    width: 97px;
+    height: 21px;
+}
+
+.piece-details .ticket-shop:hover,
+.piece-details .ticket-shop:active,
+.piece-details .ticket-shop:focus {
+    background-image: url(/img/ticket-aktiv-klein.png);
+}

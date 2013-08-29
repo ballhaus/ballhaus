@@ -1,7 +1,10 @@
-<div>
+<div class="piece-details">
   <media-browser model="piece"></media-browser>
   <p class="item-tags" ng-bind-html-unsafe="piece.tags | join:' / '"></p>
-  <h1 class="item-name">{{piece.name}}</h1>
+  <div class="item-name-wrapper">
+    <h1 class="item-name">{{piece.name}}</h1>
+    <a href="/" class="ticket-shop ir">Ticket kaufen</a>
+  </div>
   <div class="item-meta">
     <span class="item-by" ng-bind-html-unsafe="piece.by.de"></span>
     <span ng-transclude/>
