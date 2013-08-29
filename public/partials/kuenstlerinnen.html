@@ -1,5 +1,5 @@
 <h1 class="page-title">Künstlerinnen</h1>
-<ul class="hor-list">
+<ul class="hor-list kuenstlerinnen-letters">
   <li ng-repeat="letterPresent in letters" ng-hide="$index < letters.offset">
     <a ng-show="letterPresent" href="/kuenstlerinnen/{{$index | fromCharCode}}">{{$index | fromCharCode}}</a>
     <span ng-hide="letterPresent" class="muted">{{$index | fromCharCode}}</span>

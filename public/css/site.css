@@ -407,7 +407,7 @@ input.search-input:focus {
 }
 
 #site-menu > nav > ul > li > ul > li {
-    margin-top: 5px;
+    margin-top: 1px;
 }
 
 #site-menu > nav > ul > li {
@@ -808,6 +808,10 @@ input.search-input:focus {
 
 .kuenstlerinnen > li {
     height: 80px;
+}
+
+.kuenstlerinnen-letters > li {
+    margin-right: 12px;
 }
 
 /* Stück / Veranstaltung / Aufführung */
