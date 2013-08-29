@@ -709,7 +709,8 @@ input.search-input:focus {
     color: #1b1b1b;
 }
 
-.item-by p {
+.item-by p,
+#main p {
     margin: 0; /* The backend wraps everything in a paragraph */
 }
 
