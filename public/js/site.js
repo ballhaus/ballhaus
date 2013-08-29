@@ -19,8 +19,12 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
 })
 .filter('formatParticipants', function () {
   return function(input) {
-    return input && input.replace(/^(.+): (.+)$/mg, '<p><em>$1</em><br/>$2</p>')
-      .replace(/,/g, '<br />');
+    if (!input) { return ''; }
+    return input.map(function (role) {
+      return '<div><em>' + role.role + '</em><ul class="participants-list">' + role.people.map(function (person) {
+        return '<li><a href="/person/' + person.link + '">' + person.name + '</a></li>';
+      }).join('') + '</ul></div>';
+    }).join('');
   };
 });
 
@@ -33,6 +37,23 @@ function translate(what) {
     case 'object':
         return what[language];
     }
+}
+
+// FIXME: Ugly c&p from CMS
+function peopleMatch(db, string) {
+    var data = [];
+    var re = /(.*):\s*(.*)/g;
+    var match;
+    while ((match = re.exec(string)) !== null) {
+        // console.log(match[1], match[2].split(/\s*,\s*/));
+        data.push({ role: match[1],
+                    people: match[2].split(/\s*,\s*/).map(function (name) {
+                        var person = db.Person.getByName(name);
+                        return { name: name,
+                                 link: (person ? person.link : utils.urlify(name)) };
+                    })});
+    }
+    return data;
 }
 
 function RepertoireController($scope, db, Page) {
@@ -102,12 +123,14 @@ function PersonPageController($scope, $routeParams, Page) {
 
 function PiecePageController($scope, $routeParams, Page, $compile) {
     $scope.piece = $scope.db.get($scope.db.Piece, $routeParams.pieceId);
+    $scope.piece.participants = peopleMatch($scope.db, $scope.piece.participants);
     Page.setTitle($scope.piece.name);
     Page.setSidebarContent($compile('<piece-sidebar for="piece"/>')($scope));
 }
 
 function EventPageController($scope, $routeParams, Page, $compile) {
     $scope.event = $scope.db.get($scope.db.Event, $routeParams.eventId);
+    $scope.event.participants = peopleMatch($scope.db, $scope.event.participants);
     Page.setTitle($scope.event.name);
     Page.setSidebarContent($compile('<piece-sidebar for="event"/>')($scope));
 }
@@ -115,6 +138,7 @@ function EventPageController($scope, $routeParams, Page, $compile) {
 function EnactmentPageController($scope, $routeParams, Page, $compile) {
     var enactment = $scope.db.get($scope.db.Enactment, $routeParams.enactmentId);
     $scope.enactment = angular.extend({}, enactment.piece, enactment);
+    $scope.enactment.participants = peopleMatch($scope.db, $scope.enactment.participants);
     Page.setTitle($scope.enactment.name);
     Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
 }

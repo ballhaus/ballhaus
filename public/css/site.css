@@ -811,6 +811,21 @@ input.search-input:focus {
     padding: 0;
 }
 
+.piece-sidebar .participants-list {
+    list-style: none;
+    margin: 0 0 19px 0;
+}
+
+.piece-sidebar .participants-list li {
+    line-height: 19px;
+}
+
+.piece-sidebar .participants-list a:hover,
+.piece-sidebar .participants-list a:focus,
+.piece-sidebar .participants-list a:active {
+    color: inherit;
+}
+
 .piece-details .item-name-wrapper {
     margin: 10px 0;
 }
