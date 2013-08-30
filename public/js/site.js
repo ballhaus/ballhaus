@@ -371,7 +371,8 @@ app
                     display.empty();
 
                     var maxWidth = 670;
-                    var maxHeight = 376;
+                    var maxHeight = 426;
+                    var maxVideoHeight = 376;
                     function showPicture() {
                         var image = medium;
                         var width, height;
@@ -389,7 +390,7 @@ app
 
                     function showVideo() {
                         display.append(angular.element('<iframe src="http://player.vimeo.com/video/ ' + medium.id
-                                                       + '" width="' + maxWidth + '" height="' + maxHeight
+                                                       + '" width="' + maxWidth + '" height="' + maxVideoHeight
                                                        + '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));
                     }
 
