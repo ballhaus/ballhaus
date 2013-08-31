@@ -1,27 +1,41 @@
 var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.directives', 'ngSanitize'])
 .filter('join', function () {
     return function (input, arg) {
-      return input && input.join(arg);
+        return input && input.join(arg);
+    };
+})
+.filter('or', function () {
+    return function (input, arg) {
+        return input || arg;
     };
 })
 .filter('orSpace', function () {
     return function (input) {
-      return input || '\u00a0';
-    }
+        return input || '\u00a0';
+    };
 })
 .filter('toDate', function () {
     return function (input) {
-      return moment(input).format('Do MMMM YYYY');
+        return moment(input).format('Do MMMM YYYY');
     };
 })
 .filter('translate', function () {
-  return translate;
+    return translate;
 })
 .filter('formatParticipants', function () {
-  return function(input) {
-    return input && input.replace(/^(.+): (.+)$/mg, '<p><em>$1</em><br/>$2</p>')
-      .replace(/,/g, '<br />');
-  };
+    return function(input) {
+        if (!input) { return ''; }
+        return input.map(function (role) {
+            return '<div><em>' + role.role + '</em><ul class="participants-list">' + role.people.map(function (person) {
+                return '<li><a href="/person/' + person.link + '">' + person.name + '</a></li>';
+            }).join('') + '</ul></div>';
+        }).join('');
+    };
+})
+.filter('fromCharCode', function () {
+    return function (input) {
+        return String.fromCharCode(input);
+    }
 });
 
 var language = 'de';
@@ -33,6 +47,23 @@ function translate(what) {
     case 'object':
         return what[language];
     }
+}
+
+// FIXME: Ugly c&p from CMS
+function peopleMatch(db, string) {
+    var data = [];
+    var re = /(.*):\s*(.*)/g;
+    var match;
+    while ((match = re.exec(string)) !== null) {
+        // console.log(match[1], match[2].split(/\s*,\s*/));
+        data.push({ role: match[1],
+                    people: match[2].split(/\s*,\s*/).map(function (name) {
+                        var person = db.Person.getByName(name);
+                        return { name: name,
+                                 link: (person ? person.link : utils.urlify(name)) };
+                    })});
+    }
+    return data;
 }
 
 function RepertoireController($scope, db, Page) {
@@ -77,42 +108,71 @@ function ScheduleController($scope, $routeParams, db, Page) {
     var oldMonthKey;
     $scope.events.forEach(function (event) {
         if (event.monthKey != oldMonthKey) {
-            $scope.months.push({ name: event.month,
-                                 key: event.monthKey });
+            $scope.months.push({
+                name: event.month,
+                key: event.monthKey,
+                curClass: event.monthKey === $scope.month ? 'active' : ''
+            });
             oldMonthKey = event.monthKey;
         }
     });
+
+    $scope.events = $scope.events.filter(function (event) {
+      return event.monthKey === $scope.month;
+    });
+
     Page.setTitle('Spielplan');
     Page.setSidebarContent('');
 }
 
 function PersonPageController($scope, $routeParams, Page) {
     $scope.person = $scope.db.get($scope.db.Person, $routeParams.personId);
-    Page.setTitle($scope.person.name);
+    Page.setTitle($scope.person ? $scope.person.name : 'Person nicht gefunden');
     Page.setSidebarContent('');
 }
 
 function PiecePageController($scope, $routeParams, Page, $compile) {
     $scope.piece = $scope.db.get($scope.db.Piece, $routeParams.pieceId);
+    $scope.piece.participants = peopleMatch($scope.db, $scope.piece.participants);
     Page.setTitle($scope.piece.name);
     Page.setSidebarContent($compile('<piece-sidebar for="piece"/>')($scope));
 }
 
 function EventPageController($scope, $routeParams, Page, $compile) {
     $scope.event = $scope.db.get($scope.db.Event, $routeParams.eventId);
+    $scope.event.participants = peopleMatch($scope.db, $scope.event.participants);
     Page.setTitle($scope.event.name);
     Page.setSidebarContent($compile('<piece-sidebar for="event"/>')($scope));
 }
 
 function EnactmentPageController($scope, $routeParams, Page, $compile) {
-    $scope.enactment = $scope.db.get($scope.db.Enactment, $routeParams.enactmentId);
-    Page.setTitle($scope.enactment.piece.name); //FIXME
-    Page.setSidebarContent($compile('<piece-sidebar for="enactment.piece"/>')($scope));
+    var enactment = $scope.db.get($scope.db.Enactment, $routeParams.enactmentId);
+    $scope.enactment = angular.extend({}, enactment.piece, enactment);
+    $scope.enactment.participants = peopleMatch($scope.db, $scope.enactment.participants);
+    Page.setTitle($scope.enactment.name);
+    Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
 }
 
-function KuenstlerinnenController($scope, Page, db) {
+function KuenstlerinnenController($scope, $routeParams, Page, db) {
     $scope.people = db.people();
-    Page.setTitle('Künstlerinnen');
+
+    $scope.letters = $scope.people.reduce(function (letters, person) {
+        var c = utils.urlify(person.name.charAt(0)).toUpperCase().charCodeAt(0);
+        letters[c] = 'letter-present';
+        return letters;
+    }, Array('Z'.charCodeAt(0) + 1));
+    $scope.letters.offset = 0;
+    while ($scope.letters[$scope.letters.offset++] !== 'letter-present' &&
+        $scope.letters.offset < 'A'.charCodeAt(0)) {
+    }
+
+    if ($routeParams.letter) {
+        $scope.people = $scope.people.filter(function (person) {
+            return utils.urlify(person.name.charAt(0)).toUpperCase() === $routeParams.letter;
+        });
+    }
+
+    Page.setTitle('Künstlerinnen' + ($routeParams.letter ? ' ' + $routeParams.letter : ''));
     Page.setSidebarContent('');
 }
 
@@ -142,7 +202,8 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
       [ 'stueck/:pieceId', PiecePageController ],
       [ 'auffuehrung/:enactmentId', EnactmentPageController ],
       [ 'veranstaltung/:eventId', EventPageController ],
-      [ 'kuenstlerinnen', KuenstlerinnenController ]
+      [ 'kuenstlerinnen', KuenstlerinnenController ],
+      [ 'kuenstlerinnen/:letter', KuenstlerinnenController ]
     ].forEach(function (pageDef) {
         var def = { name: pageDef[0],
                     templateUrl: '/partials/' + pageDef[0].replace(/\/.*$/, "") + '.html',
@@ -157,7 +218,7 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
 app
     .filter('reverse', function() {
         return function(items) {
-            return items.slice().reverse();
+            return items && items.slice().reverse();
         };
     })
     .directive("includeDb", ['$rootScope', 'db', function ($rootScope, db) {
@@ -190,6 +251,7 @@ app
             templateUrl: '/partials/submenu.html',
             link: function ($scope, element, attributes) {
                 $scope.title = attributes.name;
+                $scope.linkTarget = attributes.link;
             }
         }
     })
@@ -280,40 +342,20 @@ app
             restrict: 'E',
             replace: true,
             templateUrl: '/partials/media-browser.html',
-            scope: { model: '=model' },
+            scope: { model: '=' },
             link: function ($scope, element, attributes) {
 
-                $scope.media = $scope.model.images.slice();
+                $scope.media = ($scope.model && $scope.model.images || []).slice();
 
                 $scope.media.forEach(function (picture) { picture.type = 'picture' });
-                if ($scope.model.video) {
+                if ($scope.model && $scope.model.video) {
                     $scope.model.video.type = 'video';
                     $scope.media.push($scope.model.video);
                 }
                 $scope.mediumIndex = 0;
 
-                $scope.previousIconClass = function () {
-                    var iconClass = 'icon-left';
-                    if ($scope.mediumIndex != 0) {
-                        iconClass += " icon-white";
-                    }
-                    return iconClass;
-                }
-
-                $scope.nextIconClass = function () {
-                    var iconClass = 'icon-right';
-                    if ($scope.mediumIndex != ($scope.media.length - 1)) {
-                        iconClass += " icon-white";
-                    }
-                    return iconClass;
-                }
-
                 $scope.mediumClass = function () {
-                    var iconClass = "icon-" + this.medium.type;
-                    if ($scope.mediumIndex != $scope.media.indexOf(this.medium)) {
-                        iconClass += " icon-white";
-                    }
-                    return iconClass;
+                    return "icon-" + this.medium.type;
                 }
 
                 $scope.clickMedium = function () {
@@ -323,29 +365,32 @@ app
 
                 $scope.showMedium = function () {
                     var medium = $scope.media[$scope.mediumIndex];
-                    var display = element.find('.display');
-                    display.children().remove();
+                    if (!medium) return;
 
+                    var display = element.find('.display');
+                    display.empty();
+
+                    var maxWidth = 670;
+                    var maxHeight = 426;
+                    var maxVideoHeight = 376;
                     function showPicture() {
                         var image = medium;
                         var width, height;
-                        if (image.width < image.height) {
-                            width = image.width * (450 / image.height);
-                            height = 450;
+                        if (image.width / maxWidth < image.height / maxHeight) {
+                            width = image.width * (maxHeight / image.height);
+                            height = maxHeight;
                         } else {
-                            width = 600;
-                            height = image.height * (600 / image.width);
+                            width = maxWidth;
+                            height = image.height * (maxWidth / image.width);
                         }
-                        var left = (600 / 2) - (width / 2);
-                        var top = (450 / 2) - (height / 2);
                         display.append(angular.element('<img src="/image/' + image.name
                                                        + '" width="' + width + '" height="' + height
-                                                       + '" style="left: ' + left + 'px; top: ' + top + 'px;"/>'));
+                                                       + '" />'));
                     }
 
                     function showVideo() {
                         display.append(angular.element('<iframe src="http://player.vimeo.com/video/ ' + medium.id
-                                                       + '" width="' + 600 + '" height="' + 450
+                                                       + '" width="' + maxWidth + '" height="' + maxVideoHeight
                                                        + '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));
                     }
 

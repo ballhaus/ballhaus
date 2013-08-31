@@ -92,14 +92,14 @@ a {
 
 h1 {
     margin: 10px 0;
+    color: black;
 }
 
 .item-name, h1 {
-    font-size: 18px;
+    font-size: 19px;
     line-height: 20px;
-    font-family: Cillop-Bold, Helvetica, Arial, sans-serif;
+    font-family: Verdana, Geneva, sans-serif;
     font-weight: normal;
-    letter-spacing: 1px;
     text-transform: uppercase;
 }
 
@@ -112,7 +112,7 @@ h1 {
 #main {
     width: 670px;
     float: left;
-    margin: 47px 15px 5px 32px;
+    margin: 47px 15px 45px 32px;
 }
 
 #main a {
@@ -122,10 +122,12 @@ h1 {
 #main a:focus,
 #main a:hover,
 #main a:active,
+#main a.active,
 /* Tags need to get the message twice */
 #main a:focus .item-tags,
 #main a:hover .item-tags,
-#main a:active .item-tags {
+#main a:active .item-tags,
+#main a.active {
     color: #eb0033;
 }
 
@@ -405,7 +407,11 @@ input.search-input:focus {
 }
 
 #site-menu > nav > ul > li > ul > li {
-    margin-top: 5px;
+    margin-top: 1px;
+}
+
+#site-menu > nav > ul > li {
+    margin-right: 5px;
 }
 
 .site-submenu-Programm {
@@ -572,7 +578,7 @@ input.search-input:focus {
 
 .site-menuitem-pressemitteilungen {
     background: url(/img/menu/pressemitteilungen-inaktiv.png);
-    width: 228px;
+    width: 239px;
     height: 42px;
     display: block;
 }
@@ -599,33 +605,18 @@ input.search-input:focus {
 }
 
 .media-browser {
-    background: black;
-    color: white;
-    width: 620px;
-    height: 500px;
-    position: relative;
-    margin-bottom: 1em;
+    width: 670px;
 }
 
 .media-browser .display {
-    position: absolute;
-/*    background: #555; */
-    color: white;
-    width: 600px;
-    height: 450px;
-    top: 10px;
-    left: 10px;
+    width: 100%;
+    height: 426px;
     cursor: e-resize;
 }
 
 .media-browser > .nav {
-    position: absolute;
-/*    background: #505; */
-    color: white;
-    width: 600px;
-    height: 20px;
-    top: 470px;
-    left: 10px;
+    width: 100%;
+    margin: 16px 0;
 }
 
 .media-browser ul {
@@ -635,19 +626,7 @@ input.search-input:focus {
 
 .media-browser li {
     display: inline-block;
-    margin: 0 5px 0 5px;
-}
-
-.media-browser ul.right li {
-    float: right;
-}
-
-.media-browser ul.left li {
-    float: left;
-}
-
-.media-browser .display img {
-    position: absolute;
+    margin: 0 5px 0 0;
 }
 
 .media-browser ul li span {
@@ -690,7 +669,7 @@ input.search-input:focus {
 }
 
 .hor-list {
-    font-family: Cillop-Medium, Helvetica, Arial, sans-serif;
+    font-family: Verdana, Geneva, sans-serif;
     font-size: 18px;
     padding: 6px 0 20px 20px;
 }
@@ -700,6 +679,10 @@ input.search-input:focus {
     margin: 0.5em 14px 0.5em 0;
 }
 
+#main .muted {
+    color: #5f5f5f;
+}
+
 .big-list {
     border-top: solid black 2px;
 }
@@ -707,35 +690,37 @@ input.search-input:focus {
 .big-list > li {
     display: block;
     margin: 0;
-    padding: 16px 0 10px 20px; /* This should be 16 _ 16 _, but the line-height bleeds */
+    padding: 16px 0 16px 20px;
     border-bottom: solid black 2px;
     clear: both;
-    font: 16px/26px Cillop-Medium, Helvetica, Arial, sans-serif;
+    font: 16px/24px Verdana, Geneva, sans-serif;
 }
 
 .item-tags {
-    font-size: 14px;
+    font-size: 16px;
     color: #5f5f5f;
     text-transform: uppercase;
 }
 
 #main h2 {
-    font: 16px/26px Cillop-Medium, Helvetica, Arial, sans-serif;
+    font: 16px/20px Verdana, Geneva, sans-serif;
     margin: 15px 0 0 0;
 }
 
 .item-meta {
-    font: 16px/26px Cillop-Medium, Helvetica, Arial, sans-serif;
+    font: 16px/26px Verdana, Geneva, sans-serif;
     margin-bottom: 26px;
+    color: #1b1b1b;
 }
 
-.item-by p {
+.item-by p,
+#main p {
     margin: 0; /* The backend wraps everything in a paragraph */
 }
 
-.item-by, .item-meta {
-    line-height: 18px;
-    margin-bottom: 8px;
+.piece-details .item-by, .item-meta {
+    line-height: 20px;
+    margin-bottom: 21px;
 }
 
 .big-list .image-container {
@@ -772,17 +757,31 @@ input.search-input:focus {
 
 .events .date {
     float: left;
-    font-size: 18px;
-    width: 120px;
+    font-size: 16px;
+    width: 125px;
 }
 
 .events .big-column {
-    padding-left: 130px;
+    padding-left: 135px;
 }
 
 .events .item-name,
 .events .item-by {
-    line-height: 26px;
+    line-height: 24px;
+}
+
+.events .item-name {
+    font-size: 16px;
+}
+
+.events .item-tags {
+     font-size: 15px;
+}
+
+.events .item-by {
+    line-height: 21px;
+    padding-top: 3px;
+    font-size: 14px;
 }
 
 /* Repertoire */
@@ -811,6 +810,49 @@ input.search-input:focus {
     height: 80px;
 }
 
+.kuenstlerinnen-letters > li {
+    margin-right: 12px;
+}
+
 /* Stück / Veranstaltung / Aufführung */
-.piece-sidebar {
+#right .piece-sidebar {
+    padding: 0;
+}
+
+.piece-sidebar .participants-list {
+    list-style: none;
+    margin: 0 0 19px 0;
+}
+
+.piece-sidebar .participants-list li {
+    line-height: 19px;
+}
+
+.piece-sidebar .participants-list a:hover,
+.piece-sidebar .participants-list a:focus,
+.piece-sidebar .participants-list a:active {
+    color: inherit;
+}
+
+.piece-details .item-name-wrapper {
+    margin: 10px 0;
+}
+
+.piece-details .item-name {
+    display: inline;
+    padding-right: 36px;
+}
+
+.piece-details .ticket-shop {
+    display: inline-block;
+    margin-bottom: -3px;
+    background-image: url(/img/ticket-inaktiv-klein.png);
+    width: 97px;
+    height: 21px;
+}
+
+.piece-details .ticket-shop:hover,
+.piece-details .ticket-shop:active,
+.piece-details .ticket-shop:focus {
+    background-image: url(/img/ticket-aktiv-klein.png);
 }
