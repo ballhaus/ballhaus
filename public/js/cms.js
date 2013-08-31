@@ -764,14 +764,14 @@ angular.module('cmsApp.directives', [])
                 scope.time = moment(scope.object.date).format("HH:mm");
                 db.tickets.forEach(function (ticket) {
                     if ((ticket.startdate == scope.date) && (ticket.starttime == scope.time)) {
-                        scope.ticketLink = ticket.affiliateSaleUrl;
+                        scope.object.ticketLink = ticket.affiliateSaleUrl;
                         console.log('ticket gefunden', ticket.affiliateSaleUrl);
                     }
                 });
                 scope.hasTicketLinkStyle = function (hasLink) {
-                    return "display: " + ((hasLink ^ !scope.ticketLink) ? "block" : "none");
+                    return "display: " + ((hasLink ^ !scope.object.ticketLink) ? "block" : "none");
                 }
-                if (!scope.ticketLink) {
+                if (!scope.object.ticketLink) {
                     console.log('ticket NICHT gefunden');
                 }
             }

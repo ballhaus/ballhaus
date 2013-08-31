@@ -92,6 +92,7 @@ function ScheduleController($scope, $routeParams, db, Page) {
         return {
             name: event.name || (event.piece && event.piece.name),
             link: link,
+            ticketLink: event.ticketLink,
             by: event.by || (event.piece && event.piece.by),
             weekday: date.format('dddd'),
             date: date.format('Do MMMM'),
