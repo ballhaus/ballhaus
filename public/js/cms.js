@@ -772,6 +772,29 @@ angular.module('cmsApp.directives', [])
             scope: { object: '=model' }
         }
     })
+    .directive("ticketLink", ['db', function (db) {
+        return {
+            restrict: 'E',
+            scope: { object: '=model' },
+            templateUrl: '/partials/cms/ticket-link.html',
+            link: function (scope, element, attrs, controller) {
+                scope.date = moment(scope.object.date).format("YYYY-MM-DD");
+                scope.time = moment(scope.object.date).format("HH:mm");
+                db.tickets.forEach(function (ticket) {
+                    if ((ticket.startdate == scope.date) && (ticket.starttime == scope.time)) {
+                        scope.ticketLink = ticket.affiliateSaleUrl;
+                        console.log('ticket gefunden', ticket.affiliateSaleUrl);
+                    }
+                });
+                scope.hasTicketLinkStyle = function (hasLink) {
+                    return "display: " + ((hasLink ^ !scope.ticketLink) ? "block" : "none");
+                }
+                if (!scope.ticketLink) {
+                    console.log('ticket NICHT gefunden');
+                }
+            }
+        }
+    }])
     .directive('dateInput', function () {
         return {
             restrict: 'E',
