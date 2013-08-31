@@ -773,6 +773,8 @@ angular.module('cmsApp.directives', [])
                 }
                 if (!scope.object.ticketLink) {
                     console.log('ticket NICHT gefunden');
+                } else {
+                    scope.ticketLink = scope.object.ticketLink;
                 }
             }
         }
