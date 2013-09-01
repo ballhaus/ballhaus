@@ -93,9 +93,11 @@ function PressPdfController($scope, db, Page) {
 function PressImagesController($scope, db, Page) {
     $scope.sets = db.flickrSets
         .map(function (set) {
+            var m = moment(set.date_update * 1000);
             return {
                 id: set.id,
-                date: moment(set.date_update * 1000).format('Do MMMM YYYY'),
+                epochSeconds: m.unix(),
+                date: m.format('Do MMMM YYYY'),
                 name: set.title._content
             };
         });
