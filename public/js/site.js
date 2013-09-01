@@ -72,6 +72,25 @@ function RepertoireController($scope, db, Page) {
     Page.setSidebarContent('');
 }
 
+function PressPdfController($scope, db, Page) {
+    $scope.events = db.events()
+        .filter(function (event) {
+            return event.presse;
+        })
+        .map(function (event) {
+            console.log('event', event);
+            return {
+                name: event.name || (event.piece && event.piece.name),
+                date: moment(event.date).format('Do MMMM YYYY'),
+                epochSeconds: event.date.getTime(),
+                pdf: event.presse
+            };
+        });
+    console.log('events', $scope.events);
+    Page.setTitle('Pressemitteilungen');
+    Page.setSidebarContent('');
+}
+
 function ScheduleController($scope, $routeParams, db, Page) {
     if ($routeParams.month) {
         $scope.month = $routeParams.month;
@@ -204,7 +223,8 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
       [ 'auffuehrung/:enactmentId', EnactmentPageController ],
       [ 'veranstaltung/:eventId', EventPageController ],
       [ 'kuenstlerinnen', KuenstlerinnenController ],
-      [ 'kuenstlerinnen/:letter', KuenstlerinnenController ]
+      [ 'kuenstlerinnen/:letter', KuenstlerinnenController ],
+      [ 'pressemitteilungen', PressPdfController ]
     ].forEach(function (pageDef) {
         var def = { name: pageDef[0],
                     templateUrl: '/partials/' + pageDef[0].replace(/\/.*$/, "") + '.html',

@@ -664,6 +664,46 @@ angular.module('cmsApp.directives', [])
             }
         }
     }])
+    .directive("pdfUploader", [ '$compile', 'db', function($compile, db) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: { model: '=model' },
+            templateUrl: '/partials/cms/pdf-uploader.html',
+            link: function($scope, element, attributes) {
+                $scope.modelSetStyle = function () {
+                    if ($scope.model) {
+                        return "display: block";
+                    } else {
+                        return "display: none";
+                    }
+                }
+
+                $scope.deletePdf = function () {
+                    $scope.model = undefined;
+                }
+
+                new qq.FineUploader({
+                    element: $(element).find('#uploader')[0],
+                    request: {
+                        endpoint: '/pdf'
+                    },
+                    validation: {
+                        allowedExtensions: ['pdf']
+                    },
+                    callbacks: { 
+                        onComplete: function(id, fileName, response) {
+                            console.log('upload complete', id, 'fileName', fileName, 'response', JSON.stringify(response));
+                            if (response.success) {
+                                $scope.model = response.pdf;
+                                $scope.$apply();
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    }])
     .directive("thumbnailImg", [ '$compile', function ($compile) {
         return {
             restrict: 'E',

@@ -41,9 +41,11 @@ app.configure(function() {
                 if (req.url.match('^/cms')) {
                     console.log('REDIRECTING TO CMS');
                     res.render('cms');
-                } else {
+                } else if (!req.url.match('^/pdf/')) {
                     console.log('REDIRECTING TO SITE');
                     res.render('site');
+                } else {
+                    next();
                 }
         } else {
             next();
@@ -134,6 +136,29 @@ app.post('/image', function (req, res) {
              });
          });
 });
+
+// PDF Upload/Download
+app.get('/pdf/:name', function (req, res) {
+    var name = req.params.name;
+    var filename = path.resolve("pdf/" + name);
+    fs.stat(filename, function (err) {
+        if (err) {
+            res.send(404);
+        } else {
+            res.sendfile(filename);
+        }
+    });
+});
+
+app.post('/pdf', function (req, res) {
+    var name = req.files.qqfile.name;
+    fs.renameSync(req.files.qqfile.path, 'pdf/' + name);
+    res.json({
+        success: true,
+        pdf: name
+    });
+});
+
 
 var repo = gift('.');
 
