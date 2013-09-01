@@ -770,15 +770,15 @@ input.search-input:focus {
     line-height: 24px;
 }
 
-.events .item-name {
+.big-list .item-name {
     font-size: 16px;
 }
 
-.events .item-tags {
+.big-list .item-tags {
      font-size: 15px;
 }
 
-.events .item-by {
+.big-list .item-by {
     line-height: 21px;
     padding-top: 3px;
     font-size: 14px;
