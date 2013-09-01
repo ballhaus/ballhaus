@@ -211,6 +211,8 @@ app.factory('db',
                  inherits(db.Video, db.Extent);
 
                  // //////////////////////////////////////////////////////////////////////
+                 // Flickr Sets
+                 db.flickrSets = $resource('/flickr-sets').query();
 
                  if (cmsMode) {
                      db.videos = $resource('/video').query(function (videos) {
@@ -226,7 +228,6 @@ app.factory('db',
                              }
                          };
                      }
-                     db.flickrSets = $resource('/flickr-sets').query();
 
                      db.tickets = $resource('/tickets').query(function (tickets) {
                          var ticketGroups = {};

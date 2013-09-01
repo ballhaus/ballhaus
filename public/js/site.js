@@ -86,8 +86,20 @@ function PressPdfController($scope, db, Page) {
                 pdf: event.presse
             };
         });
-    console.log('events', $scope.events);
     Page.setTitle('Pressemitteilungen');
+    Page.setSidebarContent('');
+}
+
+function PressImagesController($scope, db, Page) {
+    $scope.sets = db.flickrSets
+        .map(function (set) {
+            return {
+                id: set.id,
+                date: moment(set.date_update * 1000).format('Do MMMM YYYY'),
+                name: set.title._content
+            };
+        });
+    Page.setTitle('Bildmaterial');
     Page.setSidebarContent('');
 }
 
@@ -224,7 +236,8 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
       [ 'veranstaltung/:eventId', EventPageController ],
       [ 'kuenstlerinnen', KuenstlerinnenController ],
       [ 'kuenstlerinnen/:letter', KuenstlerinnenController ],
-      [ 'pressemitteilungen', PressPdfController ]
+      [ 'pressemitteilungen', PressPdfController ],
+      [ 'bildmaterial', PressImagesController ]
     ].forEach(function (pageDef) {
         var def = { name: pageDef[0],
                     templateUrl: '/partials/' + pageDef[0].replace(/\/.*$/, "") + '.html',
