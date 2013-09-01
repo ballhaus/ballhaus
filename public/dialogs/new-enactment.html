@@ -1,19 +1,8 @@
 <div class="modal-header"><h2>Neue Aufführung</h2></div>
 <div class="modal-body control-group">
-  <form class="form-horizontal" validate>
+  <form class="form-inline" validate>
     <div class="control-group">
-      <label class="control-label" for="date">Datum</label>
-      <div class="controls">
-        <input type="text" class="input-small" ng-model="data.date" data-date-format="dd.mm.yyyy" bs-datepicker required>
-        <i class="icon-calendar" style="position: relative;margin: 2.5px 0 0 -24px;"></i>
-      </div>
-    </div>
-    <div class="control-group">
-      <label class="control-label" for="time">Uhrzeit</label>
-      <div class="controls">
-        <input type="text" class="input-small" ng-model="data.time" ng-value="'20:00'" timepicker required>
-        <i class="icon-time" style="position: relative;margin: 2.5px 0 0 -24px;"></i>
-      </div>
+      <date-time-picker ng-model="data.datetime"/>
     </div>
     <div class="control-group">
       <button type="submit" ng-click="close(data)" class="submit btn btn-small btn-primary">Anlegen</button>

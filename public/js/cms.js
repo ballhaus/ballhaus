@@ -134,34 +134,31 @@ function CmsController($scope, $rootScope, $dialog, $http, db) {
                 }
             });
     }
-    $scope.parseDateAndTime = function (date, time) {
-        var dateString = new moment(date).format('DD.MM.YYYY');
-        return new moment(dateString + ' ' + time, "DD.MM.YYYY HH:mm").toDate();
-    }
     $scope.newEvent = function () {
         $dialog
             .dialog({ controller: 'NewNamedObjectController',
-                      resolve: { defaults: function () { return { time: '20:00' } } },
+                      resolve: { defaults: function () { return { datetime: moment().startOf('day').hour(20).toDate() } } },
                       templateUrl: '/dialogs/new-event.html' })
             .open()
             .then(function (data) {
                 if (data) {
                     console.log('new event, data', data);
                     new db.Event({ name: data.name,
-                                   link: utils.urlify(data.name + ' ' + moment(data.date).format("DD.MM.YYYY")),
-                                   date: $scope.parseDateAndTime(data.date, data.time) });
+                                   link: utils.urlify(data.name + ' ' + moment(data.datetime).format("DD.MM.YYYY")),
+                                   date: data.datetime });
                 }
             });
     }
     $scope.newEnactment = function (piece) {
         $dialog
             .dialog({ controller: 'NewNamedObjectController',
-                      resolve: { defaults: function () { return { time: '20:00' } } },
+                      resolve: { defaults: function () { return { datetime: moment().startOf('day').hour(20).toDate() } } },
                       templateUrl: '/dialogs/new-enactment.html' })
             .open()
             .then(function (data) {
                 if (data) {
-                    piece.enactments.push(new db.Enactment({ date: $scope.parseDateAndTime(data.date, data.time),
+                    console.log('data', data);
+                    piece.enactments.push(new db.Enactment({ date: data.datetime,
                                                              piece: piece }));
                 }
             });
@@ -803,6 +800,41 @@ angular.module('cmsApp.directives', [])
                 });
             }
         };
+    })
+    .directive('dateTimePicker', function () {
+        return {
+            restrict: 'E',
+            scope: true,
+            require: '?ngModel',
+            templateUrl: '/partials/date-time-picker.html',
+            link: function (scope, element, attrs, ngModel) {
+                console.log('model', ngModel, '$viewValue', ngModel.$viewValue);
+                ngModel.$render = function () {
+                    console.log('render', this.$viewValue);
+                    if (this.$viewValue) {
+                        var m = new moment(this.$viewValue);
+                        scope.date = m.format('DD.MM.YYYY');
+                        scope.time = m.format('HH:mm');
+                    }
+                }
+
+                function parse() {
+                    var datetime = moment(scope.date).format('DD.MM.YYYY') + ' ' + scope.time;
+                    console.log('parse', datetime);
+                    var m = moment(datetime, 'DD.MM.YYYY HH:mm');
+                    if (m.isValid()) {
+                        console.log('$setViewValue', m.toDate());
+                        ngModel.$setViewValue(m.toDate());
+                    }
+                }
+
+                element.on('blur keyup change', function () {
+                    scope.$apply(parse);
+                });
+
+                parse();
+            }
+        }
     })
     .directive('participantEditor', ['$dialog', '$compile', 'db', function ($dialog, $compile, db) {
         return {
