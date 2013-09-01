@@ -198,7 +198,9 @@ function EnactmentPageController($scope, $routeParams, Page, $compile) {
 }
 
 function KuenstlerinnenController($scope, $routeParams, Page, db) {
-    $scope.people = db.people();
+    $scope.people = db.people().filter(function (person) {
+        return person.bio && (person.bio.de || person.bio.en) && person.images && person.images.length;
+    });
 
     $scope.letters = $scope.people.reduce(function (letters, person) {
         var c = utils.urlify(person.name.charAt(0)).toUpperCase().charCodeAt(0);
