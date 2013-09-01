@@ -903,16 +903,20 @@ angular.module('cmsApp.directives', [])
                         }
                         return retval;
                     });
-                }
+                };
                 $scope.calculateTags();
+                function calculateModel() {
+                    $scope.model = $scope.tags.filter(function (tag) {
+                        return tag['class'];
+                    }).map(function (tag) {
+                        return tag.name;
+                    }).reverse();
+                }
                 $scope.toggle = function () {
-                    var position = this.$parent.tagPosition(this.tag.name);
-                    if (position == -1) {
-                        this.$parent.model.push(this.tag.name);
-                    } else {
-                        this.$parent.model.splice(position, 1);
-                    }
-                    $scope.calculateTags();
+                    var tObject = $scope.tags[this.$index];
+                    tObject['class'] = tObject['class'] ? '' : 'selected';
+
+                    calculateModel();
                 }
             }
         }
