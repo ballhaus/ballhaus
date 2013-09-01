@@ -338,6 +338,14 @@ app
             scope: { piece: '=' }
         };
     })
+    .directive("ticketLink", function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/partials/ticket-link.html',
+            scope: { for: '=' }
+        };
+    })
     .directive("mediaBrowser", function () {
         return {
             restrict: 'E',

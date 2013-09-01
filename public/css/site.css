@@ -738,7 +738,7 @@ input.search-input:focus {
     position: relative; /* For the ticket shop link */
 }
 
-.events .ticket-shop {
+.events .ticket-link {
     position: absolute;
     right: -1px;
     top: -3px;
@@ -749,9 +749,9 @@ input.search-input:focus {
     background-image: url(/img/ticket-inaktiv.png);
 }
 
-.events .ticket-shop:active,
-.events .ticket-shop:focus,
-.events .ticket-shop:hover {
+.events .ticket-link:active,
+.events .ticket-link:focus,
+.events .ticket-link:hover {
     background-image: url(/img/ticket-aktiv.png);
 }
 
@@ -843,7 +843,7 @@ input.search-input:focus {
     padding-right: 36px;
 }
 
-.piece-details .ticket-shop {
+.piece-details .ticket-link {
     display: inline-block;
     margin-bottom: -3px;
     background-image: url(/img/ticket-inaktiv-klein.png);
@@ -851,8 +851,8 @@ input.search-input:focus {
     height: 21px;
 }
 
-.piece-details .ticket-shop:hover,
-.piece-details .ticket-shop:active,
-.piece-details .ticket-shop:focus {
+.piece-details .ticket-link:hover,
+.piece-details .ticket-link:active,
+.piece-details .ticket-link:focus {
     background-image: url(/img/ticket-aktiv-klein.png);
 }

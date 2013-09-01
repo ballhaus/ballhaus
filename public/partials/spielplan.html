@@ -6,7 +6,7 @@
 </ul>
 <ul class="events big-list">
   <li class="event" ng-repeat="event in events">
-    <a href="{{event.ticketLink}}" class="ticket-shop ir" target="_new">Ticket kaufen</a>
+    <ticket-link for="event"></ticket-link>
     <a ng-href="{{event.link}}">
       <div class="date">{{event.weekday}}<br/>{{event.date}}<br/>{{event.time}} Uhr</div>
       <div class="big-column">
