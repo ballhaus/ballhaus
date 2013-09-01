@@ -67,7 +67,17 @@ function peopleMatch(db, string) {
 }
 
 function RepertoireController($scope, db, Page) {
-    $scope.pieces = db.pieces();
+    var seen = {};
+    $scope.pieces = [];
+    var now = moment().unix();
+    db.events().forEach(function (event) {
+        if (event.piece && !seen[event.piece.id] && (moment(event.date).unix() >= now)) {
+            $scope.pieces.push(event.piece);
+            seen[event.piece.id] = true;
+        }
+    });
+    console.log('got', $scope.pieces.length, 'total', db.pieces().length);
+
     Page.setTitle('Repertoire');
     Page.setSidebarContent('');
 }
