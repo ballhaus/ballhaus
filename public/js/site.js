@@ -83,7 +83,7 @@ function RepertoireController($scope, db, Page) {
 }
 
 function PressPdfController($scope, db, Page) {
-    $scope.events = db.events()
+    $scope.events = db.findObjects(db.Event).concat(db.pieces())
         .filter(function (event) {
             return event.presse;
         })
@@ -91,8 +91,8 @@ function PressPdfController($scope, db, Page) {
             console.log('event', event);
             return {
                 name: event.name || (event.piece && event.piece.name),
-                date: moment(event.date).format('Do MMMM YYYY'),
-                epochSeconds: event.date.getTime(),
+                date: event.date && moment(event.date).format('Do MMMM YYYY'),
+                epochSeconds: event.date && event.date.getTime(),
                 pdf: event.presse
             };
         });
