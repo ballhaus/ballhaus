@@ -2,8 +2,6 @@
 <ul class="pressemitteilungen">
   <li class="piece" ng-repeat="event in events | orderBy:'-epochSeconds'">
     <a href="/pdf/{{event.pdf}}" target="_new">
-      <span class="item-date">{{event.date}}</span>
-      &nbsp;&nbsp;
       <span class="item-name">{{event.name}}</span>
     </a>
   </li>
