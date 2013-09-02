@@ -115,37 +115,42 @@ function PressImagesController($scope, db, Page) {
     Page.setSidebarContent('');
 }
 
-function getSchedule(db, archive) {
-    var now = new Date;
-    var events = db.events().filter(function (event) {
-      return Boolean(archive) !== (event.date.getTime() > now.getTime());
-    }).map(function (event) {
-        var date = moment(event.date);
-        var link = event.link;
-        if (link) {
-            link = '/veranstaltung/' + event.link;
-        } else {
-            link = '/auffuehrung/' + event.id;
-        }
-        return {
-            name: event.name || (event.piece && event.piece.name),
-            link: link,
-            ticketLink: event.ticketLink,
-            by: event.by || (event.piece && event.piece.by),
-            weekday: date.format('dddd'),
-            date: date.format('Do MMMM'),
-            time: date.format('H:mm'),
-            month: date.format('MMMM'),
-            monthKey: date.format('MM-YYYY'),
-            epochSeconds: event.date.getTime(),
-            tags: event.tags || (event.piece && event.piece.tags)
-        };
-    }).sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
-    return events;
-}
+app.service('schedule', function (db) {
+    function get (archive) {
+        var now = new Date;
+        var events = db.events().filter(function (event) {
+          return Boolean(archive) !== (event.date.getTime() > now.getTime());
+        }).map(function (event) {
+            var date = moment(event.date);
+            var link = event.link;
+            if (link) {
+                link = '/veranstaltung/' + event.link;
+            } else {
+                link = '/auffuehrung/' + event.id;
+            }
+            return {
+                name: event.name || (event.piece && event.piece.name),
+                link: link,
+                ticketLink: event.ticketLink,
+                by: event.by || (event.piece && event.piece.by),
+                weekday: date.format('dddd'),
+                date: date.format('Do MMMM'),
+                time: date.format('H:mm'),
+                month: date.format('MMMM'),
+                monthKey: date.format('MM-YYYY'),
+                epochSeconds: event.date.getTime(),
+                tags: event.tags || (event.piece && event.piece.tags)
+            };
+        }).sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
+        return events;
+    }
+    this.getUpcoming = get.bind(null, false);
+    this.getArchive = get.bind(null, true);
+});
 
-function ScheduleController($scope, $routeParams, db, Page) {
-    var events = getSchedule(db);
+
+function ScheduleController($scope, $routeParams, schedule, Page) {
+    var events = schedule.getUpcoming();
 
     $scope.month = $routeParams.month || moment().format('MM-YYYY');
 
@@ -171,8 +176,8 @@ function ScheduleController($scope, $routeParams, db, Page) {
     Page.setSidebarContent('');
 }
 
-function ArchiveController($scope, db, Page) {
-    $scope.events = getSchedule(db, true);
+function ArchiveController($scope, schedule, Page) {
+    $scope.events = schedule.getArchive();
     Page.setTitle('Archiv');
     Page.setSidebarContent('');
 }
