@@ -359,7 +359,7 @@ app
                     var html;
                     if (page) {
                         $scope.Page.setTitle(page.name);
-                        html = '<h1 class="page-name">' + page.name + '</h1><div>' + translate(page.contents) + '</div>';
+                        html = '<h1 class="page-title">' + page.name + '</h1><div>' + translate(page.contents) + '</div>';
                     } else {
                         $scope.Page.setTitle('Seite nicht gefunden');
                         html = '<span>Die Seite "' + pageName + '" wurde nicht gefunden</span>';
