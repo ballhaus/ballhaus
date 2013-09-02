@@ -784,11 +784,12 @@ input.search-input:focus {
     font-size: 14px;
 }
 
-/* Repertoire */
-
-.repertoire {
+.hor-list-space {
     margin-top: 78px;
+    line-height: 0px;
 }
+
+/* Repertoire */
 
 .repertoire .piece .image-container {
     width: 176px;
