@@ -115,15 +115,10 @@ function PressImagesController($scope, db, Page) {
     Page.setSidebarContent('');
 }
 
-function ScheduleController($scope, $routeParams, db, Page) {
-    if ($routeParams.month) {
-        $scope.month = $routeParams.month;
-    } else {
-        $scope.month = moment().format('MM-YYYY');
-    }
+function getSchedule(db, archive) {
     var now = new Date;
     var events = db.events().filter(function (event) {
-      return event.date.getTime() > now.getTime();
+      return Boolean(archive) !== (event.date.getTime() > now.getTime());
     }).map(function (event) {
         var date = moment(event.date);
         var link = event.link;
@@ -145,27 +140,40 @@ function ScheduleController($scope, $routeParams, db, Page) {
             epochSeconds: event.date.getTime(),
             tags: event.tags || (event.piece && event.piece.tags)
         };
-    });
-    $scope.events = events.sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
+    }).sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
+    return events;
+}
 
-    $scope.months = [];
-    var oldMonthKey;
-    $scope.events.forEach(function (event) {
-        if (event.monthKey != oldMonthKey) {
-            $scope.months.push({
+function ScheduleController($scope, $routeParams, db, Page) {
+    var events = getSchedule(db);
+
+    $scope.month = $routeParams.month || moment().format('MM-YYYY');
+
+    // Determine months
+    $scope.months = events.reduce(function (state, event) {
+        if (event.monthKey != state.oldMonthKey) {
+            state.months.push({
                 name: event.month,
                 key: event.monthKey,
                 curClass: event.monthKey === $scope.month ? 'active' : ''
             });
-            oldMonthKey = event.monthKey;
+            state.oldMonthKey = event.monthKey;
         }
-    });
+        return state;
+    }, {months: [], oldMonthKey: undefined}).months;
 
-    $scope.events = $scope.events.filter(function (event) {
+    // Filter by month
+    $scope.events = events.filter(function (event) {
       return event.monthKey === $scope.month;
     });
 
     Page.setTitle('Spielplan');
+    Page.setSidebarContent('');
+}
+
+function ArchiveController($scope, db, Page) {
+    $scope.events = getSchedule(db, true);
+    Page.setTitle('Archiv');
     Page.setSidebarContent('');
 }
 
@@ -242,6 +250,7 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
     $locationProvider.html5Mode(true);
 
     [ [ 'repertoire', RepertoireController ],
+      [ 'archiv', ArchiveController ],
       [ 'spielplan', ScheduleController ],
       [ 'spielplan/:month', ScheduleController ],
       [ 'person/:personId', PersonPageController ],
@@ -391,6 +400,14 @@ app
             replace: true,
             templateUrl: '/partials/ticket-link.html',
             scope: { for: '=' }
+        };
+    })
+    .directive("eventList", function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/partials/event-list.html',
+            scope: { events: '=' }
         };
     })
     .directive("mediaBrowser", function () {
