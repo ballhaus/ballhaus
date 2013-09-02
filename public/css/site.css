@@ -634,21 +634,31 @@ input.search-input:focus {
     width: 13px;
 }
 
-/* from bootstrap.css */
+.media-browser .icon-video,
+.media-browser .icon-picture {
+  background-position: 0 0;
+  height: 15px;
+  width: 15px;
+}
+
 .media-browser .icon-video {
-  background-position: -432px -48px;
+  background-image: url(/img/Video-inaktiv.png);
+}
+
+.media-browser .icon-video:active,
+.media-browser .icon-video:hover,
+.media-browser .icon-video:focus {
+  background-image: url(/img/Video-aktiv.png);
 }
 
 .media-browser .icon-picture {
-  background-position: -456px -48px;
+  background-image: url(/img/Foto-inaktiv.png);
 }
 
-.media-browser .icon-left {
-  background-position: -432px -72px;
-}
-
-.media-browser .icon-right {
-  background-position: -456px -72px;
+.media-browser .icon-picture:active,
+.media-browser .icon-picture:hover,
+.media-browser .icon-picture:focus {
+  background-image: url(/img/Foto-aktiv.png);
 }
 
 /* General page content styles */
