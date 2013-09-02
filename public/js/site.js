@@ -182,30 +182,30 @@ function ArchiveController($scope, schedule, Page) {
     Page.setSidebarContent('');
 }
 
-function PersonPageController($scope, $routeParams, Page) {
-    $scope.person = $scope.db.get($scope.db.Person, $routeParams.personId);
+function PersonPageController($scope, db, $routeParams, Page) {
+    $scope.person = db.get(db.Person, $routeParams.personId);
     Page.setTitle($scope.person ? $scope.person.name : 'Person nicht gefunden');
     Page.setSidebarContent('');
 }
 
-function PiecePageController($scope, $routeParams, Page, $compile) {
-    $scope.piece = $scope.db.get($scope.db.Piece, $routeParams.pieceId);
-    $scope.piece.participants = peopleMatch($scope.db, $scope.piece.participants);
+function PiecePageController($scope, db, $routeParams, Page, $compile) {
+    $scope.piece = db.get(db.Piece, $routeParams.pieceId);
+    $scope.piece.participants = peopleMatch(db, $scope.piece.participants);
     Page.setTitle($scope.piece.name);
     Page.setSidebarContent($compile('<piece-sidebar for="piece"/>')($scope));
 }
 
-function EventPageController($scope, $routeParams, Page, $compile) {
-    $scope.event = $scope.db.get($scope.db.Event, $routeParams.eventId);
-    $scope.event.participants = peopleMatch($scope.db, $scope.event.participants);
+function EventPageController($scope, db, $routeParams, Page, $compile) {
+    $scope.event = db.get(db.Event, $routeParams.eventId);
+    $scope.event.participants = peopleMatch(db, $scope.event.participants);
     Page.setTitle($scope.event.name);
     Page.setSidebarContent($compile('<piece-sidebar for="event"/>')($scope));
 }
 
-function EnactmentPageController($scope, $routeParams, Page, $compile) {
-    var enactment = $scope.db.get($scope.db.Enactment, $routeParams.enactmentId);
+function EnactmentPageController($scope, db, $routeParams, Page, $compile) {
+    var enactment = db.get(db.Enactment, $routeParams.enactmentId);
     $scope.enactment = angular.extend({}, enactment.piece, enactment);
-    $scope.enactment.participants = peopleMatch($scope.db, $scope.enactment.participants);
+    $scope.enactment.participants = peopleMatch(db, $scope.enactment.participants);
     Page.setTitle($scope.enactment.name);
     Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
 }
@@ -235,7 +235,10 @@ function KuenstlerinnenController($scope, $routeParams, Page, db) {
     Page.setSidebarContent('');
 }
 
-function PageController($scope, Page) {
+function PageController($scope, Page, db) {
+    // FIXME There is this ugly race condition wrt db loading, and injecting db
+    // is barely a fix
+
     $scope.Page = Page;
 
     $scope.$on('$routeChangeSuccess', function (e, newRoute) {
@@ -289,14 +292,6 @@ app
             return items && items.slice().reverse();
         };
     })
-    .directive("includeDb", ['$rootScope', 'db', function ($rootScope, db) {
-        return {
-            restrict: 'A',
-            link: function ($scope, element, attributes) {
-                $rootScope.db = db;
-            }
-        }
-    }])
     .directive("menu", function () {
         return {
             restrict: 'E',
@@ -335,13 +330,12 @@ app
             }
         };
     }])
-    .directive("content", ['$compile', function ($compile) {
+    .directive("content", function ($compile, db) {
         return {
             restrict: 'E',
             replace: true,
             scope: true,
             link: function ($scope, element, attributes) {
-                var db = $scope.db;
                 function doit () {
                     var pageName = window.location.pathname.substr(1);
                     if (pageName == '') {
@@ -378,6 +372,8 @@ app
                     }
                 }
 
+                // FIXME This should go away and turn into something which works
+                // everywhere
                 function pollDb() {
                     if (db.loaded) {
                         doit();
@@ -389,7 +385,7 @@ app
                 pollDb();
             }
         };
-    }])
+    })
     .directive("prices", function () {
         return {
             restrict: 'E',
