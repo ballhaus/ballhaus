@@ -425,7 +425,7 @@ input.search-input:focus {
     display: block;
 }
 
-.site-menuitem-Programm:hover,.site-menuitem-Programm:active,.site-menuitem-Programm:focus {
+.site-menuitem-Programm:hover,.site-menuitem-Programm:active,.site-menuitem-Programm:focus,.site-menuitem-Programm.active {
     background: url(/img/menu/programm-aktiv.png);
 }
 
@@ -436,7 +436,7 @@ input.search-input:focus {
     display: block;
 }
 
-.site-menuitem-kuenstlerinnen:hover,.site-menuitem-kuenstlerinnen:active,.site-menuitem-kuenstlerinnen:focus {
+.site-menuitem-kuenstlerinnen:hover,.site-menuitem-kuenstlerinnen:active,.site-menuitem-kuenstlerinnen:focus,.site-menuitem-kuenstlerinnen.active {
     background: url(/img/menu/kuenstlerinnen-aktiv.png);
 }
 
@@ -451,7 +451,7 @@ input.search-input:focus {
     display: block;
 }
 
-.site-menuitem-Haus:hover,.site-menuitem-Haus:active,.site-menuitem-Haus:focus {
+.site-menuitem-Haus:hover,.site-menuitem-Haus:active,.site-menuitem-Haus:focus,.site-menuitem-Haus.active {
     background: url(/img/menu/haus-aktiv.png);
 }
 
@@ -462,7 +462,7 @@ input.search-input:focus {
     display: block;
 }
 
-.site-menuitem-tickets:hover,.site-menuitem-tickets:active,.site-menuitem-tickets:focus {
+.site-menuitem-tickets:hover,.site-menuitem-tickets:active,.site-menuitem-tickets:focus,.site-menuitem-tickets.active {
     background: url(/img/menu/tickets-aktiv.png);
 }
 
@@ -473,7 +473,7 @@ input.search-input:focus {
     display: block;
 }
 
-.site-menuitem-Presse:hover,.site-menuitem-Presse:active,.site-menuitem-Presse:focus {
+.site-menuitem-Presse:hover,.site-menuitem-Presse:active,.site-menuitem-Presse:focus,.site-menuitem-Presse.active {
     background: url(/img/menu/presse-aktiv.png);
 }
 

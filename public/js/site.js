@@ -237,45 +237,51 @@ function KuenstlerinnenController($scope, $routeParams, Page, db) {
 
 function PageController($scope, Page) {
     $scope.Page = Page;
+
+    $scope.$on('$routeChangeSuccess', function (e, newRoute) {
+        $scope.Page.currentMenuItem(newRoute.$route && newRoute.$route.activeMenuItem);
+    });
 }
 app.factory('Page', function () {
     var title = '';
     var sidebar = null;
+    var curMenuItem;
     return {
         title: function() { return title; },
         setTitle: function(newTitle) { title = newTitle; },
         customSidebar: function () { return sidebar !== null && typeof sidebar !== 'undefined'; },
         sidebarContent: function () { return sidebar; },
-        setSidebarContent: function (newSidebar) { sidebar = newSidebar; }
+        setSidebarContent: function (newSidebar) { sidebar = newSidebar; },
+        menuClass: function (item) { return item === curMenuItem ? 'active' : ''; },
+        currentMenuItem: function (newCurMenuItem) { curMenuItem = newCurMenuItem; }
     };
 });
 
-app.config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+app.config(function($locationProvider, $routeProvider) {
 
     $locationProvider.html5Mode(true);
 
-    [ [ 'repertoire', RepertoireController ],
-      [ 'archiv', ArchiveController ],
-      [ 'spielplan', ScheduleController ],
-      [ 'spielplan/:month', ScheduleController ],
-      [ 'person/:personId', PersonPageController ],
-      [ 'stueck/:pieceId', PiecePageController ],
-      [ 'auffuehrung/:enactmentId', EnactmentPageController ],
-      [ 'veranstaltung/:eventId', EventPageController ],
-      [ 'kuenstlerinnen', KuenstlerinnenController ],
-      [ 'kuenstlerinnen/:letter', KuenstlerinnenController ],
-      [ 'pressemitteilungen', PressPdfController ],
-      [ 'bildmaterial', PressImagesController ]
+    [ { name: 'repertoire', controller: RepertoireController, activeMenuItem: 'Programm' },
+      { name: 'archiv', controller: ArchiveController, activeMenuItem: 'Programm' },
+      { name: 'spielplan', controller: ScheduleController, activeMenuItem: 'Programm' },
+      { name: 'spielplan/:month', controller: ScheduleController, activeMenuItem: 'Programm' },
+      { name: 'person/:personId', controller: PersonPageController, activeMenuItem: 'kuenstlerinnen' },
+      { name: 'stueck/:pieceId', controller: PiecePageController, activeMenuItem: 'Programm' },
+      { name: 'auffuehrung/:enactmentId', controller: EnactmentPageController, activeMenuItem: 'Programm' },
+      { name: 'veranstaltung/:eventId', controller: EventPageController, activeMenuItem: 'Programm' },
+      { name: 'kuenstlerinnen', controller: KuenstlerinnenController },
+      { name: 'kuenstlerinnen/:letter', controller: KuenstlerinnenController, activeMenuItem: 'kuenstlerinnen' },
+      { name: 'pressemitteilungen', controller: PressPdfController, activeMenuItem: 'Presse' },
+      { name: 'bildmaterial', controller: PressImagesController, activeMenuItem: 'Presse' }
     ].forEach(function (pageDef) {
-        var def = { name: pageDef[0],
-                    templateUrl: '/partials/' + pageDef[0].replace(/\/.*$/, "") + '.html',
-                    controller: pageDef[1] };
-        $routeProvider.when('/' + pageDef[0], def);
+        pageDef.templateUrl = '/partials/' + pageDef.name.replace(/\/.*$/, "") + '.html';
+        pageDef.activeMenuItem = pageDef.activeMenuItem || pageDef.name;
+        $routeProvider.when('/' + pageDef.name, pageDef);
     });
 
     $routeProvider
         .otherwise({ template: '<content/>' });
-}]);
+});
 
 app
     .filter('reverse', function() {
@@ -323,7 +329,7 @@ app
             replace: true,
             transclude: true,
             scope: true,
-            template: '<li><a class="site-menuitem-{{to}} ir" href="/{{to}}" ng-transclude></a></li>',
+            template: '<li><a class="site-menuitem-{{to}} ir" ng-class="Page.menuClass(to)" href="/{{to}}" ng-transclude></a></li>',
             link: function ($scope, element, attributes) {
                 $scope.to = attributes.to || utils.urlify(element.text());
             }
@@ -343,6 +349,16 @@ app
                     }
 
                     $scope.Page.setSidebarContent();
+                    $scope.Page.currentMenuItem({
+                        'home': '',
+                        'geschichte': 'Haus',
+                        'team': 'Haus',
+                        'auszeichnungen': 'Haus',
+                        'postmigranten_on_tour': 'Haus',
+                        'partner': 'Haus',
+                        'tickets': 'tickets',
+                        'reihen': 'Programm'
+                    }[pageName]);
 
                     var page = db.get(db.Page, pageName);
 
