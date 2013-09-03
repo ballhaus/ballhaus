@@ -747,6 +747,10 @@ input.search-input:focus {
     margin-right: 20px;
 }
 
+.big-list .image-container + .item-tags {
+    margin-top: -6px;
+}
+
 /* Spielplan */
 
 .events .event {
