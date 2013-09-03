@@ -69,6 +69,8 @@ app.get('/', function (req, res) {
 var thaw = require('./thaw');
 var Image = thaw.Image;
 
+var loginStatus = {};
+
 var db;
 var dirtyDb = dirty(path.resolve('ballhaus.dat'));
 dirtyDb.on('load', function () {
@@ -81,9 +83,11 @@ app.get('/db', function (req, res) {
 });
 
 app.post('/db', function (req, res) {
-    console.log('update', req.body);
+    console.log('update database');
+    fs.appendFileSync('database-debug.log', JSON.stringify(req.body));
     db = thaw(req.body);
     dirtyDb.set('data', req.body);
+    dirtyDb.set('lastUpdate', { name: loginStatus.name, time: (new Date).toString() });
     res.send("ok");
 });
 
@@ -255,7 +259,6 @@ app.get('/tickets',
             getNextPage();
         });
 
-var loginStatus = {};
 var bogusUserSalts = {};
 
 // CMS user passwords are hashed on the client side and only the

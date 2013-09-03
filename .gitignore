@@ -11,3 +11,4 @@ node_modules
 .idea/*
 ballhaus.dat
 config.json
+database-debug.log

@@ -240,18 +240,23 @@ function LoginController($scope, $rootScope, $dialog, $http, db) {
             });
     }
 
-    $scope.saveChanges = true;
+    $scope.uploadChanges = true;
 
     $scope.logout = function (force) {
         console.log('db', db);
-        db.pushToServer(function () {
+        function doLogout() {
             localStorage.data = '';
             localStorage.lockId = '';
             $http.post(force ? '/logout?force=1' : '/logout')
                 .success(function () {
                     window.location = '/cms';
                 });
-        });
+        }
+        if ($scope.uploadChanges) {
+            db.pushToServer(doLogout);
+        } else {
+            doLogout();
+        }
     }
 }
 LoginController.$inject = ['$scope', '$rootScope', '$dialog', '$http', 'db'];
