@@ -2,6 +2,6 @@
   <li ng-repeat="ticket in db.tickets | orderBy:'date_time'">
     {{ticket.date_time | date:'dd.MM.yyyy HH:mm'}}
     <img ng-src="{{ticket.image[0].thumbnail_url}}"/>
-    <a href="{{ticket.publicSaleUrl}}" target="_new">{{ticket.name}}</a>
+    <a href="{{ticket.publicSaleUrl}}" target="_blank">{{ticket.name}}</a>
   </li>
 </ul>

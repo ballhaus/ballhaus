@@ -1,7 +1,7 @@
 <h1 class="page-title">Pressemitteilungen</h1>
 <ul class="pressemitteilungen">
   <li class="piece" ng-repeat="event in events | orderBy:'-epochSeconds'">
-    <a href="/pdf/{{event.pdf}}" target="_new">
+    <a href="/pdf/{{event.pdf}}" target="_blank">
       <span class="item-name">{{event.name}}</span>
     </a>
   </li>
