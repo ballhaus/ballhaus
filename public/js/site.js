@@ -228,6 +228,9 @@ function EnactmentPageController($scope, db, $routeParams, Page, $compile) {
 function KuenstlerinnenController($scope, $routeParams, Page, db) {
     $scope.people = db.people().filter(function (person) {
         return person.bio && (person.bio.de || person.bio.en) && person.images && person.images.length;
+    }).map(function (person) {
+        person.imageSize = intoRect({width: 120, height: 80}, person.images[0]);
+        return person;
     });
 
     $scope.letters = $scope.people.reduce(function (letters, person) {
@@ -408,7 +411,7 @@ app
             restrict: 'E',
             replace: true,
             templateUrl: '/partials/prices.html',
-            scope: { for: '=' }
+            scope: { 'for': '=' }
         };
     })
     .directive("pieceSidebar", function () {
@@ -416,7 +419,7 @@ app
             restrict: 'E',
             replace: true,
             templateUrl: '/partials/piece-sidebar.html',
-            scope: { for: '=' }
+            scope: { 'for': '=' }
         };
     })
     .directive("pieceBase", function () {
@@ -433,7 +436,15 @@ app
             restrict: 'E',
             replace: true,
             templateUrl: '/partials/ticket-link.html',
-            scope: { for: '=' }
+            scope: { 'for': '=' }
+        };
+    })
+    .directive("thumbnail", function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            template: ' <img ng-src="/image/{{for.images[0].name}}?thumbnail=1" width="{{for.imageSize.width}}" height="{{for.imageSize.height}}" />',
+            scope: { 'for': '=' }
         };
     })
     .directive("eventList", function () {

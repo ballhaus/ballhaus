@@ -9,7 +9,7 @@
   <li ng-repeat="person in people | orderBy:'name'">
     <a href="/person/{{person.link}}">
       <div class="image-container">
-        <img ng-src="/image/{{person.images[0].name}}?thumbnail=1"/>
+        <thumbnail for="person" />
       </div>
       <div class="item-name">{{person.name}}</div>
     </a>
