@@ -647,6 +647,7 @@ input.search-input:focus {
 }
 
 .media-browser .icon-video:active,
+.media-browser .icon-video.active,
 .media-browser .icon-video:hover,
 .media-browser .icon-video:focus {
   background-image: url(/img/Video-aktiv.png);
@@ -657,6 +658,7 @@ input.search-input:focus {
 }
 
 .media-browser .icon-picture:active,
+.media-browser .icon-picture.active,
 .media-browser .icon-picture:hover,
 .media-browser .icon-picture:focus {
   background-image: url(/img/Foto-aktiv.png);

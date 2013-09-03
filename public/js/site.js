@@ -461,7 +461,7 @@ app
                 $scope.mediumIndex = 0;
 
                 $scope.mediumClass = function () {
-                    return "icon-" + this.medium.type;
+                    return "icon-" + this.medium.type + ($scope.media.indexOf(this.medium) === $scope.mediumIndex ? ' active' : '');
                 }
 
                 $scope.clickMedium = function () {
