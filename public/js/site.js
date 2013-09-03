@@ -360,6 +360,7 @@ app
                     $scope.Page.setSidebarContent();
                     $scope.Page.currentMenuItem({
                         'home': '',
+                        'haus': 'Haus',
                         'geschichte': 'Haus',
                         'team': 'Haus',
                         'auszeichnungen': 'Haus',
