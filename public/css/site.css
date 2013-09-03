@@ -661,6 +661,11 @@ input.search-input:focus {
   background-image: url(/img/Foto-aktiv.png);
 }
 
+.media-browser .media-credit {
+    font-size: 10px;
+    padding-top: 4px;
+}
+
 /* General page content styles */
 
 .page-title,

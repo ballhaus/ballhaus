@@ -1,6 +1,6 @@
 <div class="media-browser" ng-show="media">
   <div href="#" ng-click="gotoMedium(1)"><div class="display"></div></div>
-  <p>{{media[mediumIndex].credits}}</p>
+  <p class="media-credit">{{media[mediumIndex].credits}}</p>
   <div class="nav">
     <ul>
       <li ng-repeat="medium in media | reverse">
