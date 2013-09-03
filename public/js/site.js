@@ -508,9 +508,9 @@ app
                 $scope.gotoMedium = function (direction) {
                     $scope.mediumIndex += direction;
                     if ($scope.mediumIndex < 0) {
-                        $scope.mediumIndex = 0;
-                    } else if ($scope.mediumIndex >= $scope.media.length) {
                         $scope.mediumIndex = $scope.media.length - 1;
+                    } else if ($scope.mediumIndex >= $scope.media.length) {
+                        $scope.mediumIndex = 0;
                     }
                     $scope.showMedium();
                 }
