@@ -742,11 +742,7 @@ input.search-input:focus {
 
 .big-list .image-container {
     float: left;
-    margin-right: 16px;
-}
-
-.big-list .image-container img {
-    max-height: 100%;
+    margin-right: 20px;
 }
 
 /* Spielplan */

@@ -66,12 +66,27 @@ function peopleMatch(db, string) {
     return data;
 }
 
+function intoRect(rect, item) {
+    var res = {};
+    if (item.width / rect.width < item.height / rect.height) {
+      res.width = item.width * (rect.height / item.height);
+      res.height = rect.height;
+    } else {
+      res.width = rect.width;
+      res.height = item.height * (rect.width / item.width);
+    }
+    return res;
+}
+
 function RepertoireController($scope, db, Page) {
     var seen = {};
     $scope.pieces = [];
     var now = moment().unix();
     db.events().forEach(function (event) {
         if (event.piece && !seen[event.piece.id] && (moment(event.date).unix() >= now)) {
+            if (event.piece.images[0]) {
+              event.piece.imageSize = intoRect({width: 176, height: 112}, event.piece.images[0]);
+            }
             $scope.pieces.push(event.piece);
             seen[event.piece.id] = true;
         }
@@ -466,16 +481,9 @@ app
                     var maxVideoHeight = 376;
                     function showPicture() {
                         var image = medium;
-                        var width, height;
-                        if (image.width / maxWidth < image.height / maxHeight) {
-                            width = image.width * (maxHeight / image.height);
-                            height = maxHeight;
-                        } else {
-                            width = maxWidth;
-                            height = image.height * (maxWidth / image.width);
-                        }
+                        var size = intoRect({width: maxWidth, height: maxHeight}, image);
                         display.append(angular.element('<img src="/image/' + image.name
-                                                       + '" width="' + width + '" height="' + height
+                                                       + '" width="' + size.width + '" height="' + size.height
                                                        + '" />'));
                     }
 

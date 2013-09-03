@@ -4,7 +4,7 @@
   <li class="piece" ng-repeat="piece in pieces | orderBy:'premiere'">
     <a href="/stueck/{{piece.link}}">
       <div class="image-container">
-        <img ng-src="/image/{{piece.images[0].name}}?thumbnail=1"/>
+        <img ng-src="/image/{{piece.images[0].name}}?thumbnail=1" width="{{piece.imageSize.width}}" height="{{piece.imageSize.height}}" />
       </div>
       <div class="item-tags">{{piece.tags | join:" / " | orSpace}}</div>
       <div class="item-name">{{piece.name}}</div>
