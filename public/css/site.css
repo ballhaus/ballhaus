@@ -670,6 +670,7 @@ input.search-input:focus {
 /* General page content styles */
 
 .page-title,
+.page-content,
 .big-list > li,
 .hor-list {
     padding-left: 20px;
