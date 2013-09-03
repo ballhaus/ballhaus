@@ -59,11 +59,12 @@
           <div ng-show="Page.customSidebar()" ng-bind-html-unsafe="Page.sidebarContent()" />
           <div ng-hide="Page.customSidebar()">
             <div>
-              <form action="#" class="form-inline newsletter-form">
+              <form method="POST" class="form-inline newsletter-form" ng-controller="NewsletterController" ng-submit="subscribe()">
                 <h2>Newsletter bestellen</h2>
                 <div class="newsletter-controls">
-                  <input type="text" class="newsletter-address" type="email" placeholder="Email-Adresse" required>
+                  <input ng-model="address" name="address" type="text" class="newsletter-address" type="email" placeholder="Email-Adresse" required>
                   <button type="submit" class="newsletter-submit ir">OK</button>
+                  <p class="newsletter-success" ng-cloak ng-show="success">Newsletter abonniert!</p>
                 </div>
               </form>
             </div>

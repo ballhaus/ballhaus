@@ -271,6 +271,15 @@ app.factory('Page', function () {
     };
 });
 
+function NewsletterController($scope, $http) {
+    $scope.subscribe = function () {
+        $scope.success = false;
+        $http.post('/newsletter-subscription', {address: this.address}).success(function () {
+            $scope.success = true;
+        });
+    };
+};
+
 app.config(function($locationProvider, $routeProvider) {
 
     $locationProvider.html5Mode(true);

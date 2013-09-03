@@ -259,6 +259,21 @@ app.get('/tickets',
             getNextPage();
         });
 
+var mailer = require('nodemailer').createTransport("Sendmail", "/usr/sbin/sendmail");
+
+app.post('/newsletter-subscription', function (req, res, next) {
+    console.log(req.body);
+    req.body.address
+    mailer.sendMail({
+        from: req.body.address,
+        to: ['adrian@kleinrot.net'],
+        subject: 'Newsletter abonnieren',
+        text: 'Ich möchte bitte euren Newsletter abonnieren'
+    }, function (error, response) {
+        res.send({success: !error});
+    });
+});
+
 var bogusUserSalts = {};
 
 // CMS user passwords are hashed on the client side and only the

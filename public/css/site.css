@@ -193,6 +193,11 @@ input.newsletter-address {
     background-image: url(/img/ok-aktiv.png);
 }
 
+.newsletter-success {
+    margin: 4px 0 -23px;
+    text-align: right;
+}
+
 /* Header */
 
 #header {

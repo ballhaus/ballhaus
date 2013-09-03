@@ -19,6 +19,7 @@
         "http-get": "*",
         "flickr": "*",
         "node-uuid": "*",
-        "read": "*"
+        "read": "*",
+        "nodemailer": ""
     }
 }
