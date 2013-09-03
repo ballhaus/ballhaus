@@ -266,7 +266,7 @@ app.post('/newsletter-subscription', function (req, res, next) {
     req.body.address
     mailer.sendMail({
         from: req.body.address,
-        to: ['adrian@kleinrot.net'],
+        to: ['hallo@ballhausnaunynstrasse.de'],
         subject: 'Newsletter abonnieren',
         text: 'Ich möchte bitte euren Newsletter abonnieren'
     }, function (error, response) {
