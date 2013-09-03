@@ -2,7 +2,7 @@
   <div href="#" ng-click="gotoMedium(1)"><div class="display"></div></div>
   <p class="media-credit">{{media[mediumIndex].credits}}</p>
   <div class="nav">
-    <ul>
+    <ul ng-hide="media.length == 1">
       <li ng-repeat="medium in media | reverse">
         <a href="#" ng-click="clickMedium()"><span ng-class="mediumClass()"></span></a>
       </li>
