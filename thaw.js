@@ -18,11 +18,11 @@ Image.prototype.thawed = function () {
 }
 Image.prototype.makeThumbnail = function (callback) {
     if (this.width > this.height) {
-        this.thumbnailWidth = 100;
-        this.thumbnailHeight = Math.floor(this.height / (this.width / 100));
+        this.thumbnailWidth = 176;
+        this.thumbnailHeight = Math.floor(this.height / (this.width / this.thumbnailWidth));
     } else {
-        this.thumbnailHeight = 100;
-        this.thumbnailWidth = Math.floor(this.width / (this.height / 100));
+        this.thumbnailHeight = 112;
+        this.thumbnailWidth = Math.floor(this.width / (this.height / this.thumbnailHeight));
     }
     gm('images/' + this.name)
         .resize(this.thumbnailWidth, this.thumbnailHeight)
