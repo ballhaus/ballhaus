@@ -160,6 +160,13 @@ h1 {
     border-top: 2px solid black;
 }
 
+.sidebar-link-postmigranten {
+    display: block;
+    background-image: url(/img/postmig.png);
+    height: 83px;
+    width: 239px;
+}
+
 .newsletter-form {
     color: #5f5f5f;
 }
