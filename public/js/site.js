@@ -22,16 +22,6 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
 .filter('translate', function () {
     return translate;
 })
-.filter('formatParticipants', function () {
-    return function(input) {
-        if (!input) { return ''; }
-        return input.map(function (role) {
-            return '<div><em>' + role.role + '</em><ul class="participants-list">' + role.people.map(function (person) {
-                return '<li><a href="/person/' + person.link + '">' + person.name + '</a></li>';
-            }).join('') + '</ul></div>';
-        }).join('');
-    };
-})
 .filter('fromCharCode', function () {
     return function (input) {
         return String.fromCharCode(input);
@@ -58,9 +48,12 @@ function peopleMatch(db, string) {
         // console.log(match[1], match[2].split(/\s*,\s*/));
         data.push({ role: match[1],
                     people: match[2].split(/\s*,\s*/).map(function (name) {
+                        var res = { name: name };
                         var person = db.Person.getByName(name);
-                        return { name: name,
-                                 link: (person ? person.link : utils.urlify(name)) };
+                        if (person && person.bio && (person.bio.de || person.bio.en) && person.images && person.images.length) {
+                            res.link = person.link;
+                        }
+                        return res;
                     })});
     }
     return data;

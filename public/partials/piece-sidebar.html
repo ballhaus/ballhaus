@@ -1,4 +1,14 @@
 <div class="piece-sidebar">
-  <span ng-bind-html-unsafe="for.participants | formatParticipants" />
+  <span>
+    <div ng-repeat="role in for.participants">
+      <em>{{role.role}}</em>
+      <ul class="participants-list">
+        <li ng-repeat="person in role.people">
+          <a ng-show="person.link" href="/person/{{person.link}}">{{person.name}}</a>
+          <span ng-hide="person.link">{{person.name}}</span>
+        </li>
+      </ul>
+    </div>
+  </span>
   <span ng-bind-html-unsafe="for.sponsors | translate" />
 </div>
