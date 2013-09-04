@@ -44,8 +44,6 @@ app.factory('db',
                          var newId = db.nextId();
                          console.log('object id ' + object.id + ' from thawed object unavailable, assigning new id ' + newId);
                          object.id = newId;
-                     } else {
-                         console.log('object id ' + object.id + ' thawed');
                      }
                      db.Extent.extent[object.id] = object;
                      db.Extent.lastId = Math.max(db.Extent.lastId || 0, object.id);
