@@ -12,7 +12,7 @@
         "step": "*",
         "passport": "*",
         "restler": "git://github.com/eric-wieser/restler.git#8a2ca18a8e942cd8dd85046bf7bb1a0ddf4cc1f9",
-        "icebox": "<=0.1.5",
+        "icebox": ">=0.1.6",
         "dirty": "*",
         "gm": "*",
 	"super": "*",

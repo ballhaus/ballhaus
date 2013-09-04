@@ -6,7 +6,7 @@ app.factory('db',
                  var db = { objects: [] };
 
                  var cmsMode = window.location.href.match(/cms/);
-                 console.log('cmsMode:', cmsMode);
+                 console.log('cmsMode: ' + cmsMode);
 
                  dB = db;                                // for debugging
                  
@@ -42,8 +42,10 @@ app.factory('db',
                      var object = this;
                      if (!object.id || db.Extent.extent[object.id]) {
                          var newId = db.nextId();
-                         console.log('object id', object.id, 'from thawed object unavailable, assigning new id', newId);
+                         console.log('object id ' + object.id + ' from thawed object unavailable, assigning new id ' + newId);
                          object.id = newId;
+                     } else {
+                         console.log('object id ' + object.id + ' thawed');
                      }
                      db.Extent.extent[object.id] = object;
                      db.Extent.lastId = Math.max(db.Extent.lastId || 0, object.id);
@@ -54,7 +56,8 @@ app.factory('db',
                      db.objects.unshift(object);
                  }
                  db.get = function (constructor, id) {
-                     console.log('db.get', constructor.name, id);
+                     var constructorName = constructor.name || ieConstructorName(constructor)
+                     console.log('db.get ' + constructorName + ' ' + id);
                      if (db.Extent.extent[id]) {
                          return db.Extent.extent[id];
                      } else {
@@ -67,6 +70,7 @@ app.factory('db',
                              }
                          }
                      }
+                     console.log('not found');
                      return null;
                  }
                  db.findObjects = function (constructor) {

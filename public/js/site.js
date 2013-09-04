@@ -91,7 +91,7 @@ function RepertoireController($scope, db, Page) {
             seen[event.piece.id] = true;
         }
     });
-    console.log('got', $scope.pieces.length, 'total', db.pieces().length);
+    console.log('got ' + $scope.pieces.length + ' total ' + db.pieces().length);
 
     Page.setTitle('Repertoire');
     Page.setSidebarContent('');
@@ -103,7 +103,7 @@ function PressPdfController($scope, db, Page) {
             return event.presse;
         })
         .map(function (event) {
-            console.log('event', event);
+            console.log('event ' + event);
             return {
                 name: event.name || (event.piece && event.piece.name),
                 date: event.date && moment(event.date).format('Do MMMM YYYY'),
@@ -522,7 +522,7 @@ app
                         showVideo();
                         break;
                     default:
-                        console.log('unknown medium type', medium.type);
+                        console.log('unknown medium type ' + medium.type);
                     }
                 }
 
