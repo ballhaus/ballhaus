@@ -388,7 +388,7 @@ app
                     if (page) {
                         $scope.Page.setTitle(page.name);
                         $scope.page = page;
-                        html = '<media-browser model="page"></media-browser><h1 class="page-title">' + page.name + '</h1>' + translate(page.contents);
+                        html = '<media-browser model="page"></media-browser><h1 class="page-title">' + page.name + '</h1><div class="static-content">' + translate(page.contents) + '</div>';
                     } else {
                         $scope.Page.setTitle('Seite nicht gefunden');
                         html = 'Die Seite "' + pageName + '" wurde nicht gefunden';
