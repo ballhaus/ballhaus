@@ -499,7 +499,7 @@ app
                     display.empty();
 
                     var maxWidth = 630;
-                    var maxHeight = 426;
+                    var maxHeight = 400;
                     var maxVideoHeight = 376;
                     function showPicture() {
                         var image = medium;

@@ -618,12 +618,12 @@ input.search-input:focus {
 }
 
 .media-browser {
-    width: 670px;
+    width: 630px;
 }
 
 .media-browser .display {
     width: 100%;
-    height: 426px;
+    height: 400px;
     cursor: e-resize;
 }
 
