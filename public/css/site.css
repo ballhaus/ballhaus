@@ -686,8 +686,12 @@ input.search-input:focus {
 .page-title,
 .page-content,
 .big-list > li,
+.piece-details,
+.person,
+.static-page .media-browser,
 .hor-list {
     padding-left: 20px;
+    padding-right: 20px;
 }
 
 .page-title {
@@ -702,7 +706,8 @@ input.search-input:focus {
 .hor-list {
     font-family: Verdana, Geneva, sans-serif;
     font-size: 18px;
-    padding: 6px 0 20px 20px;
+    padding-top: 6px;
+    padding-bottom: 20px;
 }
 
 .hor-list > li {
@@ -721,7 +726,8 @@ input.search-input:focus {
 .big-list > li {
     display: block;
     margin: 0;
-    padding: 16px 0 16px 20px;
+    padding-top: 16px;
+    padding-bottom: 16px;
     border-bottom: solid black 2px;
     clear: both;
     font: 16px/24px Verdana, Geneva, sans-serif;
@@ -843,7 +849,7 @@ input.search-input:focus {
 }
 
 .kuenstlerinnen-letters > li {
-    margin-right: 12px;
+    margin-right: 11px;
 }
 
 /* Stück / Veranstaltung / Aufführung */

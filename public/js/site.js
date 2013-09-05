@@ -388,7 +388,7 @@ app
                     if (page) {
                         $scope.Page.setTitle(page.name);
                         $scope.page = page;
-                        html = '<media-browser model="page"></media-browser><h1 class="page-title">' + page.name + '</h1><div class="page-content">' + translate(page.contents) + '</div>';
+                        html = '<div class="static-page"><media-browser model="page"></media-browser><h1 class="page-title">' + page.name + '</h1><div class="page-content">' + translate(page.contents) + '</div></div>';
                     } else {
                         $scope.Page.setTitle('Seite nicht gefunden');
                         html = '<span>Die Seite "' + pageName + '" wurde nicht gefunden</span>';
@@ -497,7 +497,7 @@ app
                     var display = element.find('.display');
                     display.empty();
 
-                    var maxWidth = 670;
+                    var maxWidth = 630;
                     var maxHeight = 426;
                     var maxVideoHeight = 376;
                     function showPicture() {
