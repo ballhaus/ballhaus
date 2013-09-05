@@ -688,7 +688,7 @@ input.search-input:focus {
     margin-top: 0;
 }
 
-.hor-list, .big-list {
+.hor-list, .big-list, .simple-list {
     list-style: none;
     margin: 0;
 }
