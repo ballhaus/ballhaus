@@ -477,6 +477,7 @@ app
                 $scope.media.forEach(function (picture) { picture.type = 'picture' });
                 if ($scope.model && $scope.model.video) {
                     $scope.model.video.type = 'video';
+                    $scope.model.video.vimeoId = $scope.model.video.vimeoId || $scope.model.video.url.match(/\/(\d+)$/)[1];
                     $scope.media.push($scope.model.video);
                 }
                 $scope.mediumIndex = 0;
@@ -509,7 +510,7 @@ app
                     }
 
                     function showVideo() {
-                        display.append(angular.element('<iframe src="http://player.vimeo.com/video/ ' + medium.id
+                        display.append(angular.element('<iframe src="http://player.vimeo.com/video/ ' + medium.vimeoId
                                                        + '" width="' + maxWidth + '" height="' + maxVideoHeight
                                                        + '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));
                     }

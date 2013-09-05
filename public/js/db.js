@@ -220,6 +220,8 @@ app.factory('db',
                      db.videos = $resource('/video').query(function (videos) {
                          videos.map(function (video) {
                              video.name = video.title;
+                             video.vimeoId = video.id;
+                             delete video.id;
                          });
                      });
                      db.videos.find = function (id) {
