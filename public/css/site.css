@@ -729,6 +729,10 @@ input.search-input:focus {
     text-transform: uppercase;
 }
 
+.simple-list {
+    font: 16px/20px Verdana, Geneva, sans-serif;
+}
+
 #main h2 {
     font: 16px/20px Verdana, Geneva, sans-serif;
     margin: 15px 0 0 0;
