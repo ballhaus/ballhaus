@@ -510,7 +510,7 @@ app
                     }
 
                     function showVideo() {
-                        display.append(angular.element('<iframe src="http://player.vimeo.com/video/ ' + medium.vimeoId
+                        display.append(angular.element('<iframe src="//player.vimeo.com/video/' + medium.vimeoId
                                                        + '" width="' + maxWidth + '" height="' + maxVideoHeight
                                                        + '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));
                     }
