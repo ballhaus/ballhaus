@@ -388,10 +388,10 @@ app
                     if (page) {
                         $scope.Page.setTitle(page.name);
                         $scope.page = page;
-                        html = '<div class="static-page"><media-browser model="page"></media-browser><h1 class="page-title">' + page.name + '</h1><div class="page-content">' + translate(page.contents) + '</div></div>';
+                        html = '<media-browser model="page"></media-browser><h1 class="page-title">' + page.name + '</h1>' + translate(page.contents);
                     } else {
                         $scope.Page.setTitle('Seite nicht gefunden');
-                        html = '<span>Die Seite "' + pageName + '" wurde nicht gefunden</span>';
+                        html = 'Die Seite "' + pageName + '" wurde nicht gefunden';
                     }
                     var contents = angular.element(html);
                     element.replaceWith(contents);

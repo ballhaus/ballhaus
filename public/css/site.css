@@ -110,9 +110,10 @@ h1 {
 }
 
 #main {
-    width: 670px;
+    width: 630px;
     float: left;
     margin: 47px 15px 45px 32px;
+    padding: 0 20px;
 }
 
 #main a {
@@ -683,17 +684,6 @@ input.search-input:focus {
 
 /* General page content styles */
 
-.page-title,
-.page-content,
-.big-list > li,
-.piece-details,
-.person,
-.static-page .media-browser,
-.hor-list {
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
 .page-title {
     margin-top: 0;
 }
@@ -721,13 +711,13 @@ input.search-input:focus {
 
 .big-list {
     border-top: solid black 2px;
+    margin: 0 -20px;
 }
 
 .big-list > li {
     display: block;
     margin: 0;
-    padding-top: 16px;
-    padding-bottom: 16px;
+    padding: 16px 20px;
     border-bottom: solid black 2px;
     clear: both;
     font: 16px/24px Verdana, Geneva, sans-serif;
