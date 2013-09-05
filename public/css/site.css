@@ -120,6 +120,10 @@ h1 {
     color: black;
 }
 
+#main p a {
+    color: #9c0033;
+}
+
 #main a:focus,
 #main a:hover,
 #main a:active,
