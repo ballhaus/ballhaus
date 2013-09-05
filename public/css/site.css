@@ -843,6 +843,11 @@ input.search-input:focus {
 }
 
 /* Stück / Veranstaltung / Aufführung */
+.piece-premiere {
+    padding-top: 1em;
+
+}
+
 #right .piece-sidebar {
     padding: 0;
 }
