@@ -692,7 +692,8 @@ input.search-input:focus {
     margin-top: 0;
 }
 
-.page-title + .static-content {
+.page-title + .static-content,
+.page-title + .simple-list {
     margin-top: 36px;
 }
 
