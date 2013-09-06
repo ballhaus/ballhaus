@@ -290,6 +290,7 @@ app.factory('db',
                                                       { name: 'Literatur' },
                                                       { name: 'Ausstellung' },
                                                       { name: 'Denken' },
+                                                      { name: 'Performance' },
                                                       { name: 'akademie der autodidakten' },
                                                       { name: 'project in/out' },
                                                       { name: 'Festival Black Lux' }
