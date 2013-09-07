@@ -20,6 +20,6 @@
         "flickr": "*",
         "node-uuid": "*",
         "read": "*",
-        "nodemailer": ""
+        "nodemailer": "*"
     }
 }

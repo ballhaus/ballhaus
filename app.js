@@ -26,7 +26,10 @@ var flickr = new Flickr(config.flickr.apiKey, '');
 
 var app = express();
 
+var access_logfile = fs.createWriteStream(__dirname + '/logs/access.log', { flags: 'a' });
+
 app.configure(function() {
+    app.use(express.logger({stream: access_logfile }));
     app.set('port', process.env.PORT || config.port || 3000);
     app.use(express.favicon());
     app.use(express.logger('dev'));
@@ -41,8 +44,8 @@ app.configure(function() {
                 if (req.url.match('^/cms')) {
                     console.log('REDIRECTING TO CMS');
                     res.render('cms');
-                } else if (!req.url.match('^/pdf/')) {
-                    console.log('REDIRECTING TO SITE');
+                } else if (!req.url.match('^/(pdf|browser-error)/')) {
+                    console.log('REDIRECTING TO DYNAMIC SITE');
                     res.render('site');
                 } else {
                     next();

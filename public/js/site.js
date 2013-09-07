@@ -257,6 +257,10 @@ function PageController($scope, Page, db) {
     // FIXME There is this ugly race condition wrt db loading, and injecting db
     // is barely a fix
 
+    if (!Object.create) {
+        window.location = '/browser-error';
+    }
+
     $scope.Page = Page;
 
     $scope.$on('$routeChangeSuccess', function (e, newRoute) {
