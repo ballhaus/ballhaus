@@ -40,7 +40,6 @@ app.configure(function() {
     app.use(express.cookieParser(config.cookieSecret));
     app.use(express.session({cookie: { path: '/', httpOnly: true, expires: false }}));
     app.use(function (req, res, next) {
-        console.log('req.url', req.url);
         if (req.accepted && req.accepted.length && req.accepted[0].value == 'text/html') {
                 if (req.url.match('^/cms')) {
                     console.log('REDIRECTING TO CMS');
