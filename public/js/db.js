@@ -220,6 +220,8 @@ app.factory('db',
                      db.videos = $resource('/video').query(function (videos) {
                          videos.map(function (video) {
                              video.name = video.title;
+                             video.vimeoId = video.id;
+                             delete video.id;
                          });
                      });
                      db.videos.find = function (id) {
@@ -288,6 +290,7 @@ app.factory('db',
                                                       { name: 'Literatur' },
                                                       { name: 'Ausstellung' },
                                                       { name: 'Denken' },
+                                                      { name: 'Performance' },
                                                       { name: 'akademie der autodidakten' },
                                                       { name: 'project in/out' },
                                                       { name: 'Festival Black Lux' }

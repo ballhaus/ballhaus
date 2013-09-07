@@ -392,10 +392,10 @@ app
                     if (page) {
                         $scope.Page.setTitle(page.name);
                         $scope.page = page;
-                        html = '<media-browser model="page"></media-browser><h1 class="page-title">' + page.name + '</h1><div class="page-content">' + translate(page.contents) + '</div>';
+                        html = '<media-browser model="page"></media-browser><h1 class="page-title">' + page.name + '</h1><div class="static-content">' + translate(page.contents) + '</div>';
                     } else {
                         $scope.Page.setTitle('Seite nicht gefunden');
-                        html = '<span>Die Seite "' + pageName + '" wurde nicht gefunden</span>';
+                        html = 'Die Seite "' + pageName + '" wurde nicht gefunden';
                     }
                     var contents = angular.element(html);
                     element.replaceWith(contents);
@@ -481,6 +481,7 @@ app
                 $scope.media.forEach(function (picture) { picture.type = 'picture' });
                 if ($scope.model && $scope.model.video) {
                     $scope.model.video.type = 'video';
+                    $scope.model.video.vimeoId = $scope.model.video.vimeoId || $scope.model.video.url.match(/\/(\d+)$/)[1];
                     $scope.media.push($scope.model.video);
                 }
                 $scope.mediumIndex = 0;
@@ -501,8 +502,8 @@ app
                     var display = element.find('.display');
                     display.empty();
 
-                    var maxWidth = 670;
-                    var maxHeight = 426;
+                    var maxWidth = 630;
+                    var maxHeight = 400;
                     var maxVideoHeight = 376;
                     function showPicture() {
                         var image = medium;
@@ -513,7 +514,7 @@ app
                     }
 
                     function showVideo() {
-                        display.append(angular.element('<iframe src="http://player.vimeo.com/video/ ' + medium.id
+                        display.append(angular.element('<iframe src="//player.vimeo.com/video/' + medium.vimeoId
                                                        + '" width="' + maxWidth + '" height="' + maxVideoHeight
                                                        + '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));
                     }
