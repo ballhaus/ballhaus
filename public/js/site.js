@@ -83,7 +83,7 @@ function RepertoireController($scope, db, Page) {
         if (!event.piece || seen[event.piece.id]) {
             return;
         }
-        if (moment(event.date).unix() >= now || shouldAppear.indexOf(event.piece.link) !== -1) {
+        if (!moment(event.date).isBefore(now, 'day') || shouldAppear.indexOf(event.piece.link) !== -1) {
             if (event.piece.images && event.piece.images[0]) {
               event.piece.imageSize = intoRect({width: 176, height: 112}, event.piece.images[0]);
             }
@@ -134,7 +134,7 @@ app.service('schedule', function (db) {
     function get (archive) {
         var now = new Date;
         var events = db.events().filter(function (event) {
-          return Boolean(archive) !== (event.date.getTime() > now.getTime());
+          return Boolean(archive) === (moment(event.date).isBefore(now, 'day'));
         }).map(function (event) {
             var date = moment(event.date);
             var link = event.link;
