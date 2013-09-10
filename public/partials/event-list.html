@@ -2,7 +2,7 @@
   <li class="event" ng-repeat="event in events">
     <ticket-link for="event"></ticket-link>
     <a ng-href="{{event.link}}">
-      <div class="date">{{event.weekday}}<br/>{{event.date}}<br/>{{event.time}} Uhr</div>
+      <div class="date">{{event.date | formatDate:"dddd"}}<br/>{{event.date | formatDate:"Do MMMM"}}<br/>{{event.date | formatDate:"H:mm"}} Uhr</div>
       <div class="big-column">
         <div class="item-tags">{{event.tags | join:" / " | orSpace }}</div>
         <div class="item-name">{{event.name}}</div>

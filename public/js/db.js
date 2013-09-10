@@ -127,12 +127,16 @@ app.factory('db',
                      this.images = [];
                      this.tags = [];
                      db.Extent.call(this, attributes);
-                 }
+                 };
                  inherits(db.Event, db.Extent);
 
-                 Event.prototype.title = function () {
+                 db.Event.prototype.title = function () {
                      return this.name;
-                 }
+                 };
+
+                 db.Event.prototype.isCurrent = function () {
+                     return !moment(this.date).isBefore(moment(), 'day');
+                 };
 
                  // //////////////////////////////////////////////////////////////////////
                  // Enactment
@@ -145,6 +149,10 @@ app.factory('db',
                  db.Enactment.prototype.title = function () {
                      return this.name || this.piece.name;
                  }
+
+                 db.Enactment.prototype.isCurrent = function () {
+                     return !moment(this.date).isBefore(moment(), 'day');
+                 };
 
                  // //////////////////////////////////////////////////////////////////////
                  // Person

@@ -19,6 +19,11 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
         return moment(input).format('Do MMMM YYYY');
     };
 })
+.filter('formatDate', function () {
+    return function (input, format) {
+        return moment(input).format(format);
+    };
+})
 .filter('translate', function () {
     return translate;
 })
@@ -132,9 +137,8 @@ function PressImagesController($scope, db, Page) {
 
 app.service('schedule', function (db) {
     function get (archive) {
-        var now = new Date;
         var events = db.events().filter(function (event) {
-          return Boolean(archive) === (moment(event.date).isBefore(now, 'day'));
+          return Boolean(archive) !== event.isCurrent();
         }).map(function (event) {
             var date = moment(event.date);
             var link = event.link;
@@ -143,19 +147,12 @@ app.service('schedule', function (db) {
             } else {
                 link = '/auffuehrung/' + event.id;
             }
-            return {
-                name: event.name || (event.piece && event.piece.name),
+            return angular.extend({}, event.__proto__, event.piece, event, {
                 link: link,
-                ticketLink: event.ticketLink,
-                by: event.by || (event.piece && event.piece.by),
-                weekday: date.format('dddd'),
-                date: date.format('Do MMMM'),
-                time: date.format('H:mm'),
                 month: date.format('MMMM'),
                 monthKey: date.format('MM-YYYY'),
-                epochSeconds: event.date.getTime(),
-                tags: event.tags || (event.piece && event.piece.tags)
-            };
+                epochSeconds: event.date.getTime()
+            });
         }).sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
         return events;
     }
@@ -219,7 +216,7 @@ function EventPageController($scope, db, $routeParams, Page, $compile) {
 
 function EnactmentPageController($scope, db, $routeParams, Page, $compile) {
     var enactment = db.get(db.Enactment, $routeParams.enactmentId);
-    $scope.enactment = angular.extend({}, enactment.piece, enactment);
+    $scope.enactment = angular.extend({}, enactment.__proto__, enactment.piece, enactment);
     $scope.enactment.participants = peopleMatch(db, $scope.enactment.participants);
     Page.setTitle($scope.enactment.name);
     Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
