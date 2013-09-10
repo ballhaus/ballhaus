@@ -84,7 +84,7 @@ function RepertoireController($scope, db, Page) {
             return;
         }
         if (moment(event.date).unix() >= now || shouldAppear.indexOf(event.piece.link) !== -1) {
-            if (event.piece.images[0]) {
+            if (event.piece.images && event.piece.images[0]) {
               event.piece.imageSize = intoRect({width: 176, height: 112}, event.piece.images[0]);
             }
             $scope.pieces.push(event.piece);
