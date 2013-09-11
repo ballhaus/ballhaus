@@ -390,9 +390,12 @@ app
                         $scope.Page.setTitle(page.name);
                         $scope.page = page;
                         html = '<media-browser model="page"></media-browser><h1 class="page-title">' + page.name + '</h1><div class="static-content">' + translate(page.contents) + '</div>';
+                    } else if (pageName === 'english') {
+                        $scope.Page.setTitle('English page');
+                        html = '<p>We are working on the English version of our website, which will soon be available here.</p>';
                     } else {
                         $scope.Page.setTitle('Seite nicht gefunden');
-                        html = 'Die Seite "' + pageName + '" wurde nicht gefunden';
+                        html = '<p>Die Seite "' + pageName + '" wurde nicht gefunden</p>';
                     }
                     var contents = angular.element(html);
                     element.replaceWith(contents);
