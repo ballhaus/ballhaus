@@ -358,6 +358,19 @@ app
             }
         };
     }])
+    .directive("staticPage", function (db) {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/partials/static-page.html',
+            scope: {pageName: '='},
+            link: function ($scope, element, attributes) {
+                // pageName is only set in scope when it refers to something in
+                // the parent scope.
+                $scope.page = db.get(db.Page, $scope.pageName || attributes.pageName);
+            }
+        };
+    })
     .directive("content", function ($compile, db) {
         return {
             restrict: 'E',
@@ -388,8 +401,8 @@ app
                     var html;
                     if (page) {
                         $scope.Page.setTitle(page.name);
-                        $scope.page = page;
-                        html = '<media-browser model="page"></media-browser><h1 class="page-title">' + page.name + '</h1><div class="static-content">' + translate(page.contents) + '</div>';
+                        $scope.page = pageName;
+                        html = '<static-page page-name="page"></static-page>';
                     } else if (pageName === 'english') {
                         $scope.Page.setTitle('English page');
                         html = '<p>We are working on the English version of our website, which will soon be available here.</p>';

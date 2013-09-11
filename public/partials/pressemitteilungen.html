@@ -1,4 +1,4 @@
-<h1 class="page-title">Pressemitteilungen</h1>
+<static-page page-name="pressemitteilungen"></static-page>
 <ul class="simple-list">
   <li ng-repeat="event in events | orderBy:'-epochSeconds'">
     <a href="/pdf/{{event.pdf}}" target="_blank">{{event.name}}</a>
