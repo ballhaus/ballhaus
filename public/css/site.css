@@ -172,6 +172,13 @@ h1 {
     width: 239px;
 }
 
+.sidebar-link-akademie {
+    display: block;
+    background-image: url(/img/ada_logo.png);
+    height: 76px;
+    width: 238px;
+}
+
 .newsletter-form {
     color: #5f5f5f;
 }
