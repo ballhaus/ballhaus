@@ -1,6 +1,6 @@
 <static-page page-name="pressemitteilungen"></static-page>
 <ul class="simple-list">
-  <li ng-repeat="event in events | orderBy:'-epochSeconds'">
+  <li ng-repeat="event in events | orderBy:'name'">
     <a href="/pdf/{{event.pdf}}" target="_blank">{{event.name}}</a>
   </li>
 </ul>
