@@ -95,6 +95,12 @@ function CmsController($scope, $rootScope, $dialog, $http, db) {
     $scope.$on('$routeChangeStart', function (e) {
         console.log('$routeChangeStart');
         db.maybeSaveChanges();
+        if (db.hasChanged()) {
+            confirm($dialog, "Änderungen online stellen?", "Sollen die Änderungen übernommen werden?", function () {
+                console.log('übernehmen');
+                db.pushToServer();
+            });
+        }
     });
 
     function pollLoginStatus() {
@@ -185,14 +191,6 @@ function CmsController($scope, $rootScope, $dialog, $http, db) {
 
     $rootScope.state = 'loggedOut';
 
-    $rootScope.loginStatus = function () {
-        switch (this.state) {
-        case 'loggedOut': return "Nicht angemeldet";
-        case 'loggedIn': return "Angemeldet";
-        case 'locked': return $rootScope.loggedInUser + " ist angemeldet";
-        }
-    }
-
     $rootScope.menuDisplay = function () {
         if (this.state == 'loggedIn') {
             return "inherit";
@@ -207,7 +205,7 @@ function CmsController($scope, $rootScope, $dialog, $http, db) {
 }
 CmsController.$inject = ['$scope', '$rootScope', '$dialog', '$http', 'db'];
 
-function LoginController($scope, $rootScope, $dialog, $http, db) {
+function LoginController($scope, $rootScope, $dialog, $http, $location, db) {
     $scope.loginFailure = 'none';
 
     $scope.displayState = function(state) {
@@ -234,7 +232,9 @@ function LoginController($scope, $rootScope, $dialog, $http, db) {
                         $rootScope.state = 'loggedIn';
                         localStorage.lockId = loginStatus.uuid;
                         db.editMode = true;
-                        db.load(true);
+                        db.load(true, function () {
+                            $location.path('/cms/events');
+                        });
                     })
                     .error(function (message, status) {
                         if (status == 401) {
@@ -249,23 +249,15 @@ function LoginController($scope, $rootScope, $dialog, $http, db) {
     $scope.uploadChanges = true;
 
     $scope.logout = function (force) {
-        console.log('db', db);
-        function doLogout() {
-            localStorage.data = '';
-            localStorage.lockId = '';
-            $http.post(force ? '/logout?force=1' : '/logout')
-                .success(function () {
-                    window.location = '/cms';
-                });
-        }
-        if ($scope.uploadChanges) {
-            db.pushToServer(doLogout);
-        } else {
-            doLogout();
-        }
+        localStorage['data'] = '';
+        localStorage.lockId = '';
+        $http.post(force ? '/logout?force=1' : '/logout')
+            .success(function () {
+                window.location = '/cms';
+            });
     }
 }
-LoginController.$inject = ['$scope', '$rootScope', '$dialog', '$http', 'db'];
+LoginController.$inject = ['$scope', '$rootScope', '$dialog', '$http', '$location', 'db'];
 
 function EventsController($scope) {
     $scope.archived = (location.hash == '#archiv');
@@ -491,11 +483,10 @@ angular.module('cmsApp.directives', [])
             link: function ($scope, element, attributes) {
                 $scope.title = attributes.name;
                 $scope.link = utils.urlify(attributes.name);
-                console.log($scope);
             }
         };
     }])
-    .directive("menuLink", [ '$location', function ($location) {
+    .directive("menuLink", function () {
         return {
             restrict: 'E',
             replace: true,
@@ -515,7 +506,7 @@ angular.module('cmsApp.directives', [])
                 $scope.to = attributes.to;
             }
         };
-    }])
+    })
     .directive("optionalText", [ '$compile', function($compile) {
         return {
             restrict: 'E',
@@ -903,7 +894,6 @@ angular.module('cmsApp.directives', [])
                     var re = /(.*):\s*(.*)/g;
                     var match;
                     while ((match = re.exec(string)) !== null) {
-                        // console.log(match[1], match[2].split(/\s*,\s*/));
                         data.push({ role: match[1],
                                     people: match[2].split(/\s*,\s*/).map(function (name) {
                                         var person = db.Person.getByName(name);

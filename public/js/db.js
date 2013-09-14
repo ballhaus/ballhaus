@@ -118,6 +118,7 @@ app.factory('db',
                      deleteFrom(convict.constructor.extent);
                      deleteFrom(db.objects);
                      db.maybeSaveChanges();
+                     db.pushToServer();
                  }
 
                  // //////////////////////////////////////////////////////////////////////
@@ -253,23 +254,22 @@ app.factory('db',
                          });
                          
                      });
-                     var oldState;
+                     var serverState;
                      db.maybeSaveChanges = function () {
                          if (db.editMode) {
-                             var newState = JSON.stringify(freeze(db.objects));
-                             if (oldState && oldState != newState) {
-                                 console.log('saving to localStorage');
-                                 localStorage['data'] = newState;
-                             }
-                             oldState = newState;
+                             localStorage['data'] = JSON.stringify(freeze(db.objects))
                          }
+                     }
+
+                     db.hasChanged = function () {
+                         return serverState && localStorage['data'] && (localStorage['data'] != serverState);
                      }
 
                      db.pushToServer = function (callback) {
                          console.log('saving to server');
-                         $http.post('/db', JSON.stringify(freeze(db.objects)))
+                         serverState = JSON.stringify(freeze(db.objects));
+                         $http.post('/db', serverState)
                              .success(function () {
-                                 delete localStorage['data'];
                                  console.log('done saving');
                                  if (callback) {
                                      callback();
@@ -280,7 +280,6 @@ app.factory('db',
                  }
 
                  function initializeObjects(data) {
-                     oldState = data;
                      db.objects = [];
                      db.Extent.lastId = 0;
                      db.Extent.extent = {};
@@ -310,19 +309,25 @@ app.factory('db',
                                                       { name: 'project in/out' },
                                                       { name: 'Festival Black Lux' }
                                                     ] };
+                     localStorage['data'] = serverState = JSON.stringify(freeze(db.objects));
                      db.loaded = true;
                  }
 
-                 db.load = function (ignoreLocalstorage) {
-                     if (localStorage.data && !ignoreLocalstorage) {
+                 db.load = function (ignoreLocalstorage, handler) {
+                     if (localStorage['data'] && !ignoreLocalstorage) {
                          console.log('loading from localStorage');
-                         initializeObjects(JSON.parse(localStorage.data));
-                         $http.get('/db').success(function (serverState) {
-                             oldState = serverState;
-                         });
+                         initializeObjects(JSON.parse(localStorage['data']));
+                         if (handler) {
+                             handler();
+                         }
                      } else {
                          console.log('loading from server');
-                         $resource('/db').query(initializeObjects);
+                         $http.get('/db').success(function (state) {
+                             initializeObjects(state);
+                             if (handler) {
+                                 handler();
+                             }
+                         });
                      }
                  }
 
