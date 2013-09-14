@@ -103,6 +103,31 @@ function CmsController($scope, $rootScope, $dialog, $http, db) {
         }
     });
 
+    $scope.uploadFile = function(files) {
+        var formData = new FormData();
+        // Take the first selected file
+        formData.append("file", files[0]);
+
+        $http.post('/import-legacy-artists', formData, {
+            withCredentials: true,
+            headers: {'Content-Type': undefined },
+            transformRequest: angular.identity
+        })
+            .success(function (data) {
+                console.log('success', data);
+                data.forEach(function (personData) {
+                    personData.images = [new db.Image(personData.image)];
+                    personData.link = utils.urlify(personData.name);
+                    delete personData['image'];
+                    new db.Person(personData);
+                });
+            })
+            .error(function (error) {
+                console.log('error', error);
+            });
+
+    }
+
     function pollLoginStatus() {
         $http
             .get('/login-status')
@@ -110,12 +135,12 @@ function CmsController($scope, $rootScope, $dialog, $http, db) {
                 if (loginStatus.uuid) {
                     if (loginStatus.uuid == localStorage.lockId) {
                         db.editMode = true;
+                        $rootScope.superuser = loginStatus.superuser;
                         $rootScope.state = 'loggedIn';
                     } else {
                         $rootScope.state = 'locked';
                         db.editMode = false;
                         $rootScope.loggedInUser = loginStatus.name;
-                        $rootScope.superuser = loginStatus.superuser;
                     }
                 } else {
                     $rootScope.state = 'loggedOut';

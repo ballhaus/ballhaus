@@ -9,7 +9,6 @@ function Person (options) {
     for (var key in options) {
         this[key] = options[key];
     }
-    this.thawed();
 }
 function Piece () {}
 function Enactment () {}

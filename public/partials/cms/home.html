@@ -50,5 +50,9 @@
         </div>
       </form>
     </fieldset>
+    <fieldset>
+      <legend>Leute-Import</legend>
+      <label>XML-File<input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/></label>
+    </fieldset>
   </div>
 </form>
