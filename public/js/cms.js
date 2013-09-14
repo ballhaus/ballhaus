@@ -229,6 +229,7 @@ function LoginController($scope, $rootScope, $dialog, $http, db) {
                         $rootScope.state = 'loggedIn';
                         localStorage.lockId = loginStatus.uuid;
                         db.editMode = true;
+                        db.load(true);
                     })
                     .error(function (message, status) {
                         if (status == 401) {

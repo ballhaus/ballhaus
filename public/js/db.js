@@ -280,8 +280,11 @@ app.factory('db',
                      }
                  }
 
-                 function reload (data) {
+                 function initializeObjects(data) {
                      oldState = data;
+                     db.objects = [];
+                     db.Extent.lastId = 0;
+                     db.Extent.extent = {};
                      thaw(data, [ db.Event, db.Person, db.Piece, db.Image, db.Enactment, db.Page, db.Video ]);
 
                      db.events = function () {
@@ -305,16 +308,21 @@ app.factory('db',
                                                     ] };
                      db.loaded = true;
                  }
-                 if (localStorage.data) {
-                     console.log('loading from localStorage');
-                     reload(JSON.parse(localStorage.data));
-                     $http.get('/db').success(function (serverState) {
-                         oldState = serverState;
-                     });
-                 } else {
-                     console.log('loading from server');
-                     $resource('/db').query(reload);
+
+                 db.load = function (ignoreLocalstorage) {
+                     if (localStorage.data && !ignoreLocalstorage) {
+                         console.log('loading from localStorage');
+                         initializeObjects(JSON.parse(localStorage.data));
+                         $http.get('/db').success(function (serverState) {
+                             oldState = serverState;
+                         });
+                     } else {
+                         console.log('loading from server');
+                         $resource('/db').query(initializeObjects);
+                     }
                  }
+
+                 db.load();
 
                  return db;
              }]);
