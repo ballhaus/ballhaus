@@ -274,6 +274,9 @@ app.factory('db',
                                  if (callback) {
                                      callback();
                                  }
+                             })
+                             .error(function () {
+                                 alert('Daten konnten nicht auf dem Server gespeichert werden!');
                              });
 
                      }
