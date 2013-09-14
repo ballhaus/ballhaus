@@ -20,6 +20,8 @@
         "flickr": "*",
         "node-uuid": "*",
         "read": "*",
-        "nodemailer": "*"
+        "nodemailer": "*",
+        "xpath": "*",
+        "xmldom": "*"
     }
 }

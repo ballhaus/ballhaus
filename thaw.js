@@ -5,7 +5,12 @@ var icebox = require('icebox');
 var gm = require('gm');
 
 function Event () {}
-function Person () {}
+function Person (options) {
+    for (var key in options) {
+        this[key] = options[key];
+    }
+    this.thawed();
+}
 function Piece () {}
 function Enactment () {}
 function Page () {}
@@ -84,3 +89,4 @@ function thaw(data)
 
 module.exports = thaw;
 module.exports.Image = Image;
+module.exports.Person = Person;

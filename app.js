@@ -15,10 +15,12 @@ var gift = require('gift');
 var restler = require('restler');
 var dirty = require('dirty');
 var icebox = require('icebox');
-var httpGet = require('http-get');
 var gm = require('gm');
 var Flickr = require('flickr').Flickr;
 var uuid = require('node-uuid');
+var xpath = require('xpath');
+var dom = require('xmldom').DOMParser;
+
 var config = require('./config.json');
 var sha1 = require('./public/lib/sha1.js');
 
@@ -73,6 +75,7 @@ app.get('/', function (req, res) {
 
 var thaw = require('./thaw');
 var Image = thaw.Image;
+var Person = thaw.Person;
 
 var loginStatus = {};
 
@@ -344,6 +347,52 @@ app.post('/logout',
              }
          });
 
+// Import legacy artists
+app.post('/import-legacy-artists',
+         function (req, res) {
+             var data = '';
+             req.setEncoding('utf8');
+             req.on('data', function(chunk) { 
+                 data += chunk;
+             });
+             req.on('end', function() {
+                 var people;
+                 Step(
+                     function () {
+                         var doc = new dom().parseFromString(data);
+                         people = xpath.select('/people/person[picture/path != "" and bio != ""]', doc);
+                         var group = this.group();
+                         people.forEach(function (person) {
+                             var name = xpath.select('name/text()', person).toString();
+                             var path = xpath.select('picture/path/text()', person).toString();
+                             var credits = xpath.select('picture/credits/text()', person).toString();
+                             var bio = xpath.select('bio', person).toString();
+                             var localPath = path.replace(/.*\//, '');
+                             Image.importFromWeb('http://old.ballhausnaunynstrasse.de/' + path,
+                                                 localPath,
+                                                 group());
+                                                 
+                         });
+                     },
+                     function (err, images) {
+                         if (err) throw err;
+                         people.forEach(function (person) {
+                             var name = xpath.select('name/text()', person).toString();
+                             var credits = xpath.select('picture/credits/text()', person).toString();
+                             var bio = xpath.select('bio', person).toString();
+                             var image = images.shift();
+                             image.credits = credits;
+                             new Person({ name: name,
+                                          bio: bio,
+                                          image: image });
+                         });
+                         dirtyDb.set('data', icebox.freeze(db));
+                         res.send('got ' + people.length + ' artists');
+                     });
+             });
+         });
+
 http.createServer(app).listen(app.get('port'), function() {
     console.log("Express server listening on port " + app.get('port'));
 });
+
