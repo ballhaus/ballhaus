@@ -264,7 +264,6 @@ app.factory('db',
                              oldState = newState;
                          }
                      }
-                     setInterval(db.maybeSaveChanges, 1000);
 
                      db.pushToServer = function (callback) {
                          console.log('saving to server');

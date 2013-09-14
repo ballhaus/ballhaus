@@ -92,6 +92,11 @@ app.value('ui.config', {
 });
 
 function CmsController($scope, $rootScope, $dialog, $http, db) {
+    $scope.$on('$routeChangeStart', function (e) {
+        console.log('$routeChangeStart');
+        db.maybeSaveChanges();
+    });
+
     function pollLoginStatus() {
         $http
             .get('/login-status')
