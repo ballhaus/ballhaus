@@ -398,7 +398,7 @@ app
 
                     var html;
                     if (page) {
-                        $scope.Page.setTitle(page.name);
+                        $scope.Page.setTitle(page.name.de);
                         $scope.page = pageName;
                         html = '<static-page page-name="page"></static-page>';
                     } else if (pageName === 'english') {

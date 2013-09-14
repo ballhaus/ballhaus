@@ -293,6 +293,11 @@ app.factory('db',
                      db.pieces = db.findObjects.bind(this, db.Piece);
                      db.images = db.findObjects.bind(this, db.Image);
                      db.pages = db.findObjects.bind(this, db.Page);
+                     db.pages().forEach(function (page) {
+                         if (typeof page.name == 'string') {
+                             page.name = { de: page.name };
+                         }
+                     });
                      db.tags = function () { return [ { name: 'Theater' },
                                                       { name: 'Tanz' },
                                                       { name: 'Film' },
