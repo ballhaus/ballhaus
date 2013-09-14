@@ -33,7 +33,7 @@ var access_logfile = fs.createWriteStream(__dirname + '/logs/access.log', { flag
 app.configure(function() {
     app.use(express.logger({ stream: access_logfile }));
     app.set('port', process.env.PORT || config.port || 3000);
-    app.use(express.favicon());
+    app.use(express.favicon(__dirname + '/public/img/favicon.ico'));
     app.set('statics', process.cwd() + '/public');
     app.use(express.static(app.get('statics')));
     app.use(express.bodyParser({ keepExtensions: true, uploadDir: __dirname + '/uploads' }));
