@@ -200,14 +200,12 @@ function PersonPageController($scope, db, $routeParams, Page) {
 
 function PiecePageController($scope, db, $routeParams, Page, $compile) {
     $scope.piece = db.get(db.Piece, $routeParams.pieceId);
-    $scope.piece.participants = peopleMatch(db, $scope.piece.participants);
     Page.setTitle($scope.piece.name);
     Page.setSidebarContent($compile('<piece-sidebar for="piece"/>')($scope));
 }
 
 function EventPageController($scope, db, $routeParams, Page, $compile) {
     $scope.event = db.get(db.Event, $routeParams.eventId);
-    $scope.event.participants = peopleMatch(db, $scope.event.participants);
     Page.setTitle($scope.event.name);
     Page.setSidebarContent($compile('<piece-sidebar for="event"/>')($scope));
 }
@@ -215,7 +213,6 @@ function EventPageController($scope, db, $routeParams, Page, $compile) {
 function EnactmentPageController($scope, db, $routeParams, Page, $compile) {
     var enactment = db.get(db.Enactment, $routeParams.enactmentId);
     $scope.enactment = angular.extend({}, enactment.__proto__, enactment.piece, enactment);
-    $scope.enactment.participants = peopleMatch(db, $scope.enactment.participants);
     Page.setTitle($scope.enactment.name);
     Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
 }
@@ -438,12 +435,15 @@ app
             scope: { 'for': '=' }
         };
     })
-    .directive("pieceSidebar", function () {
+    .directive("pieceSidebar", function (db) {
         return {
             restrict: 'E',
             replace: true,
             templateUrl: '/partials/piece-sidebar.html',
-            scope: { 'for': '=' }
+            scope: { 'for': '=' },
+            link: function ($scope, element, attributes) {
+                $scope.participants = peopleMatch(db, $scope.for.participants);
+            }
         };
     })
     .directive("pieceBase", function () {
