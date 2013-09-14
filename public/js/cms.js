@@ -859,31 +859,34 @@ angular.module('cmsApp.directives', [])
             require: '?ngModel',
             templateUrl: '/partials/date-time-picker.html',
             link: function (scope, element, attrs, ngModel) {
-                console.log('model', ngModel, '$viewValue', ngModel.$viewValue);
                 ngModel.$render = function () {
-                    console.log('render', this.$viewValue);
-                    if (this.$viewValue) {
-                        var m = new moment(this.$viewValue);
+                    if (this.$modelValue) {
+                        var m = new moment(this.$modelValue);
                         scope.date = m.format('DD.MM.YYYY');
                         scope.time = m.format('HH:mm');
                     }
                 }
 
                 function parse() {
-                    var datetime = moment(scope.date).format('DD.MM.YYYY') + ' ' + scope.time;
-                    console.log('parse', datetime);
-                    var m = moment(datetime, 'DD.MM.YYYY HH:mm');
-                    if (m.isValid()) {
-                        console.log('$setViewValue', m.toDate());
+                    if (typeof scope.date != 'string') {
+                        scope.date = moment(scope.date).format('DD.MM.YYYY');
+                    }
+                    if (!moment(scope.date, 'DD.MM.YYYY').isValid()) {
+                        console.log('invalid date');
+                    } else if (!moment(scope.time, 'HH:mm').isValid()) {
+                        console.log('invalid time');
+                    } else {
+                        var datetime = scope.date + ' ' + scope.time;
+                        var m = moment(datetime, 'DD.MM.YYYY HH:mm');
                         ngModel.$setViewValue(m.toDate());
+                        ngModel.$setValidity('date', true);
+                        ngModel.$setValidity('time', true);
                     }
                 }
 
                 element.on('blur keyup change', function () {
                     scope.$apply(parse);
                 });
-
-                parse();
             }
         }
     })
