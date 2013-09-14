@@ -33,8 +33,8 @@
 </div>
 <h3>Alle Seiten</h3>
 <ul class="data">
-  <li ng-repeat="page in db.pages() | orderBy:'name'">
-    {{page.path}} <ref object="page"/>
+  <li ng-repeat="page in db.pages() | orderBy:'name.de'">
+    {{page.path}} <ref object="page" title="page.name.de"/>
   </li>
 </ul>
 </div>
