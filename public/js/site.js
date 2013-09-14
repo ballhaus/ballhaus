@@ -121,14 +121,12 @@ function PressPdfController($scope, db, Page) {
 }
 
 function PressImagesController($scope, db, Page) {
-    $scope.sets = db.flickrSets
-        .map(function (set) {
-            var m = moment(set.date_update * 1000);
+    $scope.sets = db.pieces()
+        .filter(function (piece) { return piece.flickrSet; })
+        .map(function (piece) {
             return {
-                id: set.id,
-                epochSeconds: m.unix(),
-                date: m.format('Do MMMM YYYY'),
-                name: set.title._content
+                id: piece.flickrSet.id,
+                name: piece.name
             };
         });
     Page.setTitle('Bildmaterial');
