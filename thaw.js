@@ -1,3 +1,6 @@
+var Step = require('step');
+var fs = require('fs');
+var httpGet = require('http-get');
 var icebox = require('icebox');
 var gm = require('gm');
 
