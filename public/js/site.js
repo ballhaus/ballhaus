@@ -248,7 +248,7 @@ function KuenstlerinnenController($scope, $routeParams, Page, db) {
     Page.setSidebarContent('');
 }
 
-function PageController($scope, Page, db) {
+function PageController($scope, $timeout, $location, Page, db) {
     // FIXME There is this ugly race condition wrt db loading, and injecting db
     // is barely a fix
 
@@ -258,9 +258,35 @@ function PageController($scope, Page, db) {
 
     $scope.Page = Page;
 
+    $scope.scrollPos = {}; // scroll position of each view
+
+    $(window).on('scroll', function() {
+        if ($scope.okSaveScroll) { // false between $routeChangeStart and $routeChangeSuccess
+            $scope.scrollPos[$location.path()] = $(window).scrollTop();
+            console.log('save scroll position for', $location.path(), '=>', $scope.scrollPos[$location.path()]);
+        }
+    });
+
+    $scope.scrollClear = function(path) {
+        console.log('clear scroll position for', path);
+        $scope.scrollPos[path] = 0;
+    }
+
+    $scope.$on('$routeChangeStart', function() {
+        $scope.okSaveScroll = false;
+    });
+
     $scope.$on('$routeChangeSuccess', function (e, newRoute) {
+        $timeout(function() { // wait for DOM, then restore scroll position
+            var position = $scope.scrollPos[$location.path()] ? $scope.scrollPos[$location.path()] : 0;
+            console.log('restore scroll position for', $location.path(), '=>', position);
+            $(window).scrollTop(position);
+            $scope.okSaveScroll = true;
+        }, 0);
+
         $scope.Page.currentMenuItem(newRoute.$route && newRoute.$route.activeMenuItem);
     });
+
 }
 app.factory('Page', function () {
     var title = '';
