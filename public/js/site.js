@@ -19,6 +19,11 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
         return moment(input).format('Do MMMM YYYY');
     };
 })
+.filter('toDateWithTime', function () {
+    return function (input) {
+        return moment(input).format('Do MMMM YYYY, HH:mm');
+    };
+})
 .filter('formatDate', function () {
     return function (input, format) {
         return moment(input).format(format);
