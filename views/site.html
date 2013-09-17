@@ -4,7 +4,7 @@
     <!--[if lt IE 8]><script type="text/javascript">window.location = '/browser-error';<![endif]-->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title ng-cloak>Ballhaus Naunynstraße - {{Page.title()}}</title>
+    <title ng-cloak>Ballhaus Naunynstraße - {{Page.title() | translate}}</title>
     <link rel="stylesheet" href="/css/bootstrap-combined.min.css"/>
     <link rel="stylesheet" href="/css/MyFontsWebfontsKit.css"/>
     <link rel="stylesheet" href="/css/site.css"/>
@@ -96,7 +96,6 @@
     <script src="/lib/angular-strap/vendor/bootstrap-timepicker.js"></script>
     <script src="/lib/moment.min.js"></script>
     <script src="/lib/moment.langs.min.js"></script>
-    <script>moment.lang('de')</script>
     <script src="/lib/icebox.js"></script>
     <script src="/lib/super.min.js"></script>
     <script src="/js/utils.js"></script>

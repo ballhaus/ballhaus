@@ -30,7 +30,14 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
     };
 })
 .filter('translate', function () {
-    return translate;
+    return function translate(what) {
+        switch (typeof what) {
+        case 'string':
+            return what;
+        case 'object':
+            return what[language];
+        }
+    };
 })
 .filter('fromCharCode', function () {
     return function (input) {
@@ -40,14 +47,7 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
 
 var language = 'de';
 
-function translate(what) {
-    switch (typeof what) {
-    case 'string':
-        return what;
-    case 'object':
-        return what[language];
-    }
-}
+moment.lang(language);
 
 // FIXME: Ugly c&p from CMS
 function peopleMatch(db, string) {
@@ -193,7 +193,11 @@ function ScheduleController($scope, $routeParams, schedule, Page) {
 
 function ArchiveController($scope, schedule, Page) {
     $scope.events = schedule.getArchive();
-    Page.setTitle('Archiv');
+    $scope.title = {
+      de: 'Archiv',
+      en: 'Archive'
+    }
+    Page.setTitle($scope.title);
     Page.setSidebarContent('');
 }
 
@@ -320,6 +324,13 @@ app
             return items && items.slice().reverse();
         };
     })
+    .directive("pageTitle", function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/partials/page-title.html'
+        };
+    })
     .directive("menu", function () {
         return {
             restrict: 'E',
@@ -343,6 +354,7 @@ app
             link: function ($scope, element, attributes) {
                 $scope.title = attributes.name;
                 $scope.linkTarget = attributes.link;
+                $scope.lang = language;
             }
         }
     })
@@ -352,9 +364,10 @@ app
             replace: true,
             transclude: true,
             scope: true,
-            template: '<li><a class="site-menuitem-{{to}} ir" ng-class="Page.menuClass(to)" href="/{{to}}" ng-transclude></a></li>',
+            template: '<li><a class="site-menuitem-{{lang}}-{{to}} ir" ng-class="Page.menuClass(to)" href="/{{to}}" ng-transclude></a></li>',
             link: function ($scope, element, attributes) {
                 $scope.to = attributes.to || utils.urlify(element.text());
+                $scope.lang = language;
             }
         };
     }])
