@@ -358,10 +358,7 @@ app.post('/import-legacy-artists',
                      people = xpath.select('/people/person[picture/path != "" and bio != ""]', doc);
                      var group = this.group();
                      people.forEach(function (person) {
-                         var name = xpath.select('name/text()', person).toString();
                          var path = xpath.select('picture/path/text()', person).toString();
-                         var credits = xpath.select('picture/credits/text()', person).toString();
-                         var bio = xpath.select('bio', person).toString();
                          var localPath = path.replace(/.*\//, '');
                          Image.importFromWeb('http://old.ballhausnaunynstrasse.de/' + path,
                                              localPath,
@@ -374,7 +371,7 @@ app.post('/import-legacy-artists',
                      res.json(people.map(function (person) {
                          var name = xpath.select('name/text()', person).toString();
                          var credits = xpath.select('picture/credits/text()', person).toString();
-                         var bio = xpath.select('bio/p', person).toString();
+                         var bio = xpath.select('bio/p', person).map(function (node) { return node.toString(); }).join("\n");
                          var image = images.shift();
                          image.credits = credits;
                          return new Person({ name: name,
