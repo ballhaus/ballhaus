@@ -55,7 +55,6 @@ app.factory('db',
                  }
                  db.get = function (constructor, id) {
                      var constructorName = constructor.name || ieConstructorName(constructor)
-                     console.log('db.get ' + constructorName + ' ' + id);
                      if (db.Extent.extent[id]) {
                          return db.Extent.extent[id];
                      } else {
@@ -68,7 +67,7 @@ app.factory('db',
                              }
                          }
                      }
-                     console.log('not found');
+                     console.log('db.get ' + constructorName + ' ' + id + ' not found');
                      return null;
                  }
                  db.findObjects = function (constructor) {
