@@ -76,7 +76,7 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
 app.value('ui.config', {
     tinymce: {
         theme: 'advanced',
-        theme_advanced_buttons1: "bold,italic,|,h2,|,link,unlink,image",
+        theme_advanced_buttons1: "bold,italic,|,h2,|,link,unlink,|,removeformat",
         theme_advanced_statusbar_location: "none",
         content_css: "/css/tinymce_content.css",
         plugins: "paste,inlinepopups,heading",
