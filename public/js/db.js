@@ -222,6 +222,14 @@ app.factory('db',
                  inherits(db.Video, db.Extent);
 
                  // //////////////////////////////////////////////////////////////////////
+                 // Homepage
+
+                 db.Homepage = function Homepage (attributes) {
+                     db.Extent.call(this, attributes);
+                 }
+                 inherits(db.Homepage, db.Extent);
+
+                 // //////////////////////////////////////////////////////////////////////
                  // Flickr Sets
                  db.flickrSets = $resource('/flickr-sets').query();
 
@@ -287,7 +295,7 @@ app.factory('db',
                      db.objects = [];
                      db.Extent.lastId = 0;
                      db.Extent.extent = {};
-                     thaw(data, [ db.Event, db.Person, db.Piece, db.Image, db.Enactment, db.Page, db.Video ]);
+                     thaw(data, [ db.Event, db.Person, db.Piece, db.Image, db.Enactment, db.Page, db.Video, db.Homepage ]);
 
                      db.events = function () {
                          return db.findObjects(db.Event).concat(db.findObjects(db.Enactment));
@@ -301,6 +309,12 @@ app.factory('db',
                              page.name = { de: page.name };
                          }
                      });
+                     var homepages = db.findObjects(db.Homepage);
+                     if (homepages.length) {
+                         db.homepage = homepages[0];
+                     } else {
+                         db.homepage = new db.Homepage;
+                     }
                      db.tags = function () { return [ { name: 'Theater' },
                                                       { name: 'Tanz' },
                                                       { name: 'Film' },

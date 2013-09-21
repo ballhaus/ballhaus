@@ -19,6 +19,7 @@ function Image (options) {
     }
     this.thawed();
 }
+function Homepage () {}
 Image.nameMap = {};
 Image.prototype.thawed = function () {
     Image.nameMap[this.name] = this;
@@ -83,7 +84,7 @@ function Video() {}
 
 function thaw(data)
 {
-    return icebox.thaw(data, [ Event, Person, Piece, Image, Enactment, Video, Page ]);
+    return icebox.thaw(data, [ Event, Person, Piece, Image, Enactment, Video, Page, Homepage ]);
 }
 
 module.exports = thaw;

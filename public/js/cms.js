@@ -53,6 +53,7 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
       [ 'piece/:pieceId', EditPieceController ],
       [ 'enactment/:enactmentId', EditEnactmentController ],
       [ 'people' ],
+      [ 'homepage', EditHomepageController ],
       [ 'pages' ],
       [ 'page/:pageName', EditPageController ],
       [ 'person/:personId', EditPersonController ],
@@ -97,7 +98,6 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
         db.maybeSaveChanges();
         if (db.hasChanged()) {
             confirm($dialog, "Änderungen online stellen?", "Sollen die Änderungen übernommen werden?", function () {
-                console.log('übernehmen');
                 db.pushToServer();
             });
         }
@@ -391,6 +391,13 @@ function EditDatabaseController($scope, $dialog, db) {
     }
 }
 EditDatabaseController.$inject = ['$scope', '$dialog', 'db'];
+
+function EditHomepageController($scope, db) {
+    $scope.pages = db.pages().filter(function (page) { return !page.linkedFromMenu; });
+    $scope.pieces = db.pieces();
+    $scope.homepage = db.homepage;
+}
+EditHomepageController.$inject = ['$scope', 'db'];
 
 function EditPageController($scope, $dialog, $routeParams, db) {
     var pageName = $routeParams.pageName;
@@ -1032,3 +1039,4 @@ angular.module('cmsApp.directives', [])
             }
         };
     }]);
+

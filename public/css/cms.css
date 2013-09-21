@@ -198,3 +198,18 @@ image-button {
     color: #005ace;
     font-style: italic;
 }
+
+.homepage-layout table {
+    border: 3px solid black;
+    width: 600px;
+    height: 300px;
+}
+
+.homepage-layout table td {
+    border: 3px solid black;
+    text-align: center;
+    vertical-align: middle;
+    background: #ccc;
+    width: 50%;
+}
+
