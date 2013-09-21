@@ -542,7 +542,7 @@ angular.module('cmsApp.directives', [])
                         var contents;
                         if (asTextEditor) {
                             contents = angular.element('<textarea ui-' + config.editor + ' ng-model="' + attributes.model
-                                                       + '" rows="' + $scope.rows + '" class="input-xxlarge">');
+                                                       + '" rows="' + $scope.rows + '" class="fancy-editor">');
                             $scope.mode = 'editor';
                         } else {
                             contents = angular.element('<button ng-click="showControl(true)">+</button>');
