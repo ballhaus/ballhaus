@@ -1,40 +1,43 @@
-<div>
-  <ul class="edit-menu">
-    <span>Programm</span><br/>
-    <ul>
-      <li><span>Spielplan</span></li>
-      <li><span>Repertoire</span></li>
-      <li><page-edit-ref name="Reihen"/></li>
-      <li><span>Archiv</span></li>
+<page-directory>
+  <div>
+    <ul class="edit-menu">
+      <span>Programm</span><br/>
+      <ul>
+        <li><span>Spielplan</span></li>
+        <li><span>Repertoire</span></li>
+        <li><page-edit-ref page="reihen"/></li>
+        <li><span>Archiv</span></li>
+      </ul>
+      <span>Künstlerinnen</span><br/>
+      <li><page-edit-ref page="haus" /><li>
+        <ul>
+          <li><page-edit-ref page="geschichte"/></li>
+          <li><page-edit-ref page="team"/></li>
+          <li><page-edit-ref page="auszeichnungen" /></li>
+          <li><page-edit-ref page="postmigranten_on_tour"/></li>
+          <li><page-edit-ref page="partner"/></li>
+        </ul>
+      <li><page-edit-ref page="tickets"/></li>
+      <span>Presse</span>
+      <ul>
+        <li><page-edit-ref page="pressemitteilungen"/></li>
+        <li><page-edit-ref page="bildmaterial"/></li>
+      </ul>
+      <br/>
+      <li><page-edit-ref page="impressum"/></li>
+      <li><page-edit-ref page="kontakt"/></li>
     </ul>
-    <span>Künstlerinnen</span><br/>
-    <li><page-edit-ref name="Haus" /><li>
-    <ul>
-      <li><page-edit-ref name="Geschichte"/></li>
-      <li><page-edit-ref name="Team"/></li>
-      <li><page-edit-ref name="Auszeichnungen" /></li>
-      <li><page-edit-ref name="Postmigranten on Tour"/></li>
-      <li><page-edit-ref name="Partner"/></li>
+  </div>
+  <hr/>
+  <h3>Weitere Seiten</h3>
+  <p>
+    <ul class="data">
+      <li ng-repeat="page in freePages">
+        /{{page.link}} <ref object="page" title="page.name.de"/>
+      </li>
     </ul>
-    <li><page-edit-ref name="Tickets"/></li>
-    <span>Presse</span>
-    <ul>
-      <li><page-edit-ref name="Pressemitteilungen"/></li>
-      <li><page-edit-ref name="Bildmaterial"/></li>
-    </ul>
-    <br/>
-    <li><page-edit-ref name="Impressum"/></li>
-    <li><page-edit-ref name="Kontakt"/></li>
-  </ul>
-</div>
-<hr/>
-<div class="actions control-group">
-  <button ng-click="newPage()" class="btn btn-small btn-primary">Neue Seite</button>
-</div>
-<h3>Alle Seiten</h3>
-<ul class="data">
-  <li ng-repeat="page in db.pages() | orderBy:'name.de'">
-    {{page.path}} <ref object="page" title="page.name.de"/>
-  </li>
-</ul>
-</div>
+  </p>
+  <div class="actions control-group">
+    <button ng-click="newPage()" class="btn btn-small btn-primary">Neue Seite</button>
+  </div>
+<page-directory>

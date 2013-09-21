@@ -355,7 +355,7 @@ app.post('/import-legacy-artists',
              Step(
                  function () {
                      var doc = new dom().parseFromString(fs.readFileSync(req.files.file.path, 'utf8'));
-                     people = xpath.select('/people/person[picture/path != "" and bio != ""]', doc);
+                     people = xpath.select('/people/person[picture/path != "" and bio != "" and name != ""]', doc);
                      var group = this.group();
                      people.forEach(function (person) {
                          var path = xpath.select('picture/path/text()', person).toString();

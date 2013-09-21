@@ -91,7 +91,7 @@ app.value('ui.config', {
     }
 });
 
-function CmsController($scope, $rootScope, $dialog, $http, db) {
+function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
     $scope.$on('$routeChangeStart', function (e) {
         console.log('$routeChangeStart');
         db.maybeSaveChanges();
@@ -165,8 +165,12 @@ function CmsController($scope, $rootScope, $dialog, $http, db) {
             .open()
             .then(function(name) {
                 if (name) {
+                    var link = utils.urlify(name);
                     new db.Piece({ name: name,
-                                   link: utils.urlify(name) });
+                                   link: link });
+                    db.pushToServer(function () {
+                        $location.path('/cms/piece/' + link);
+                    });
                 }
             });
     }
@@ -179,9 +183,13 @@ function CmsController($scope, $rootScope, $dialog, $http, db) {
             .then(function (data) {
                 if (data) {
                     console.log('new event, data', data);
+                    var link = utils.urlify(data.name + ' ' + moment(data.datetime).format("DD.MM.YYYY"));
                     new db.Event({ name: data.name,
-                                   link: utils.urlify(data.name + ' ' + moment(data.datetime).format("DD.MM.YYYY")),
+                                   link: link,
                                    date: data.datetime });
+                    db.pushToServer(function () {
+                        $location.path('/cms/event/' + link);
+                    });
                 }
             });
     }
@@ -194,22 +202,12 @@ function CmsController($scope, $rootScope, $dialog, $http, db) {
             .then(function (data) {
                 if (data) {
                     console.log('data', data);
-                    piece.enactments.push(new db.Enactment({ date: data.datetime,
-                                                             piece: piece }));
-                }
-            });
-    }
-    $scope.newPage = function () {
-        $dialog
-            .dialog({ controller: 'NewNamedObjectController',
-                      resolve: { defaults: function () { return { } } },
-                      templateUrl: '/dialogs/new-page.html' })
-            .open()
-            .then(function (data) {
-                if (data) {
-                    console.log('new page, data', data);
-                    new db.Page({ name: data.name,
-                                  link: utils.urlify(data.name) });
+                    var enactment = new db.Enactment({ date: data.datetime,
+                                                       piece: piece });
+                    piece.enactments.push(enactment);
+                    db.pushToServer(function () {
+                        $location.path('/cms/enactment/' + enactment.id);
+                    });
                 }
             });
     }
@@ -228,7 +226,7 @@ function CmsController($scope, $rootScope, $dialog, $http, db) {
         return $rootScope.superuser ? "block" : "none";
     }
 }
-CmsController.$inject = ['$scope', '$rootScope', '$dialog', '$http', 'db'];
+CmsController.$inject = ['$scope', '$rootScope', '$dialog', '$http', '$location', 'db'];
 
 function LoginController($scope, $rootScope, $dialog, $http, $location, db) {
     $scope.loginFailure = 'none';
@@ -496,18 +494,6 @@ angular.module('cmsApp.directives', [])
                 var contents = angular.element('<a href="/cms/{{type}}/{{link}}">{{title}}</div>');
                 element.replaceWith(contents);
                 $compile(contents)($scope);
-            }
-        };
-    }])
-    .directive("pageEditRef", [ function ($compile, db) {
-        return {
-            restrict: 'E',
-            replace: true,
-            scope: true,
-            template: '<a href="/cms/page/{{link}}">{{title}}</a>',
-            link: function ($scope, element, attributes) {
-                $scope.title = attributes.name;
-                $scope.link = utils.urlify(attributes.name);
             }
         };
     }])
@@ -989,4 +975,54 @@ angular.module('cmsApp.directives', [])
                 }
             }
         }
+    }])
+    .directive('pageDirectory', ['db', '$dialog', '$location', function (db, $dialog, $location) {
+
+        return {
+            restrict: 'E',
+            link: function ($scope, element, attrs, controller) {
+                $scope.newPage = function () {
+                    $dialog
+                        .dialog({ controller: 'NewNamedObjectController',
+                                  resolve: { defaults: function () { return { } } },
+                                  templateUrl: '/dialogs/new-page.html' })
+                        .open()
+                        .then(function (data) {
+                            if (data) {
+                                console.log('new page, data', data);
+                                var link = utils.urlify(data.name);
+                                new db.Page({ name: { de: data.name },
+                                              link: link });
+                                db.pushToServer(function () {
+                                    $location.path('/cms/page/' + link);
+                                });
+                            }
+                        });
+                }
+
+                var linkedPages = [];
+                $('.edit-menu a').each(function (x, node) {
+                    linkedPages.push(db.get(db.Page, $(node).attr('page')));
+                });
+                $scope.freePages = [];
+                db.pages().forEach(function (page) {
+                    if ($.inArray(page, linkedPages) == -1) {
+                        $scope.freePages.push(page);
+                    }
+                });
+            }
+        }
+    }])
+    .directive("pageEditRef", [ 'db', function (db) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: true,
+            template: '<a href="/cms/page/{{link}}">{{title}}</a>',
+            link: function ($scope, element, attributes) {
+                var page = db.get(db.Page, attributes.page);
+                $scope.link = page ? page.link : "";
+                $scope.title = page ? page.name.de : "unknown page " + attributes.link;
+            }
+        };
     }]);
