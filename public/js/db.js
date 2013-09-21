@@ -51,6 +51,7 @@ app.factory('db',
                          object.constructor.extent = {};
                      }
                      object.constructor.extent[object.id] = object;
+                     Object.defineProperty(object, '$$hashKey', { enumerable: false, writable: true });
                      db.objects.unshift(object);
                  }
                  db.get = function (constructor, id) {
@@ -269,6 +270,7 @@ app.factory('db',
                          serverState = JSON.stringify(freeze(db.objects));
                          $http.post('/db', serverState)
                              .success(function () {
+                                 localStorage['data'] = serverState;
                                  console.log('done saving');
                                  if (callback) {
                                      callback();
