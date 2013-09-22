@@ -393,8 +393,18 @@ function EditDatabaseController($scope, $dialog, db) {
 EditDatabaseController.$inject = ['$scope', '$dialog', 'db'];
 
 function EditHomepageController($scope, db) {
-    $scope.pages = db.pages().filter(function (page) { return !page.linkedFromMenu; });
-    $scope.pieces = db.pieces();
+    $scope.boxes = [];
+    $scope.boxes.push({ name: '--- Seiten ---' });
+    db.pages()
+        .filter(function (page) { return !page.linkedFromMenu; })
+        .forEach(function (page) {
+            $scope.boxes.push({ name: page.name.de, object: page });
+        });
+    $scope.boxes.push({ name: '--- Stücke ---' });
+    db.pieces()
+        .forEach(function (piece) {
+            $scope.boxes.push({ name: piece.name, object: piece });
+        });
     $scope.homepage = db.homepage;
 }
 EditHomepageController.$inject = ['$scope', 'db'];
