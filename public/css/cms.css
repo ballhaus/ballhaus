@@ -202,7 +202,7 @@ image-button {
 .homepage-layout table {
     border: 3px solid black;
     width: 600px;
-    height: 600px;
+    height: 300px;
 }
 
 .homepage-layout table td {

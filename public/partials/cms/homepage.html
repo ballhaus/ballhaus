@@ -1,33 +1,28 @@
 <h2>Homepage bearbeiten</h2>
 <div ng-model="homepage.layout" class="homepage-layout" bs-tabs>
-  <div data-tab="Zweispaltig">
+  <div data-tab="Normal">
     <table>
       <tr>
         <td>Nächste Aufführung</td>
-        <td><select ng-model="homepage.box1" ng-options="box.object as box.name for box in boxes"></select></td>
-      </tr>
-      <tr>
-        <td><select ng-model="homepage.box2" ng-options="box.object as box.name for box in boxes"></select></td>
-        <td><select ng-model="homepage.box3" ng-options="box.object as box.name for box in boxes"></select></td>
-      </tr>
-      <tr>
-        <td><select ng-model="homepage.box4" ng-options="box.object as box.name for box in boxes"></select></td>
-        <td><select ng-model="homepage.box5" ng-options="box.object as box.name for box in boxes"></select></td>
+        <td><select ng-model="homepage.page1" ng-options="page as page.name.de for page in pages"></select></td>
       </tr>
     </table>
   </div>
-  <div data-tab="Zweispaltig + Kopf">
+  <div data-tab="Premiere">
     <table>
       <tr>
-        <td colspan="2"><select ng-model="homepage.box1" ng-options="box.object as box.name for box in boxes"></select></td>
+        <td><select ng-model="homepage.piece" ng-options="piece as piece.name for piece in pieces"></select></td>
+      </tr>
+    </table>
+  </div>
+  <div data-tab="Special">
+    <table>
+      <tr>
+        <td colspan="2">Nächste Aufführung</td>
       </tr>
       <tr>
-        <td>Nächste Aufführung</td>
-        <td><select ng-model="homepage.box2" ng-options="box.object as box.name for box in boxes"></select></td>
-      </tr>
-      <tr>
-        <td><select ng-model="homepage.box3" ng-options="box.object as box.name for box in boxes"></select></td>
-        <td><select ng-model="homepage.box4" ng-options="box.object as box.name for box in boxes"></select></td>
+        <td><select ng-model="homepage.page1" ng-options="page as page.name.de for page in pages"></select></td>
+        <td><select ng-model="homepage.page2" ng-options="page as page.name.de for page in pages"></select></td>
       </tr>
     </table>
   </div>
