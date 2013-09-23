@@ -48,7 +48,7 @@ app.configure(function() {
                 } else if (req.url.match('^/browser-error')) {
                     console.log('BROWSER ERROR');
                     res.render('browser-error');
-                } else if (!req.url.match('^/pdf/')) {
+                } else if (!req.url.match('^/pdf/') && !req.url.match('^/index.php')) {
                     console.log('REDIRECTING TO DYNAMIC SITE');
                     res.render('site');
                 } else {
@@ -269,7 +269,7 @@ app.get('/tickets',
 
 var mailer = require('nodemailer').createTransport("Sendmail", "/usr/sbin/sendmail");
 
-app.post('/newsletter-subscription', function (req, res, next) {
+app.post('/newsletter-subscription', function (req, res) {
     console.log(req.body);
     req.body.address
     mailer.sendMail({
@@ -281,6 +281,19 @@ app.post('/newsletter-subscription', function (req, res, next) {
         res.send({success: !error});
     });
 });
+
+var redirects = { '21/810': '/stueck/liga_der_verdammten' };
+
+app.get('/index.php', function (req, res) {
+    var id = req.query.id;
+    var evt = req.query.evt;
+    var key = id + '/' + evt;
+    console.log('key', key, 'redirects', redirects[key]);
+    res.redirect(301, redirects[key] || '/');
+});
+    
+
+// //////////////////////////////////////////////////////////////////////
 
 var bogusUserSalts = {};
 
