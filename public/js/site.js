@@ -84,16 +84,12 @@ function intoRect(rect, item) {
 function RepertoireController($scope, db, Page) {
     var seen = {};
     $scope.pieces = [];
-    var now = moment().unix();
-    var shouldAppear = [
-        // FIXME: Make configurable
-        'liga_der_verdammten', 'lo_bal_almanya', 'i_love_i'
-    ];
+    var now = moment();
     db.events().forEach(function (event) {
         if (!event.piece || seen[event.piece.id]) {
             return;
         }
-        if (!moment(event.date).isBefore(now, 'day') || shouldAppear.indexOf(event.piece.link) !== -1) {
+        if ((!moment(event.date).isBefore(now, 'day')) || event.piece.repertoire) {
             if (event.piece.images && event.piece.images[0]) {
               event.piece.imageSize = intoRect({width: 176, height: 112}, event.piece.images[0]);
             }
