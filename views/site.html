@@ -57,6 +57,7 @@
         <div id="main" ng-view>
         </div>
         <div id="right" ng-cloak>
+          <div ng-show="Page.customSidebar()" ng-bind-html-unsafe="Page.sidebarContent()"></div>
           <div ng-hide="Page.customSidebar()">
             <div>
               <form method="POST" class="form-inline newsletter-form" ng-controller="NewsletterController" ng-submit="subscribe()">
@@ -77,7 +78,6 @@
               <a href="/postmigranten_on_tour" class="sidebar-link-postmigranten ir">Postmigranten on Tour</a>
             </div>
           </div>
-          <div ng-show="Page.customSidebar()" ng-bind-html-unsafe="Page.sidebarContent()" />
         </div>
       </div>
       <div id="push"></div>
