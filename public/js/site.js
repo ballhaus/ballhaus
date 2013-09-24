@@ -196,6 +196,7 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
     var events = schedule.getArchive();
 
     $scope.date = $routeParams.date || moment().format('YYYY'); // FIXME: last available year, not current
+    $scope.curYear = ($scope.date.length > 4) ? $scope.date.substr(3) : $scope.date;
 
     $scope.months = null;
     $scope.years = events.reduce(function (state, event) {
@@ -251,6 +252,16 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
 
         // FIXME: Moving the reverse call to the template kills angular
         .reverse();
+
+    $scope.showFilterSet = $scope.category;
+    $scope.toggleFilterSet = function () {
+        $scope.showFilterSet = !$scope.showFilterSet;
+    };
+
+    $scope.resetFilterSet = function () {
+        $scope.category = null;
+        $scope.showFilterSet = false;
+    };
 
     $scope.title = {
       de: 'Archiv',
