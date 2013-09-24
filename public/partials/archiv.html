@@ -10,6 +10,6 @@
   </li>
 </ul>
 <ul class="hor-list tag-selector">
-  <li ng-repeat="tag in availableTags" class="{{tag.class}}"><a href="/archiv/{{date}}?category={{tag.link}}">{{tag.name}}</a></li>
+  <li ng-repeat="tag in availableTags" class="{{tag.class}}"><a href="/archiv/{{date}}?category={{tag.link}}">{{tag.name | dontBreak}}</a></li>
 </ul>
 <event-list events="events"></event-list>

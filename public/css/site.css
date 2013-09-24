@@ -932,6 +932,7 @@ input.search-input:focus {
 
 .tag-selector li:not(:last-child)::after {
     content: ' / ';
+    padding: 0 0.2em;
 }
 
 #main .tag-selector .selected a {

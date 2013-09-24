@@ -4,6 +4,11 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
         return input && input.join(arg);
     };
 })
+.filter('dontBreak', function () {
+    return function (input) {
+        return input && input.replace(/ /g, '\u00a0');
+    };
+})
 .filter('or', function () {
     return function (input, arg) {
         return input || arg;
