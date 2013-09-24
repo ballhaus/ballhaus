@@ -716,6 +716,11 @@ input.search-input:focus {
     padding-bottom: 20px;
 }
 
+.hor-list-subordinate {
+    font-size: 13px;
+    padding-top: 0;
+}
+
 .hor-list > li {
     display: inline-table;
     margin: 0.5em 14px 0.5em 0;
@@ -908,4 +913,27 @@ input.search-input:focus {
 .piece-details .ticket-link:active,
 .piece-details .ticket-link:focus {
     background-image: url(/img/ticket-aktiv-klein.png);
+}
+
+/* Archive */
+
+.tag-selector {
+    color: #000;
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+.tag-selector li {
+    display: inline;
+    margin: 0;
+}
+
+.tag-selector li:not(:last-child)::after {
+    content: ' / ';
+}
+
+#main .tag-selector .selected a {
+    color: #eb0033;
 }

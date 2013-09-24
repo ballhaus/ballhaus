@@ -1,3 +1,15 @@
-<h1 class="page-title">Archiv</h1>
-<div class="hor-list-space" />
+<page-title></page-title>
+<ul class="hor-list">
+  <li ng-repeat="year in years | reverse">
+    <a class="{{year.curClass}}" href="/archiv/{{year.name}}?category={{categories.join(',')}}">{{year.name}}</a>
+  </li>
+</ul>
+<ul class="hor-list hor-list-subordinate">
+  <li ng-repeat="month in months">
+    <a class="{{month.curClass}}" href="/archiv/{{month.key}}?category={{categories.join(',')}}">{{month.name}}</a>
+  </li>
+</ul>
+<ul class="hor-list tag-selector">
+  <li ng-repeat="tag in availableTags" class="{{tag.class}}"><a href="/archiv/{{date}}?category={{tag.link}}">{{tag.name}}</a></li>
+</ul>
 <event-list events="events"></event-list>

@@ -187,8 +187,73 @@ function ScheduleController($scope, $routeParams, schedule, Page) {
     Page.setSidebarContent('');
 }
 
-function ArchiveController($scope, schedule, Page) {
-    $scope.events = schedule.getArchive();
+function ArchiveController(db, $scope, $routeParams, schedule, Page) {
+    var events = schedule.getArchive();
+
+    $scope.date = $routeParams.date || moment().format('YYYY'); // FIXME: last available year, not current
+
+    $scope.months = null;
+    $scope.years = events.reduce(function (state, event) {
+        var year, isCurrent;
+        if (event.monthKey != state.oldMonthKey) {
+            year = event.monthKey.substr(3);
+            if (!state.years[year]) {
+                isCurrent = $scope.date === year || $scope.date.substr(3) === year;
+                state.years[year] = {
+                    name: year,
+                    curClass: isCurrent ? 'active' : '',
+                    months: []
+                };
+                if (isCurrent) {
+                    $scope.months = state.years[year].months;
+                }
+            }
+            state.years[year].months.push({
+                name: event.month,
+                key: event.monthKey,
+                curClass: event.monthKey === $scope.date ? 'active' : ''
+            });
+            state.oldMonthKey = event.monthKey;
+        }
+        return state;
+    }, {years: {}, oldMonthKey: undefined}).years;
+
+    // Convert to sorted array
+    $scope.years = Object.keys($scope.years).sort().map(function (k) {
+        return $scope.years[k];
+    });
+
+    $scope.categories = $routeParams.category ? $routeParams.category.split(',') : [];
+    $scope.availableTags = db.tags().map(function (tag) {
+        var urlTag = utils.urlify(tag.name);
+        var selected = $scope.categories.indexOf(urlTag) !== -1;
+        if (selected) {
+            tag['class'] = 'selected';
+            tag.link = $scope.categories.filter(function (selectedTag) { return selectedTag !== urlTag; });
+        } else {
+            tag.link = $scope.categories.concat([utils.urlify(urlTag)]);
+        }
+        tag.link = tag.link.join(',');
+        return tag;
+    });
+
+    $scope.events = events
+        // Filter by date
+        .filter(function (event) {
+            return (($scope.date.length === 4) ? event.monthKey.substr(3) : event.monthKey) === $scope.date;
+        })
+
+        // Filter by categories
+        .filter(function (event) {
+            var urlified = event.tags.map(utils.urlify);
+            return $scope.categories.every(function (tag) {
+                return urlified.indexOf(tag) !== -1;
+            });
+        })
+
+        // FIXME: Moving the reverse call to the template kills angular
+        .reverse();
+
     $scope.title = {
       de: 'Archiv',
       en: 'Archive'
@@ -294,6 +359,7 @@ app.config(function($locationProvider, $routeProvider) {
 
     [ { name: 'repertoire', controller: RepertoireController, activeMenuItem: 'Programm' },
       { name: 'archiv', controller: ArchiveController, activeMenuItem: 'Programm' },
+      { name: 'archiv/:date', controller: ArchiveController, activeMenuItem: 'Programm' },
       { name: 'spielplan', controller: ScheduleController, activeMenuItem: 'Programm' },
       { name: 'spielplan/:month', controller: ScheduleController, activeMenuItem: 'Programm' },
       { name: 'person/:personId', controller: PersonPageController, activeMenuItem: 'kuenstlerinnen' },
