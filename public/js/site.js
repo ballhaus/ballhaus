@@ -228,17 +228,13 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
         return $scope.years[k];
     });
 
-    $scope.categories = $routeParams.category ? $routeParams.category.split(',') : [];
+    $scope.category = $routeParams.category;
     $scope.availableTags = db.tags().map(function (tag) {
         var urlTag = utils.urlify(tag.name);
-        var selected = $scope.categories.indexOf(urlTag) !== -1;
-        if (selected) {
+        if ($scope.category === urlTag) {
             tag['class'] = 'selected';
-            tag.link = $scope.categories.filter(function (selectedTag) { return selectedTag !== urlTag; });
-        } else {
-            tag.link = $scope.categories.concat([utils.urlify(urlTag)]);
         }
-        tag.link = tag.link.join(',');
+        tag.urlName = urlTag;
         return tag;
     });
 
@@ -250,10 +246,7 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
 
         // Filter by categories
         .filter(function (event) {
-            var urlified = event.tags.map(utils.urlify);
-            return $scope.categories.every(function (tag) {
-                return urlified.indexOf(tag) !== -1;
-            });
+            return !$scope.category || event.tags.map(utils.urlify).indexOf($scope.category) !== -1;
         })
 
         // FIXME: Moving the reverse call to the template kills angular
@@ -365,6 +358,7 @@ app.config(function($locationProvider, $routeProvider) {
     [ { name: 'repertoire', controller: RepertoireController, activeMenuItem: 'Programm' },
       { name: 'archiv', controller: ArchiveController, activeMenuItem: 'Programm' },
       { name: 'archiv/:date', controller: ArchiveController, activeMenuItem: 'Programm' },
+      { name: 'archiv/:date/:category', controller: ArchiveController, activeMenuItem: 'Programm' },
       { name: 'spielplan', controller: ScheduleController, activeMenuItem: 'Programm' },
       { name: 'spielplan/:month', controller: ScheduleController, activeMenuItem: 'Programm' },
       { name: 'person/:personId', controller: PersonPageController, activeMenuItem: 'kuenstlerinnen' },
