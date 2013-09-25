@@ -972,7 +972,7 @@ input.search-input:focus {
     line-height: 20px;
 }
 
-.tag-selector li {
+.filter-set .tag-selector > li {
     display: inline;
     margin: 0;
 }
