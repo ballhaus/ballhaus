@@ -200,7 +200,7 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
 
     $scope.months = {};
     for (var i = 1; i <= 12; ++i) {
-      var m = moment(i + '-01-' + $scope.curYear);
+      var m = moment(i + '-' + $scope.curYear, 'M-YYYY');
       $scope.months[i] = {
         name: m.format('MMMM'),
         key: m.format('MM-YYYY'),
