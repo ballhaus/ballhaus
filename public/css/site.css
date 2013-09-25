@@ -836,6 +836,10 @@ input.search-input:focus {
     line-height: 0px;
 }
 
+.hor-list-months {
+    margin-right: -20px; /* let months hang out as a dirty FIX */
+}
+
 /* Repertoire */
 
 .repertoire .piece .image-container {
