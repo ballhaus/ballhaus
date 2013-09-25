@@ -952,7 +952,7 @@ input.search-input:focus {
 
 .filter-set .filter-reset-line-up-with-hor-list {
     line-height: 28px;
-    background-position-y: 7px;
+    background-position: right 7px;
 }
 
 .filter-set .filter-set-reset:active,
