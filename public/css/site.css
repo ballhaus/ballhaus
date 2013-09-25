@@ -933,6 +933,10 @@ input.search-input:focus {
     padding: 4px 0;
 }
 
+.filter-set .hor-list-subordinate > li {
+    margin-right: 9px;
+}
+
 .filter-set .tag-selector {
     padding: 17px 0 9px 0;
 }

@@ -198,31 +198,37 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
     $scope.date = $routeParams.date || moment().format('YYYY'); // FIXME: last available year, not current
     $scope.curYear = ($scope.date.length > 4) ? $scope.date.substr(3) : $scope.date;
 
-    $scope.months = null;
+    $scope.months = {};
+    for (var i = 1; i <= 12; ++i) {
+      var m = moment(i + '-01-' + $scope.curYear);
+      $scope.months[i] = {
+        name: m.format('MMMM'),
+        key: m.format('MM-YYYY'),
+        curClass: 'muted'
+      };
+    }
     $scope.years = events.reduce(function (state, event) {
         var year, isCurrent;
         if (event.monthKey != state.oldMonthKey) {
             year = event.monthKey.substr(3);
+            isCurrent = $scope.date === year || $scope.date.substr(3) === year;
             if (!state.years[year]) {
-                isCurrent = $scope.date === year || $scope.date.substr(3) === year;
                 state.years[year] = {
                     name: year,
                     curClass: isCurrent ? 'active' : '',
-                    months: []
                 };
-                if (isCurrent) {
-                    $scope.months = state.years[year].months;
-                }
             }
-            state.years[year].months.push({
-                name: event.month,
-                key: event.monthKey,
-                curClass: event.monthKey === $scope.date ? 'active' : ''
-            });
+            if (isCurrent) {
+                $scope.months[moment(event.date).month() + 1].curClass = event.monthKey === $scope.date ? 'active' : '';
+            }
             state.oldMonthKey = event.monthKey;
         }
         return state;
     }, {years: {}, oldMonthKey: undefined}).years;
+
+    $scope.months = Object.keys($scope.months).sort(function (a, b) {return a-b;}).map(function (k) {
+        return $scope.months[k];
+    });
 
     // Convert to sorted array
     $scope.years = Object.keys($scope.years).sort().map(function (k) {
