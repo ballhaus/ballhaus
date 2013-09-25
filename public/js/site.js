@@ -302,31 +302,49 @@ function EnactmentPageController($scope, db, $routeParams, Page, $compile) {
     Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
 }
 
-function KuenstlerinnenController($scope, $routeParams, Page, db) {
-    $scope.people = db.people().filter(function (person) {
+app.service('artists', function (db) {
+    var people = db.people().filter(function (person) {
         return person.bio && (person.bio.de || person.bio.en) && person.images && person.images.length;
     }).map(function (person) {
-        person.imageSize = intoRect({width: 120, height: 80}, person.images[0]);
         person.orderName = person.name.substr(person.name.lastIndexOf(' ') + 1);
         return person;
     });
 
-    $scope.letters = $scope.people.reduce(function (letters, person) {
-        var c = utils.urlify(person.orderName.charAt(0)).toUpperCase();
-        var cCode = c.charCodeAt(0);
-        letters[cCode] = 'letter-present' + ($routeParams.letter === c ? ' active' : '');
+    var letters = people.reduce(function (letters, person) {
+        var c = utils.urlify(person.orderName.charAt(0)).toUpperCase().charCodeAt(0);
+        letters[c] = 'letter-present';
         return letters;
     }, Array('Z'.charCodeAt(0) + 1));
-    $scope.letters.offset = 0;
-    while ($scope.letters[$scope.letters.offset++] !== 'letter-present' &&
-        $scope.letters.offset < 'A'.charCodeAt(0)) {
+
+    letters.offset = 0;
+    while (letters[letters.offset++] !== 'letter-present' &&
+        letters.offset < 'A'.charCodeAt(0)) {
     }
+
+    this.getPeople = function () {
+        return people;
+    };
+
+    this.getLetters = function () {
+        var l = letters.slice();
+        l.offset = letters.offset;
+        return l;
+    }
+});
+
+function KuenstlerinnenController($scope, $routeParams, Page, artists) {
+    $scope.people = artists.getPeople().map(function (person) {
+        person.imageSize = intoRect({width: 120, height: 80}, person.images[0]);
+        return person;
+    });
 
     if ($routeParams.letter) {
         $scope.people = $scope.people.filter(function (person) {
             return utils.urlify(person.orderName.charAt(0)).toUpperCase() === $routeParams.letter;
         });
     }
+
+    $scope.curLetter = $routeParams.letter;
 
     Page.setTitle('Künstlerinnen' + ($routeParams.letter ? ' ' + $routeParams.letter : ''));
     Page.setSidebarContent('');
@@ -435,6 +453,21 @@ app
             restrict: 'E',
             replace: true,
             templateUrl: '/partials/page-title.html'
+        };
+    })
+    .directive("artistsLetterList", function (artists) {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/partials/artists-letter-list.html',
+            scope: {cur: '='},
+            link: function ($scope, element, attributes) {
+                $scope.letters = artists.getLetters();
+
+                if ($scope.cur) {
+                    $scope.letters[$scope.cur.charCodeAt(0)] += ' active';
+                }
+            }
         };
     })
     .directive("menu", function () {
@@ -601,6 +634,14 @@ app
             replace: true,
             templateUrl: '/partials/event-list.html',
             scope: { events: '=' }
+        };
+    })
+    .directive("backendImage", function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '<img ng-src="/image/{{image.name}}" width="{{image.width}}" height="{{image.height}}" />',
+            scope: { image: '=' }
         };
     })
     .directive("mediaBrowser", function () {

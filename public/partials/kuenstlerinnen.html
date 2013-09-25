@@ -1,10 +1,5 @@
 <h1 class="page-title">Künstlerinnen</h1>
-<ul class="hor-list kuenstlerinnen-letters">
-  <li ng-repeat="letterPresent in letters" ng-hide="$index < letters.offset">
-    <a ng-show="letterPresent" ng-class="letterPresent" href="/kuenstlerinnen/{{$index | fromCharCode}}">{{$index | fromCharCode}}</a>
-    <span ng-hide="letterPresent" class="muted">{{$index | fromCharCode}}</span>
-  </li>
-</ul>
+<artists-letter-list cur="curLetter"></artists-letter-list>
 <ul class="big-list kuenstlerinnen">
   <li ng-repeat="person in people | orderBy:'orderName'">
     <a href="/person/{{person.link}}">
