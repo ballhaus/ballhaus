@@ -307,12 +307,14 @@ function KuenstlerinnenController($scope, $routeParams, Page, db) {
         return person.bio && (person.bio.de || person.bio.en) && person.images && person.images.length;
     }).map(function (person) {
         person.imageSize = intoRect({width: 120, height: 80}, person.images[0]);
+        person.orderName = person.name.substr(person.name.lastIndexOf(' ') + 1);
         return person;
     });
 
     $scope.letters = $scope.people.reduce(function (letters, person) {
-        var c = utils.urlify(person.name.charAt(0)).toUpperCase().charCodeAt(0);
-        letters[c] = 'letter-present';
+        var c = utils.urlify(person.orderName.charAt(0)).toUpperCase();
+        var cCode = c.charCodeAt(0);
+        letters[cCode] = 'letter-present' + ($routeParams.letter === c ? ' active' : '');
         return letters;
     }, Array('Z'.charCodeAt(0) + 1));
     $scope.letters.offset = 0;
@@ -322,7 +324,7 @@ function KuenstlerinnenController($scope, $routeParams, Page, db) {
 
     if ($routeParams.letter) {
         $scope.people = $scope.people.filter(function (person) {
-            return utils.urlify(person.name.charAt(0)).toUpperCase() === $routeParams.letter;
+            return utils.urlify(person.orderName.charAt(0)).toUpperCase() === $routeParams.letter;
         });
     }
 
