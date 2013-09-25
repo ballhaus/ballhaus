@@ -1,0 +1,11 @@
+<div ng-class="{'non-empty': for.length > 0}">
+  <div ng-repeat="item in for">
+    <div ng-show="item.images.length">
+      <backend-image image="item.images[0]"></backend-image>
+      <h2>{{item.name | translate}}</h2>
+    </div>
+    <div ng-hide="item.images.length">
+      <h2>{{item.name | translate}}</h2>
+    </div>
+  </div>
+</div>

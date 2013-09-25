@@ -80,7 +80,7 @@ function peopleMatch(db, string) {
 }
 
 function intoRect(rect, item) {
-    var res = {};
+    var res = Object.create(item);
     if (item.width / rect.width < item.height / rect.height) {
       res.width = item.width * (rect.height / item.height);
       res.height = rect.height;
@@ -104,16 +104,16 @@ function HomeController($scope, db, Page, schedule) {
         ++start;
     }
     if (!firstBox) {
-      firstBox = Object.create(schedule.getUpcoming()[0]);
-      firstBox.nextPiece = true;
-      firstBox.date = moment(firstBox.date);
-      firstBox.howSoon = firstBox.date.isSame(moment(), 'day') ? 'today' : (
-        firstBox.date.isSame(moment().add('d', 1), 'day') ? 'tomorrow' : 'future');
-      firstBox.dateIntro = {
-        today: 'heute,',
-        tomorrow: 'morgen,',
-        future: 'am'
-      }[firstBox.howSoon];
+        firstBox = Object.create(schedule.getUpcoming()[0]);
+        firstBox.nextPiece = true;
+        firstBox.date = moment(firstBox.date);
+        firstBox.howSoon = firstBox.date.isSame(moment(), 'day') ? 'today' : (
+            firstBox.date.isSame(moment().add('d', 1), 'day') ? 'tomorrow' : 'future');
+        firstBox.dateIntro = {
+          today: 'heute,',
+          tomorrow: 'morgen,',
+          future: 'am'
+        }[firstBox.howSoon];
     }
     $scope.columns = [
     [
@@ -127,9 +127,13 @@ function HomeController($scope, db, Page, schedule) {
         $scope.columns[0].push(homepage['page' + (start+3)]);
         $scope.columns[1].push(homepage['page' + (start+4)]);
     }
-    // FIXME: Marginal
     Page.setTitle('');
-    Page.setSidebarContent();
+    Page.marginals([ homepage.marginal1, homepage.marginal2 ].map(function (m) {
+        if (m.images && m.images.length > 0) {
+            m.images[0] = intoRect({width: 121, height: 96}, m.images[0]);
+        }
+        return m;
+    }));
 }
 
 function RepertoireController($scope, db, Page) {
@@ -439,13 +443,20 @@ function PageController($scope, $timeout, $location, Page, db) {
 app.factory('Page', function () {
     var title = '';
     var sidebar = null;
+    var marginals = null;
     var curMenuItem;
     return {
         title: function() { return title; },
         setTitle: function(newTitle) { title = newTitle; },
-        customSidebar: function () { return sidebar !== null && typeof sidebar !== 'undefined'; },
+        customSidebar: function () { return sidebar !== null && typeof sidebar !== 'undefined'},
+        marginals: function (newContent) {
+            if (arguments.length === 0) {
+                return marginals;
+            }
+            sidebar = null; marginals = newContent;
+        },
         sidebarContent: function () { return sidebar; },
-        setSidebarContent: function (newSidebar) { sidebar = newSidebar; },
+        setSidebarContent: function (newSidebar) { sidebar = newSidebar; marginals = null},
         menuClass: function (item) { return item === curMenuItem ? 'active' : ''; },
         currentMenuItem: function (newCurMenuItem) { curMenuItem = newCurMenuItem; }
     };
@@ -652,6 +663,14 @@ app
             link: function ($scope, element, attributes) {
                 $scope.participants = peopleMatch(db, $scope.for.participants);
             }
+        };
+    })
+    .directive("homeSidebar", function (db) {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/partials/home-sidebar.html',
+            scope: { 'for': '=' }
         };
     })
     .directive("pieceBase", function () {

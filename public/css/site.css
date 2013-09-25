@@ -155,12 +155,13 @@ h1 {
     margin: 0;
 }
 
-#right div > div {
+#right > div > div {
     margin: 0 0 25px 0;
     padding: 0 11px;
 }
 
-#right div > div + div {
+#right > .non-empty,
+#right > div > div + div {
     padding-top: 25px;
     border-top: 2px solid black;
 }
@@ -1029,4 +1030,26 @@ input.search-input:focus {
 
 .home-next-piece-today {
     background-color: #eb0033;
+}
+
+.home-sidebar img {
+    max-width: 121px;
+    max-height: 96px;
+}
+
+.home-sidebar h2 {
+    line-height: 22px;
+    border: #9C0033 2px solid;
+    color: #9C0033;
+    font-size: 16px;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 24px 20px;
+}
+
+.home-sidebar img + h2 {
+    float: right;
+    width: 90px;
+    height: 44px;
+    padding: 24px 7px;
 }
