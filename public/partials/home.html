@@ -1,0 +1,6 @@
+<div class="homepage">
+  <div ng-show="headBox"><home-item item="headBox"></home-item></div>
+  <div ng-repeat="column in columns" class="column">
+    <home-item ng-repeat="item in column" item="item"></home-item>
+  </div>
+</div>

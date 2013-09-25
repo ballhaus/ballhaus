@@ -994,3 +994,39 @@ input.search-input:focus {
     color: #cfd1d2;
     cursor: default;
 }
+
+/* Main page */
+.homepage {
+    margin: 0 -20px;
+}
+
+.column {
+    border-bottom: solid black 2px;
+    float: left;
+    width: 320px;
+}
+
+.column + .column {
+    margin-left: 30px;
+}
+
+.box {
+    border-top: solid black 2px;
+    padding: 24px 0;
+    overflow: hidden;
+}
+
+.home-next-piece {
+    padding-top: 0;
+}
+
+.home-next-piece-date {
+    position: absolute;
+    color: white;
+    padding: 5px 4px 0;
+    background-color: #767676;
+}
+
+.home-next-piece-today {
+    background-color: #eb0033;
+}

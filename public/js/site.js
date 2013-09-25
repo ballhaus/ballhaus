@@ -48,6 +48,11 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
     return function (input) {
         return String.fromCharCode(input);
     }
+})
+.filter('onlyTeaser', function () {
+    return function (input) {
+        return input && input.substr(0, input.indexOf('\u06DD'));
+    }
 });
 
 var language = 'de';
@@ -84,6 +89,47 @@ function intoRect(rect, item) {
       res.height = item.height * (rect.width / item.width);
     }
     return res;
+}
+
+function HomeController($scope, db, Page, schedule) {
+    var homepage = db.homepage;
+    var start = 1;
+    var firstBox;
+    if (homepage.layout === 1) {
+        $scope.headBox = homepage.page1;
+        ++start;
+    }
+    if (homepage.layout === 2) {
+        firstBox = homepage.page1;
+        ++start;
+    }
+    if (!firstBox) {
+      firstBox = Object.create(schedule.getUpcoming()[0]);
+      firstBox.nextPiece = true;
+      firstBox.date = moment(firstBox.date);
+      firstBox.howSoon = firstBox.date.isSame(moment(), 'day') ? 'today' : (
+        firstBox.date.isSame(moment().add('d', 1), 'day') ? 'tomorrow' : 'future');
+      firstBox.dateIntro = {
+        today: 'heute,',
+        tomorrow: 'morgen,',
+        future: 'am'
+      }[firstBox.howSoon];
+    }
+    $scope.columns = [
+    [
+        firstBox,
+        homepage['page' + (start+1)]
+    ], [
+        homepage['page' + (start)],
+        homepage['page' + (start+2)]
+    ]];
+    if (homepage.layout === 0) {
+        $scope.columns[0].push(homepage['page' + (start+3)]);
+        $scope.columns[1].push(homepage['page' + (start+4)]);
+    }
+    // FIXME: Marginal
+    Page.setTitle('');
+    Page.setSidebarContent();
 }
 
 function RepertoireController($scope, db, Page) {
@@ -431,9 +477,10 @@ app.config(function($locationProvider, $routeProvider) {
       { name: 'kuenstlerinnen', controller: KuenstlerinnenController },
       { name: 'kuenstlerinnen/:letter', controller: KuenstlerinnenController, activeMenuItem: 'kuenstlerinnen' },
       { name: 'pressemitteilungen', controller: PressPdfController, activeMenuItem: 'Presse' },
-      { name: 'bildmaterial', controller: PressImagesController, activeMenuItem: 'Presse' }
+      { name: 'bildmaterial', controller: PressImagesController, activeMenuItem: 'Presse' },
+      { name: '', templateName: 'home', controller: HomeController }
     ].forEach(function (pageDef) {
-        pageDef.templateUrl = '/partials/' + pageDef.name.replace(/\/.*$/, "") + '.html';
+        pageDef.templateUrl = '/partials/' + (pageDef.templateName || pageDef.name.replace(/\/.*$/, "")) + '.html';
         pageDef.activeMenuItem = pageDef.activeMenuItem || pageDef.name;
         $routeProvider.when('/' + pageDef.name, pageDef);
     });
@@ -453,6 +500,14 @@ app
             restrict: 'E',
             replace: true,
             templateUrl: '/partials/page-title.html'
+        };
+    })
+    .directive("homeItem", function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {item: '='},
+            templateUrl: '/partials/home-item.html'
         };
     })
     .directive("artistsLetterList", function (artists) {
@@ -531,13 +586,9 @@ app
             link: function ($scope, element, attributes) {
                 function doit () {
                     var pageName = window.location.pathname.substr(1);
-                    if (pageName == '') {
-                        pageName = 'home';
-                    }
 
                     $scope.Page.setSidebarContent();
                     $scope.Page.currentMenuItem({
-                        'home': '',
                         'haus': 'Haus',
                         'geschichte': 'Haus',
                         'team': 'Haus',
@@ -640,7 +691,7 @@ app
         return {
             restrict: 'E',
             replace: true,
-            template: '<img ng-src="/image/{{image.name}}" width="{{image.width}}" height="{{image.height}}" />',
+            template: '<img ng-show="image" ng-src="/image/{{image.name}}" width="{{image.width}}" height="{{image.height}}" />',
             scope: { image: '=' }
         };
     })

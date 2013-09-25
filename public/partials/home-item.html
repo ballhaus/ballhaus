@@ -1,0 +1,7 @@
+<div class="box" ng-class="{'home-next-piece': item.nextPiece}">
+  <div class="home-next-piece-date" ng-show="item.nextPiece" ng-class="{'home-next-piece-today': item.howSoon == 'today'}">{{item.dateIntro}} {{item.date | formatDate:'dd, l'}}</div>
+  <backend-image image="item.images[0]"></backend-image>
+  <h2 ng-bind-html-unsafe="item.name | translate"></h1>
+  <div ng-bind-html-unsafe="item.by | translate"></div>
+  <div ng-bind-html-unsafe="item.contents | translate | onlyTeaser"></div>
+</div>
