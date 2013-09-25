@@ -716,11 +716,6 @@ input.search-input:focus {
     padding-bottom: 25px;
 }
 
-.hor-list-subordinate {
-    font-size: 13px;
-    padding-top: 0;
-}
-
 .hor-list > li {
     display: inline-table;
     margin-right: 14px;
@@ -926,36 +921,50 @@ input.search-input:focus {
 
 .filter-set + .filter-set {
     border-top-width: 2px;
+    padding-top: 22px;
 }
 
 .filter-set .hor-list {
-    padding: 5px 0;
+    padding: 0 0 5px;
 }
 
-.filter-set .btn-link {
-    font: inherit;
-    padding: 0;
-    color: black;
-    border: 0;
+.filter-set .hor-list-subordinate {
+    font-size: 13px;
+    padding: 4px 0;
 }
 
-.filter-set .btn-link.active,
-.filter-set .btn-link:hover,
-.filter-set .btn-link:focus,
-.filter-set .btn-link:active {
-    color: #eb0033;
-    text-decoration: none;
+.filter-set .tag-selector {
+    padding: 17px 0 9px 0;
 }
 
 .filter-set .filter-set-reset {
     float: right;
+    background-image: url(/img/kreuz-schw.jpg);
+    background-repeat: no-repeat;
+    background-position: right 2px;
+    padding-right: 30px;
+    margin-right: -20px;
+}
+
+.filter-set .filter-reset-line-up-with-hor-list {
+    line-height: 28px;
+    background-position-y: 7px;
+}
+
+.filter-set .filter-set-reset:active,
+.filter-set .filter-set-reset:focus,
+.filter-set .filter-set-reset:hover {
+    background-image: url(/img/kreuz-aktiv.jpg);
+}
+
+.filter-set .filter-set-reset.muted {
+    background-image: url(/img/kreuz-ausgebl.jpg);
 }
 
 .tag-selector {
     color: #000;
     margin: 0;
     text-transform: uppercase;
-    font-size: 13px;
     line-height: 20px;
 }
 
@@ -966,9 +975,14 @@ input.search-input:focus {
 
 .tag-selector li:not(:last-child)::after {
     content: ' / ';
-    padding: 0 0.2em;
+    padding: 0 0.1em;
 }
 
 #main .tag-selector .selected a {
     color: #eb0033;
+}
+
+#main .filter-set .muted {
+    color: #cfd1d2;
+    cursor: default;
 }

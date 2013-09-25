@@ -1,11 +1,11 @@
 <page-title></page-title>
 <div class="filter-set">
+  <a class="filter-set-reset filter-reset-line-up-with-hor-list" ng-class="{muted: date == curYear}" href="/archiv/{{curYear}}/{{category}}">Filter zurücksetzen</a>
   <ul class="hor-list">
     <li ng-repeat="year in years | reverse">
       <a class="{{year.curClass}}" href="/archiv/{{year.name}}/{{category}}">{{year.name}}</a>
     </li>
   </ul>
-  <a class="filter-set-reset" ng-show="date != curYear" href="/archiv/{{curYear}}/{{category}}">Filter zurücksetzen</button>
   <ul class="hor-list hor-list-subordinate">
     <li ng-repeat="month in months">
       <a class="{{month.curClass}}" href="/archiv/{{month.key}}/{{category}}">{{month.name}}</a>
@@ -13,9 +13,9 @@
   </ul>
 </div>
 <div class="filter-set">
-  <button class="btn-link" ng-click="toggleFilterSet()">Nach Kategorien filtern:</button>
-  <a class="filter-set-reset" ng-show="showFilterSet && category" href="/archiv/{{date}}/">Filter zurücksetzen</button>
-  <ul class="hor-list tag-selector" ng-show="showFilterSet">
+  <a class="filter-set-reset" ng-class="{muted: !category}" ng-href="/archiv/{{date}}/">Filter zurücksetzen</a>
+  <p>Filtern nach:</p>
+  <ul class="hor-list hor-list-subordinate tag-selector">
     <li ng-repeat="tag in availableTags" class="{{tag.class}}"><a href="/archiv/{{date}}/{{tag.urlName}}">{{tag.name | dontBreak}}</a></li>
   </ul>
 </div>
