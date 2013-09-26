@@ -6,8 +6,8 @@
     <ticket-link for="piece"></ticket-link>
   </div>
   <div class="item-meta">
-    <span class="item-by" ng-bind-html-unsafe="piece.by.de"></span>
+    <span class="item-by" ng-bind-html-unsafe="piece.by | translate"></span>
     <span ng-transclude/>
   </div>
-  <p ng-bind-html-unsafe="piece.description.de"></p>
+  <p ng-bind-html-unsafe="piece.description | translate"></p>
 </div>
