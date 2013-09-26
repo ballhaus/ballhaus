@@ -1028,6 +1028,10 @@ input.search-input {
     overflow: hidden;
 }
 
+.box > a {
+    display: block;
+}
+
 .homepage > .box {
     border-bottom: solid black 2px;
 }
