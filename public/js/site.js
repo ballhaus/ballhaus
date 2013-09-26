@@ -103,7 +103,7 @@ function HomeController($scope, db, Page, schedule) {
     var start = 1;
     var firstBox;
     if (homepage.layout === 1) {
-        $scope.headBox = homepage.page1;
+        $scope.headColumn = [ homepage.page1 ];
         ++start;
     }
     if (homepage.layout === 2) {

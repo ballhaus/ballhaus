@@ -998,7 +998,6 @@ input.search-input {
 }
 
 .column {
-    border-bottom: solid black 2px;
     float: left;
     width: 320px;
 }
@@ -1008,13 +1007,26 @@ input.search-input {
 }
 
 .box {
-    border-top: solid black 2px;
-    padding: 24px 0;
+    padding-bottom: 24px;
     overflow: hidden;
 }
 
-.home-next-piece {
+.homepage > .box {
+    border-bottom: solid black 2px;
+}
+
+.box + .box {
+    border-top: solid black 2px;
+}
+
+.box + .box,
+.column:not(:first-child) .box {
+    padding-top: 24px;
+}
+
+.column:first-child .home-next-piece {
     padding-top: 0;
+    border-top: solid black 2px;
 }
 
 .home-next-piece-date {
