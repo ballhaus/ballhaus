@@ -488,7 +488,7 @@ function SearchController($scope, $routeParams, search, db) {
             }
             obj = {
                 link: prefix + '/' + obj.link,
-                name: obj.name
+                name: translate(obj.name)
             };
             return obj;
         });
