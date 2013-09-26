@@ -1083,3 +1083,11 @@ input.search-input {
     height: 44px;
     padding: 24px 7px;
 }
+
+/* Artist page */
+
+.artist-single {
+    border-top: 2px solid black;
+    margin: 0 -20px;
+    padding: 16px 20px;
+}

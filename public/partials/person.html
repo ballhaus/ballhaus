@@ -1,9 +1,7 @@
 <h1 class="page-title">Künstlerinnen</h1>
 <artists-letter-list cur="person.orderName.charAt(0)"></artists-letter-list>
-<ul class="big-list">
-<li>
-<backend-image image="person.images[0]"></backend-image>
-<h1>{{person.name}}</h1>
-<div ng-bind-html-unsafe="person.bio.de"></div>
-</li>
-</ul>
+<div class="artist-single">
+  <backend-image image="person.images[0]"></backend-image>
+  <h1>{{person.name}}</h1>
+  <div ng-bind-html-unsafe="person.bio.de"></div>
+</div>
