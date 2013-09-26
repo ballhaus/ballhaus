@@ -348,40 +348,34 @@ input.newsletter-address {
   background-image: url(/img/service-bar/impressum-aktiv.png);
 }
 
-.service-bar-search {
-  background-image: url(/img/service-bar/such-inaktiv.png);
-  display: block;
-  width: 170px;
-  height: 19px;
-}
-
-.service-bar-search:active,
-.service-bar-search:hover,
-.service-bar-search:focus {
-  background-image: url(/img/service-bar/such-aktiv.png);
-}
-
 .search-form {
-    line-height: 19px;
-}
-
-.search-button,
-.search-button:focus,
-input.search-input,
-input.search-input:focus {
-    color: #666;
-    border-color: #666;
-    font-size: 1em;
-    height: 12px;
     line-height: 17px;
-    padding: 5px 4px 0;
-    width: 116px;
+    font-size: 1em;
     font-weight: bold;
 }
 
+.search-button,
+input.search-input {
+    height: 19px;
+
+    background-image: url(/img/service-bar/such-inaktiv.png);
+    border-width: 0 !important;
+}
+
+input.search-input {
+    width: 116px;
+    padding: 0 4px;
+}
+
 .search-button {
-    padding-top: 3px;
-    padding-bottom: 2px;
+    padding: 3px 4px 2px 4px;
+    color: #666;
+    border-color: #666;
+    margin-left: 4px;
+
+    background-position: -124px;
+    width: 46px;
+    background-repeat: no-repeat;
 }
 
 .search-button:active,
@@ -390,6 +384,8 @@ input.search-input:focus {
     background-color: #666;
     border-color: #666;
     color: white;
+
+    background-image: url(/img/service-bar/such-aktiv.png);
 }
 
 #site-menu-street {

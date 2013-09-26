@@ -22,8 +22,7 @@
           <li><a href="/english" class="ir service-bar-english">English</a></li>
           <li><a href="/kontakt" class="ir service-bar-kontakt">Kontakt</a></li>
           <li><a href="/impressum" class="ir service-bar-impressum">Impressum</a></li>
-          <li><a href="?" class="ir service-bar-search">Suche</a></li>
-<!--          <li><form class="search-form"><input class="search-input"/> <input type="submit" class="search-button" value="Such!"/></form></li>-->
+          <li><form class="search-form" ng-submit="search()" ng-controller="SearchFormController"><input ng-model="term" class="search-input"/> <button type="submit" class="search-button ir" value="Such!"/></form></li>
         </ul>
         <a href="/"><img id="logo" src="/img/header.png" width="992" height="83"/></a>
       </div>
@@ -102,5 +101,6 @@
     <script src="/js/utils.js"></script>
     <script src="/js/site.js"></script>
     <script src="/js/db.js"></script>
+    <script src="/lib/lunr/lunr.min.js"></script>
   </body>
 </html>

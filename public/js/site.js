@@ -35,14 +35,7 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
     };
 })
 .filter('translate', function () {
-    return function translate(what) {
-        switch (typeof what) {
-        case 'string':
-            return what;
-        case 'object':
-            return what[language];
-        }
-    };
+    return translate;
 })
 .filter('fromCharCode', function () {
     return function (input) {
@@ -63,6 +56,15 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
 var language = 'de';
 
 moment.lang(language);
+
+function translate(what) {
+    switch (typeof what) {
+    case 'string':
+        return what;
+    case 'object':
+        return what[language];
+    }
+};
 
 // FIXME: Ugly c&p from CMS
 function peopleMatch(db, string) {
@@ -405,6 +407,51 @@ function KuenstlerinnenController($scope, $routeParams, Page, artists) {
     Page.setSidebarContent('');
 }
 
+app.service('search', function (db) {
+    var fields = [ 'description', 'participants', 'sponsors', 'name', 'bio', 'title', 'by' ];
+    var idx = lunr(function () {
+        fields.forEach(this.field.bind(this));
+    });
+    [ db.Person, db.Event, db.Piece, db.Page ].forEach(function (c) {
+      var objs = db.findObjects(c).map(function (obj) {
+          obj = Object.create(obj);
+          fields.forEach(function (f) {
+              obj[f] = translate(obj[f]);
+          });
+          return obj;
+      });
+      objs.forEach(idx.add.bind(idx));
+    });
+    this.search = function (term) {
+        return idx.search(term);
+    };
+});
+
+function SearchController($scope, $routeParams, search, db) {
+    if (!$routeParams.term) {
+        return;
+    }
+    var res = search.search($routeParams.term);
+    res = res.map(function (r) {
+        var obj = db.Extent.extent[r.ref];
+        var prefix = '';
+        if (obj instanceof db.Person) {
+            prefix = '/person';
+        } else if (obj instanceof db.Event) {
+            prefix = '/veranstaltung';
+        } else if (obj instanceof db.Piece) {
+            prefix = '/stueck';
+        }
+        obj = {
+            link: prefix + '/' + obj.link,
+            name: obj.name
+        };
+        return obj;
+    });
+    $scope.results = res;
+    $scope.term = $routeParams.term;
+}
+
 function PageController($scope, $timeout, $location, Page, db) {
     // FIXME There is this ugly race condition wrt db loading, and injecting db
     // is barely a fix
@@ -476,6 +523,13 @@ function NewsletterController($scope, $http) {
     };
 };
 
+function SearchFormController($scope, $location, $routeParams) {
+    $scope.search = function () {
+        $location.path('/suche/' + $scope.term);
+        $scope.term = ''; // FIXME: This is just to be consistent
+    };
+};
+
 app.config(function($locationProvider, $routeProvider) {
 
     $locationProvider.html5Mode(true);
@@ -494,7 +548,8 @@ app.config(function($locationProvider, $routeProvider) {
       { name: 'kuenstlerinnen/:letter', controller: KuenstlerinnenController, activeMenuItem: 'kuenstlerinnen' },
       { name: 'pressemitteilungen', controller: PressPdfController, activeMenuItem: 'Presse' },
       { name: 'bildmaterial', controller: PressImagesController, activeMenuItem: 'Presse' },
-      { name: '', templateName: 'home', controller: HomeController }
+      { name: '', templateName: 'home', controller: HomeController },
+      { name: 'suche/:term', controller: SearchController }
     ].forEach(function (pageDef) {
         pageDef.templateUrl = '/partials/' + (pageDef.templateName || pageDef.name.replace(/\/.*$/, "")) + '.html';
         pageDef.activeMenuItem = pageDef.activeMenuItem || pageDef.name;
