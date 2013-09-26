@@ -104,7 +104,7 @@ function HomeController($scope, db, Page, schedule) {
         var start = 1;
         var firstBox;
         if (homepage.layout === 1) {
-            $scope.headColumn = [ homepage.page1 ];
+            $scope.headColumn = cleanColumn({width: 670, height: 426}, [ homepage.page1 ]);
             ++start;
         }
         if (homepage.layout === 2) {
@@ -138,20 +138,30 @@ function HomeController($scope, db, Page, schedule) {
                 homepage['page' + (start)],
                 homepage['page' + (start+2)]
             ]];
+
             if (homepage.layout === 0) {
                 $scope.columns[0].push(homepage['page' + (start+3)]);
                 $scope.columns[1].push(homepage['page' + (start+4)]);
             }
+
+            $scope.columns = $scope.columns.map(function (c) {
+                return cleanColumn({width: 670, height: 426}, c);
+            });
         }
+
+        function cleanColumn(dimensions, c) {
+            return c.filter(function (box) {
+                return box;
+            }).map(function (box) {
+                if (box.images && box.images.length > 0) {
+                    box.images[0] = intoRect(dimensions, box.images[0]);
+                }
+                return box;
+            });
+        }
+
         Page.setTitle('');
-        Page.marginals([ homepage.marginal1, homepage.marginal2 ].filter(function (m) {
-            return m;
-        }).map(function (m) {
-            if (m.images && m.images.length > 0) {
-                m.images[0] = intoRect({width: 121, height: 96}, m.images[0]);
-            }
-            return m;
-        }));
+        Page.marginals(cleanColumn({width: 121, height: 96}, [ homepage.marginal1, homepage.marginal2 ]));
     });
 }
 
