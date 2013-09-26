@@ -1,10 +1,17 @@
 <div class="media-browser" ng-show="media">
-  <div href="#" ng-click="gotoMedium(1)"><div class="display"></div></div>
-  <p class="media-credit">{{media[mediumIndex].credits}}</p>
+  <div ng-repeat="medium in media" ng-show="$index == mediumIndex">
+    <div class="display" ng-class="{'display-only-medium': media.length == 1}" ng-click="gotoMedium(1)">
+      <div ng-show="medium.type == 'picture'">
+          <backend-image image="medium"></backend-image>
+      </div>
+      <iframe ng-show="medium.type == 'video'" src="//player.vimeo.com/video/{{medium.vimeoId}}" width="{{medium.width}}" height="{{medium.height}}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+    </div>
+    <p class="media-credit">{{medium.credits}}</p>
+  </div>
   <div class="nav">
     <ul ng-hide="media.length == 1">
       <li ng-repeat="medium in media">
-        <a href="#" ng-click="clickMedium()"><span ng-class="mediumClass()"></span></a>
+        <a href="#" ng-click="clickMedium()"><span class="icon-{{medium.type}}" ng-class="{active: $index == mediumIndex}"></span></a>
       </li>
     </ul>
   </div>

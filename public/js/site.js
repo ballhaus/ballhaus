@@ -783,73 +783,35 @@ app
             templateUrl: '/partials/media-browser.html',
             scope: { model: '=' },
             link: function ($scope, element, attributes) {
+                var maxWidth = 630;
+                var maxHeight = 400;
+                var maxVideoHeight = 376;
 
                 $scope.media = ($scope.model && $scope.model.images || []).slice();
 
-                $scope.media.forEach(function (picture) { picture.type = 'picture' });
+                $scope.media = $scope.media.map(function (picture) {
+                    picture = intoRect({width: maxWidth, height: maxHeight}, picture);
+                    picture.type = 'picture';
+                    return picture;
+                });
+
                 if ($scope.model && $scope.model.video) {
                     $scope.model.video.type = 'video';
                     $scope.model.video.vimeoId = $scope.model.video.vimeoId || $scope.model.video.url.match(/\/(\d+)$/)[1];
+                    $scope.model.video.width = maxWidth;
+                    $scope.model.video.height = maxVideoHeight;
                     $scope.media.push($scope.model.video);
                 }
+
                 $scope.mediumIndex = 0;
 
-                $scope.mediumClass = function () {
-                    return "icon-" + this.medium.type + ($scope.media.indexOf(this.medium) === $scope.mediumIndex ? ' active' : '');
-                }
-
                 $scope.clickMedium = function () {
-                    $scope.mediumIndex = $scope.media.indexOf(this.medium);
-                    $scope.showMedium();
-                }
-
-                $scope.showMedium = function () {
-                    var medium = $scope.media[$scope.mediumIndex];
-                    if (!medium) return;
-
-                    var display = element.find('.display');
-                    display.empty();
-
-                    var maxWidth = 630;
-                    var maxHeight = 400;
-                    var maxVideoHeight = 376;
-                    function showPicture() {
-                        var image = medium;
-                        var size = intoRect({width: maxWidth, height: maxHeight}, image);
-                        display.append(angular.element('<img src="/image/' + image.name
-                                                       + '" width="' + size.width + '" height="' + size.height
-                                                       + '" />'));
-                    }
-
-                    function showVideo() {
-                        display.append(angular.element('<iframe src="//player.vimeo.com/video/' + medium.vimeoId
-                                                       + '" width="' + maxWidth + '" height="' + maxVideoHeight
-                                                       + '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));
-                    }
-
-                    switch (medium.type) {
-                    case 'picture':
-                        showPicture();
-                        break;
-                    case 'video':
-                        showVideo();
-                        break;
-                    default:
-                        console.log('unknown medium type ' + medium.type);
-                    }
-                }
+                    $scope.mediumIndex = this.$index;
+                };
 
                 $scope.gotoMedium = function (direction) {
-                    $scope.mediumIndex += direction;
-                    if ($scope.mediumIndex < 0) {
-                        $scope.mediumIndex = $scope.media.length - 1;
-                    } else if ($scope.mediumIndex >= $scope.media.length) {
-                        $scope.mediumIndex = 0;
-                    }
-                    $scope.showMedium();
-                }
-
-                $scope.showMedium();
+                    $scope.mediumIndex = ($scope.mediumIndex + direction + $scope.media.length) % $scope.media.length;
+                };
             }
         }
     });
