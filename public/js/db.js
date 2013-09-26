@@ -1,9 +1,11 @@
 var dB;
 
 app.factory('db',
-            ['$resource', '$http',
-             function ($resource, $http) {
+             function ($resource, $http, $rootScope, $q) {
                  var db = { objects: [] };
+
+                 var deferred = $q.defer();
+                 db.promise = deferred.promise;
 
                  var cmsMode = window.location.href.match(/cms/);
                  console.log('cmsMode: ' + cmsMode);
@@ -329,6 +331,13 @@ app.factory('db',
                                                     ] };
                      localStorage['data'] = serverState = JSON.stringify(freeze(db.objects));
                      db.loaded = true;
+                     if (!$rootScope.$$phase) {
+                         $rootScope.$apply(function () {
+                            deferred.resolve(db);
+                         });
+                     } else {
+                         deferred.resolve(db);
+                     }
                  }
 
                  db.load = function (ignoreLocalstorage, handler) {
@@ -352,4 +361,4 @@ app.factory('db',
                  db.load();
 
                  return db;
-             }]);
+             });

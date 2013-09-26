@@ -99,125 +99,137 @@ function intoRect(rect, item) {
 }
 
 function HomeController($scope, db, Page, schedule) {
-    var homepage = db.homepage;
-    var start = 1;
-    var firstBox;
-    if (homepage.layout === 1) {
-        $scope.headColumn = [ homepage.page1 ];
-        ++start;
-    }
-    if (homepage.layout === 2) {
-        firstBox = homepage.page1;
-        ++start;
-    }
-    if (!firstBox) {
-        firstBox = Object.create(schedule.getUpcoming()[0]);
-        firstBox.nextPiece = true;
-        firstBox.date = moment(firstBox.date);
-        firstBox.howSoon = firstBox.date.isSame(moment(), 'day') ? 'today' : (
-            firstBox.date.isSame(moment().add('d', 1), 'day') ? 'tomorrow' : 'future');
-        firstBox.dateIntro = {
-          today: 'heute,',
-          tomorrow: 'morgen,',
-          future: 'am'
-        }[firstBox.howSoon];
-    }
-    $scope.columns = [
-    [
-        firstBox,
-        homepage['page' + (start+1)]
-    ], [
-        homepage['page' + (start)],
-        homepage['page' + (start+2)]
-    ]];
-    if (homepage.layout === 0) {
-        $scope.columns[0].push(homepage['page' + (start+3)]);
-        $scope.columns[1].push(homepage['page' + (start+4)]);
-    }
-    Page.setTitle('');
-    Page.marginals([ homepage.marginal1, homepage.marginal2 ].filter(function (m) {
-        return m;
-    }).map(function (m) {
-        if (m.images && m.images.length > 0) {
-            m.images[0] = intoRect({width: 121, height: 96}, m.images[0]);
+    db.promise.then(function () {
+        var homepage = db.homepage;
+        var start = 1;
+        var firstBox;
+        if (homepage.layout === 1) {
+            $scope.headColumn = [ homepage.page1 ];
+            ++start;
         }
-        return m;
-    }));
+        if (homepage.layout === 2) {
+            firstBox = homepage.page1;
+            ++start;
+        }
+        if (!firstBox) {
+            firstBox = Object.create(schedule.getUpcoming()[0]);
+            firstBox.nextPiece = true;
+            firstBox.date = moment(firstBox.date);
+            firstBox.howSoon = firstBox.date.isSame(moment(), 'day') ? 'today' : (
+                firstBox.date.isSame(moment().add('d', 1), 'day') ? 'tomorrow' : 'future');
+            firstBox.dateIntro = {
+              today: 'heute,',
+              tomorrow: 'morgen,',
+              future: 'am'
+            }[firstBox.howSoon];
+        }
+        $scope.columns = [
+        [
+            firstBox,
+            homepage['page' + (start+1)]
+        ], [
+            homepage['page' + (start)],
+            homepage['page' + (start+2)]
+        ]];
+        if (homepage.layout === 0) {
+            $scope.columns[0].push(homepage['page' + (start+3)]);
+            $scope.columns[1].push(homepage['page' + (start+4)]);
+        }
+        Page.setTitle('');
+        Page.marginals([ homepage.marginal1, homepage.marginal2 ].filter(function (m) {
+            return m;
+        }).map(function (m) {
+            if (m.images && m.images.length > 0) {
+                m.images[0] = intoRect({width: 121, height: 96}, m.images[0]);
+            }
+            return m;
+        }));
+    });
 }
 
 function RepertoireController($scope, db, Page) {
     var seen = {};
     $scope.pieces = [];
     var now = moment();
-    db.events().forEach(function (event) {
-        if (!event.piece || seen[event.piece.id]) {
-            return;
-        }
-        if ((!moment(event.date).isBefore(now, 'day')) || event.piece.repertoire) {
-            if (event.piece.images && event.piece.images[0]) {
-              event.piece.imageSize = intoRect({width: 176, height: 112}, event.piece.images[0]);
+    db.promise.then(function () {
+        db.events().forEach(function (event) {
+            if (!event.piece || seen[event.piece.id]) {
+                return;
             }
-            $scope.pieces.push(event.piece);
-            seen[event.piece.id] = true;
-        }
+            if ((!moment(event.date).isBefore(now, 'day')) || event.piece.repertoire) {
+                if (event.piece.images && event.piece.images[0]) {
+                  event.piece.imageSize = intoRect({width: 176, height: 112}, event.piece.images[0]);
+                }
+                $scope.pieces.push(event.piece);
+                seen[event.piece.id] = true;
+            }
+        });
     });
-    console.log('got ' + $scope.pieces.length + ' total ' + db.pieces().length);
 
     Page.setTitle('Repertoire');
     Page.setSidebarContent('');
 }
 
 function PressPdfController($scope, db, Page) {
-    $scope.events = db.findObjects(db.Event).concat(db.pieces())
-        .filter(function (event) {
-            return event.presse;
-        })
-        .map(function (event) {
-            console.log('event ' + event);
-            return {
-                name: event.name || (event.piece && event.piece.name),
-                date: event.date && moment(event.date).format('Do MMMM YYYY'),
-                epochSeconds: event.date && event.date.getTime(),
-                pdf: event.presse
-            };
-        });
+    db.promise.then(function () {
+        $scope.events = db.findObjects(db.Event).concat(db.pieces())
+            .filter(function (event) {
+                return event.presse;
+            })
+            .map(function (event) {
+                console.log('event ' + event);
+                return {
+                    name: event.name || (event.piece && event.piece.name),
+                    date: event.date && moment(event.date).format('Do MMMM YYYY'),
+                    epochSeconds: event.date && event.date.getTime(),
+                    pdf: event.presse
+                };
+            });
+    });
     Page.setTitle('Pressemitteilungen');
     Page.setSidebarContent('');
 }
 
 function PressImagesController($scope, db, Page) {
-    $scope.sets = db.pieces()
-        .filter(function (piece) { return piece.flickrSet; })
-        .map(function (piece) {
-            return {
-                id: piece.flickrSet.id,
-                name: piece.name
-            };
-        });
+    db.promise.then(function () {
+        $scope.sets = db.pieces()
+            .filter(function (piece) { return piece.flickrSet; })
+            .map(function (piece) {
+                return {
+                    id: piece.flickrSet.id,
+                    name: piece.name
+                };
+            });
+    });
     Page.setTitle('Bildmaterial');
     Page.setSidebarContent('');
 }
 
-app.service('schedule', function (db) {
+app.service('schedule', function (db, $q) {
     function get (archive) {
-        var events = db.events().filter(function (event) {
-          return Boolean(archive) !== event.isCurrent();
-        }).map(function (event) {
-            var date = moment(event.date);
-            var link = event.link;
-            if (link) {
-                link = '/veranstaltung/' + event.link;
-            } else {
-                link = '/auffuehrung/' + event.id;
-            }
-            return angular.extend({}, event.__proto__, event.piece, event, {
-                link: link,
-                month: date.format('MMMM'),
-                monthKey: date.format('MM-YYYY'),
-                epochSeconds: event.date.getTime()
-            });
-        }).sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
-        return events;
+        var deferred = $q.defer();
+        db.promise.then(function () {
+            var events = db.events().filter(function (event) {
+              return Boolean(archive) !== event.isCurrent();
+            }).map(function (event) {
+                var date = moment(event.date);
+                var link = event.link;
+                if (link) {
+                    link = '/veranstaltung/' + event.link;
+                } else {
+                    link = '/auffuehrung/' + event.id;
+                }
+                return angular.extend({}, event.__proto__, event.piece, event, {
+                    link: link,
+                    month: date.format('MMMM'),
+                    monthKey: date.format('MM-YYYY'),
+                    epochSeconds: event.date.getTime()
+                });
+            }).sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
+
+            deferred.resolve(events);
+        });
+        return deferred.promise;
     }
     this.getUpcoming = get.bind(null, false);
     this.getArchive = get.bind(null, true);
@@ -225,26 +237,26 @@ app.service('schedule', function (db) {
 
 
 function ScheduleController($scope, $routeParams, schedule, Page) {
-    var events = schedule.getUpcoming();
-
     $scope.month = $routeParams.month || moment().format('MM-YYYY');
 
-    // Determine months
-    $scope.months = events.reduce(function (state, event) {
-        if (event.monthKey != state.oldMonthKey) {
-            state.months.push({
-                name: event.month,
-                key: event.monthKey,
-                curClass: event.monthKey === $scope.month ? 'active' : ''
-            });
-            state.oldMonthKey = event.monthKey;
-        }
-        return state;
-    }, {months: [], oldMonthKey: undefined}).months;
+    schedule.getUpcoming().then(function (events) {
+        // Determine months
+        $scope.months = events.reduce(function (state, event) {
+            if (event.monthKey != state.oldMonthKey) {
+                state.months.push({
+                    name: event.month,
+                    key: event.monthKey,
+                    curClass: event.monthKey === $scope.month ? 'active' : ''
+                });
+                state.oldMonthKey = event.monthKey;
+            }
+            return state;
+        }, {months: [], oldMonthKey: undefined}).months;
 
-    // Filter by month
-    $scope.events = events.filter(function (event) {
-      return event.monthKey === $scope.month;
+        // Filter by month
+        $scope.events = events.filter(function (event) {
+          return event.monthKey === $scope.month;
+        });
     });
 
     Page.setTitle('Spielplan');
@@ -252,10 +264,9 @@ function ScheduleController($scope, $routeParams, schedule, Page) {
 }
 
 function ArchiveController(db, $scope, $routeParams, schedule, Page) {
-    var events = schedule.getArchive();
-
     $scope.date = $routeParams.date || moment().format('YYYY'); // FIXME: last available year, not current
     $scope.curYear = ($scope.date.length > 4) ? $scope.date.substr(3) : $scope.date;
+    $scope.category = $routeParams.category;
 
     $scope.months = {};
     for (var i = 1; i <= 12; ++i) {
@@ -266,57 +277,61 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
         curClass: 'muted'
       };
     }
-    $scope.years = events.reduce(function (state, event) {
-        var year, isCurrent;
-        if (event.monthKey != state.oldMonthKey) {
-            year = event.monthKey.substr(3);
-            isCurrent = $scope.date === year || $scope.date.substr(3) === year;
-            if (!state.years[year]) {
-                state.years[year] = {
-                    name: year,
-                    curClass: isCurrent ? 'active' : '',
-                };
+
+    schedule.getArchive().then(function (events) {
+        $scope.years = events.reduce(function (state, event) {
+            var year, isCurrent;
+            if (event.monthKey != state.oldMonthKey) {
+                year = event.monthKey.substr(3);
+                isCurrent = $scope.date === year || $scope.date.substr(3) === year;
+                if (!state.years[year]) {
+                    state.years[year] = {
+                        name: year,
+                        curClass: isCurrent ? 'active' : '',
+                    };
+                }
+                if (isCurrent) {
+                    $scope.months[moment(event.date).month() + 1].curClass = event.monthKey === $scope.date ? 'active' : '';
+                }
+                state.oldMonthKey = event.monthKey;
             }
-            if (isCurrent) {
-                $scope.months[moment(event.date).month() + 1].curClass = event.monthKey === $scope.date ? 'active' : '';
+            return state;
+        }, {years: {}, oldMonthKey: undefined}).years;
+
+        $scope.months = Object.keys($scope.months).sort(function (a, b) {return a-b;}).map(function (k) {
+            return $scope.months[k];
+        });
+
+        // Convert to sorted array
+        $scope.years = Object.keys($scope.years).sort().map(function (k) {
+            return $scope.years[k];
+        });
+
+        $scope.events = events
+            // Filter by date
+            .filter(function (event) {
+                return (($scope.date.length === 4) ? event.monthKey.substr(3) : event.monthKey) === $scope.date;
+            })
+
+            // Filter by categories
+            .filter(function (event) {
+                return !$scope.category || event.tags.map(utils.urlify).indexOf($scope.category) !== -1;
+            })
+
+            // FIXME: Moving the reverse call to the template kills angular
+            .reverse();
+    });
+
+    db.promise.then(function () {
+        $scope.availableTags = db.tags().map(function (tag) {
+            var urlTag = utils.urlify(tag.name);
+            if ($scope.category === urlTag) {
+                tag['class'] = 'selected';
             }
-            state.oldMonthKey = event.monthKey;
-        }
-        return state;
-    }, {years: {}, oldMonthKey: undefined}).years;
-
-    $scope.months = Object.keys($scope.months).sort(function (a, b) {return a-b;}).map(function (k) {
-        return $scope.months[k];
+            tag.urlName = urlTag;
+            return tag;
+        });
     });
-
-    // Convert to sorted array
-    $scope.years = Object.keys($scope.years).sort().map(function (k) {
-        return $scope.years[k];
-    });
-
-    $scope.category = $routeParams.category;
-    $scope.availableTags = db.tags().map(function (tag) {
-        var urlTag = utils.urlify(tag.name);
-        if ($scope.category === urlTag) {
-            tag['class'] = 'selected';
-        }
-        tag.urlName = urlTag;
-        return tag;
-    });
-
-    $scope.events = events
-        // Filter by date
-        .filter(function (event) {
-            return (($scope.date.length === 4) ? event.monthKey.substr(3) : event.monthKey) === $scope.date;
-        })
-
-        // Filter by categories
-        .filter(function (event) {
-            return !$scope.category || event.tags.map(utils.urlify).indexOf($scope.category) !== -1;
-        })
-
-        // FIXME: Moving the reverse call to the template kills angular
-        .reverse();
 
     $scope.showFilterSet = $scope.category;
     $scope.toggleFilterSet = function () {
@@ -337,71 +352,88 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
 }
 
 function PersonPageController($scope, db, $routeParams, Page) {
-    $scope.person = db.get(db.Person, $routeParams.personId);
-    Page.setTitle($scope.person ? $scope.person.name : 'Person nicht gefunden');
+    db.promise.then(function () {
+        $scope.person = db.get(db.Person, $routeParams.personId);
+        Page.setTitle($scope.person ? $scope.person.name : 'Person nicht gefunden');
+    });
     Page.setSidebarContent('');
 }
 
 function PiecePageController($scope, db, $routeParams, Page, $compile) {
-    $scope.piece = db.get(db.Piece, $routeParams.pieceId);
-    Page.setTitle($scope.piece.name);
-    Page.setSidebarContent($compile('<piece-sidebar for="piece"/>')($scope));
+    db.promise.then(function () {
+        $scope.piece = db.get(db.Piece, $routeParams.pieceId);
+        Page.setTitle($scope.piece.name);
+        Page.setSidebarContent($compile('<piece-sidebar for="piece"/>')($scope));
+    });
 }
 
 function EventPageController($scope, db, $routeParams, Page, $compile) {
-    $scope.event = db.get(db.Event, $routeParams.eventId);
-    Page.setTitle($scope.event.name);
-    Page.setSidebarContent($compile('<piece-sidebar for="event"/>')($scope));
+    db.promise.then(function () {
+        $scope.event = db.get(db.Event, $routeParams.eventId);
+        Page.setTitle($scope.event.name);
+        Page.setSidebarContent($compile('<piece-sidebar for="event"/>')($scope));
+    });
 }
 
 function EnactmentPageController($scope, db, $routeParams, Page, $compile) {
-    var enactment = db.get(db.Enactment, $routeParams.enactmentId);
-    $scope.enactment = angular.extend({}, enactment.__proto__, enactment.piece, enactment);
-    Page.setTitle($scope.enactment.name);
-    Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
+    db.promise.then(function () {
+        var enactment = db.get(db.Enactment, $routeParams.enactmentId);
+        $scope.enactment = angular.extend({}, enactment.__proto__, enactment.piece, enactment);
+        Page.setTitle($scope.enactment.name);
+        Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
+    });
 }
 
-app.service('artists', function (db) {
-    var people = db.people().filter(function (person) {
-        return person.bio && (person.bio.de || person.bio.en) && person.images && person.images.length;
-    }).map(function (person) {
-        person.orderName = person.name.substr(person.name.lastIndexOf(' ') + 1);
-        return person;
+app.service('artists', function (db, $q) {
+    var pDeferred = $q.defer();
+    var lDeferred = $q.defer();
+
+    db.promise.then(function () {
+        var people = db.people().filter(function (person) {
+            return person.bio && (person.bio.de || person.bio.en) && person.images && person.images.length;
+        }).map(function (person) {
+            person.orderName = person.name.substr(person.name.lastIndexOf(' ') + 1);
+            return person;
+        });
+        pDeferred.resolve(people);
     });
 
-    var letters = people.reduce(function (letters, person) {
-        var c = utils.urlify(person.orderName.charAt(0)).toUpperCase().charCodeAt(0);
-        letters[c] = 'letter-present';
-        return letters;
-    }, Array('Z'.charCodeAt(0) + 1));
+    pDeferred.promise.then(function (people) {
+        var letters = people.reduce(function (letters, person) {
+            var c = utils.urlify(person.orderName.charAt(0)).toUpperCase().charCodeAt(0);
+            letters[c] = 'letter-present';
+            return letters;
+        }, Array('Z'.charCodeAt(0) + 1));
 
-    letters.offset = 0;
-    while (letters[letters.offset++] !== 'letter-present' &&
-        letters.offset < 'A'.charCodeAt(0)) {
-    }
+        letters.offset = 0;
+        while (letters[letters.offset++] !== 'letter-present' &&
+            letters.offset < 'A'.charCodeAt(0)) {
+        }
+        lDeferred.resolve(letters);
+    });
 
     this.getPeople = function () {
-        return people;
+        return pDeferred.promise;
     };
 
     this.getLetters = function () {
-        var l = letters.slice();
-        l.offset = letters.offset;
-        return l;
+        return lDeferred.promise;
     }
 });
 
 function KuenstlerinnenController($scope, $routeParams, Page, artists) {
-    $scope.people = artists.getPeople().map(function (person) {
-        person.imageSize = intoRect({width: 120, height: 80}, person.images[0]);
-        return person;
-    });
-
-    if ($routeParams.letter) {
-        $scope.people = $scope.people.filter(function (person) {
-            return utils.urlify(person.orderName.charAt(0)).toUpperCase() === $routeParams.letter;
+    artists.getPeople().then(function (people) {
+        $scope.people = people.map(function (person) {
+          person.imageSize = intoRect({width: 120, height: 80}, person.images[0]);
+            return person;
         });
-    }
+
+        if ($routeParams.letter) {
+            $scope.people = $scope.people.filter(function (person) {
+                return utils.urlify(person.orderName.charAt(0)).toUpperCase() === $routeParams.letter;
+            });
+        }
+    });
 
     $scope.curLetter = $routeParams.letter;
 
@@ -409,23 +441,31 @@ function KuenstlerinnenController($scope, $routeParams, Page, artists) {
     Page.setSidebarContent('');
 }
 
-app.service('search', function (db) {
+app.service('search', function (db, $q) {
     var fields = [ 'description', 'participants', 'sponsors', 'name', 'bio', 'title', 'by' ];
     var idx = lunr(function () {
         fields.forEach(this.field.bind(this));
     });
-    [ db.Person, db.Event, db.Piece, db.Page ].forEach(function (c) {
-      var objs = db.findObjects(c).map(function (obj) {
-          obj = Object.create(obj);
-          fields.forEach(function (f) {
-              obj[f] = translate(obj[f]);
+    var idxDeferred = $q.defer();
+    db.promise.then(function () {
+        [ db.Person, db.Event, db.Piece, db.Page ].forEach(function (c) {
+          var objs = db.findObjects(c).map(function (obj) {
+              obj = Object.create(obj);
+              fields.forEach(function (f) {
+                  obj[f] = translate(obj[f]);
+              });
+              return obj;
           });
-          return obj;
-      });
-      objs.forEach(idx.add.bind(idx));
+          objs.forEach(idx.add.bind(idx));
+        });
+        idxDeferred.resolve(idx);
     });
     this.search = function (term) {
-        return idx.search(term);
+        var searchDeferred = $q.defer();
+        idxDeferred.then(function () {
+            searchDeferred.resolve(idx.search(term));
+        });
+        return searchDeferred.promise;
     };
 });
 
@@ -433,30 +473,31 @@ function SearchController($scope, $routeParams, search, db) {
     if (!$routeParams.term) {
         return;
     }
-    var res = search.search($routeParams.term);
-    res = res.map(function (r) {
-        var obj = db.Extent.extent[r.ref];
-        var prefix = '';
-        if (obj instanceof db.Person) {
-            prefix = '/person';
-        } else if (obj instanceof db.Event) {
-            prefix = '/veranstaltung';
-        } else if (obj instanceof db.Piece) {
-            prefix = '/stueck';
-        }
-        obj = {
-            link: prefix + '/' + obj.link,
-            name: obj.name
-        };
-        return obj;
-    });
-    $scope.results = res;
     $scope.term = $routeParams.term;
+
+    search.search($routeParams.term).then(function (res) {
+        res = res.map(function (r) {
+            var obj = db.Extent.extent[r.ref];
+            var prefix = '';
+            if (obj instanceof db.Person) {
+                prefix = '/person';
+            } else if (obj instanceof db.Event) {
+                prefix = '/veranstaltung';
+            } else if (obj instanceof db.Piece) {
+                prefix = '/stueck';
+            }
+            obj = {
+                link: prefix + '/' + obj.link,
+                name: obj.name
+            };
+            return obj;
+        });
+        $scope.results = res;
+    });
 }
 
 function PageController($scope, $timeout, $location, Page, db) {
-    // FIXME There is this ugly race condition wrt db loading, and injecting db
-    // is barely a fix
+    // We inject the db in order to trigger db loading
 
     if (!Object.create) {
         window.location = '/browser-error';
@@ -590,11 +631,14 @@ app
             templateUrl: '/partials/artists-letter-list.html',
             scope: {cur: '='},
             link: function ($scope, element, attributes) {
-                $scope.letters = artists.getLetters();
+                artists.getLetters().then(function (letters) {
+                    $scope.letters = letters.slice();
+                    $scope.letters.offset = letters.offset;
 
-                if ($scope.cur) {
-                    $scope.letters[$scope.cur.charCodeAt(0)] += ' active';
-                }
+                    if ($scope.cur) {
+                        $scope.letters[$scope.cur.charCodeAt(0)] += ' active';
+                    }
+                });
             }
         };
     })
@@ -647,7 +691,9 @@ app
             link: function ($scope, element, attributes) {
                 // pageName is only set in scope when it refers to something in
                 // the parent scope.
-                $scope.page = db.get(db.Page, $scope.pageName || attributes.pageName);
+                db.promise.then(function () {
+                    $scope.page = db.get(db.Page, $scope.pageName || attributes.pageName);
+                });
             }
         };
     })
@@ -657,26 +703,26 @@ app
             replace: true,
             scope: true,
             link: function ($scope, element, attributes) {
-                function doit () {
-                    var pageName = window.location.pathname.substr(1);
+                var pageName = window.location.pathname.substr(1);
 
-                    $scope.Page.setSidebarContent();
-                    $scope.Page.currentMenuItem({
-                        'haus': 'Haus',
-                        'geschichte': 'Haus',
-                        'team': 'Haus',
-                        'auszeichnungen': 'Haus',
-                        'postmigranten_on_tour': 'Haus',
-                        'partner': 'Haus',
-                        'tickets': 'tickets',
-                        'reihen': 'Programm'
-                    }[pageName]);
+                $scope.Page.setSidebarContent();
+                $scope.Page.currentMenuItem({
+                    'haus': 'Haus',
+                    'geschichte': 'Haus',
+                    'team': 'Haus',
+                    'auszeichnungen': 'Haus',
+                    'postmigranten_on_tour': 'Haus',
+                    'partner': 'Haus',
+                    'tickets': 'tickets',
+                    'reihen': 'Programm'
+                }[pageName]);
 
+                db.promise.then(function () {
                     var page = db.get(db.Page, pageName);
 
                     var html;
                     if (page) {
-                        $scope.Page.setTitle(page.name.de);
+                        $scope.Page.setTitle(page.name);
                         $scope.page = pageName;
                         html = '<static-page page-name="page"></static-page>';
                     } else if (pageName === 'english') {
@@ -692,19 +738,7 @@ app
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
-                }
-
-                // FIXME This should go away and turn into something which works
-                // everywhere
-                function pollDb() {
-                    if (db.loaded) {
-                        doit();
-                    } else {
-                        setTimeout(pollDb, 100);
-                    }
-                }
-
-                pollDb();
+                });
             }
         };
     })
@@ -723,11 +757,13 @@ app
             templateUrl: '/partials/piece-sidebar.html',
             scope: { 'for': '=' },
             link: function ($scope, element, attributes) {
-                $scope.participants = peopleMatch(db, $scope.for.participants);
+                db.promise.then(function () {
+                    $scope.participants = peopleMatch(db, $scope.for.participants);
+                });
             }
         };
     })
-    .directive("homeSidebar", function (db) {
+    .directive("homeSidebar", function () {
         return {
             restrict: 'E',
             replace: true,
