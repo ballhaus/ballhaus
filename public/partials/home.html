@@ -1,6 +1,6 @@
 <div class="homepage">
   <home-item ng-repeat="item in headColumn" item="item"></home-item>
-  <div ng-repeat="column in columns" class="column">
+  <div ng-repeat="column in columns" class="column" ng-class="{'with-head': headColumn && headColumn.length}">
     <home-item ng-repeat="item in column" item="item"></home-item>
   </div>
 </div>
