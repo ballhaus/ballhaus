@@ -47,12 +47,17 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
 .filter('fromCharCode', function () {
     return function (input) {
         return String.fromCharCode(input);
-    }
+    };
 })
 .filter('onlyTeaser', function () {
     return function (input) {
         return input && input.substr(0, input.indexOf('\u06DD'));
-    }
+    };
+})
+.filter('noTeaser', function () {
+    return function (input) {
+        return input && input.replace('\u06DD', '');
+    };
 });
 
 var language = 'de';

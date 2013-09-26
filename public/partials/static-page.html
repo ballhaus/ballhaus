@@ -1,5 +1,5 @@
 <div>
   <media-browser model="page"></media-browser>
   <h1 class="page-title" ng-bind-html-unsafe="page.name | translate"></h1>
-  <div class="static-content" ng-bind-html-unsafe="page.contents | translate"></div>
+  <div class="static-content" ng-bind-html-unsafe="page.contents | translate | noTeaser"></div>
 </div>
