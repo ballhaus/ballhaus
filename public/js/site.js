@@ -261,6 +261,11 @@ function ScheduleController($scope, $routeParams, schedule, Page) {
             return state;
         }, {months: [], oldMonthKey: undefined}).months;
 
+        $scope.years = Object.keys($scope.months.reduce(function (ys, m) {
+            ys[m.key.substr(3)] = true;
+            return ys;
+        }, {})).sort();
+
         // Filter by month
         $scope.events = events.filter(function (event) {
           return event.monthKey === $scope.month;
