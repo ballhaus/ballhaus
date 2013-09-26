@@ -112,28 +112,36 @@ function HomeController($scope, db, Page, schedule) {
             ++start;
         }
         if (!firstBox) {
-            firstBox = Object.create(schedule.getUpcoming()[0]);
-            firstBox.nextPiece = true;
-            firstBox.date = moment(firstBox.date);
-            firstBox.howSoon = firstBox.date.isSame(moment(), 'day') ? 'today' : (
-                firstBox.date.isSame(moment().add('d', 1), 'day') ? 'tomorrow' : 'future');
-            firstBox.dateIntro = {
-              today: 'heute,',
-              tomorrow: 'morgen,',
-              future: 'am'
-            }[firstBox.howSoon];
+            schedule.getUpcoming().then(function (upcoming) {
+                firstBox = Object.create(upcoming[0]);
+                firstBox.nextPiece = true;
+                firstBox.date = moment(firstBox.date);
+                firstBox.howSoon = firstBox.date.isSame(moment(), 'day') ? 'today' : (
+                    firstBox.date.isSame(moment().add('d', 1), 'day') ? 'tomorrow' : 'future');
+                firstBox.dateIntro = {
+                  today: 'heute,',
+                  tomorrow: 'morgen,',
+                  future: 'am'
+                }[firstBox.howSoon];
+                setColumns();
+            });
+        } else {
+            setColumns();
         }
-        $scope.columns = [
-        [
-            firstBox,
-            homepage['page' + (start+1)]
-        ], [
-            homepage['page' + (start)],
-            homepage['page' + (start+2)]
-        ]];
-        if (homepage.layout === 0) {
-            $scope.columns[0].push(homepage['page' + (start+3)]);
-            $scope.columns[1].push(homepage['page' + (start+4)]);
+
+        function setColumns() {
+            $scope.columns = [
+            [
+                firstBox,
+                homepage['page' + (start+1)]
+            ], [
+                homepage['page' + (start)],
+                homepage['page' + (start+2)]
+            ]];
+            if (homepage.layout === 0) {
+                $scope.columns[0].push(homepage['page' + (start+3)]);
+                $scope.columns[1].push(homepage['page' + (start+4)]);
+            }
         }
         Page.setTitle('');
         Page.marginals([ homepage.marginal1, homepage.marginal2 ].filter(function (m) {
