@@ -134,7 +134,7 @@ function HomeController($scope, db, Page, schedule) {
     }
     Page.setTitle('');
     Page.marginals([ homepage.marginal1, homepage.marginal2 ].map(function (m) {
-        if (m.images && m.images.length > 0) {
+        if (m && m.images && m.images.length > 0) {
             m.images[0] = intoRect({width: 121, height: 96}, m.images[0]);
         }
         return m;

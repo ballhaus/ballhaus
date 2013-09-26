@@ -7,3 +7,6 @@
 [submodule "public/lib/tiny_mce/plugins/heading"]
 	path = public/lib/tiny_mce/plugins/heading
 	url = https://github.com/mertenvg/tinymce-heading-plugin.git
+[submodule "public/lib/lunr"]
+	path = public/lib/lunr
+	url = https://github.com/olivernn/lunr.js.git
