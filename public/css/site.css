@@ -1031,8 +1031,10 @@ input.search-input {
 
 .home-next-piece-date {
     position: absolute;
-    color: white;
-    padding: 5px 4px 0;
+    color: #FFF;
+    padding: 6px 10px;
+    font-size: 10px;
+    line-height: 14px;
     background-color: #767676;
 }
 
