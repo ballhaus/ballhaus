@@ -894,7 +894,7 @@ input.search-input {
 .piece-sidebar .participants-list a:hover,
 .piece-sidebar .participants-list a:focus,
 .piece-sidebar .participants-list a:active {
-    color: inherit;
+    color: #EB0033;
 }
 
 .piece-details .item-name-wrapper {
