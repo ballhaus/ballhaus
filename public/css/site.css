@@ -1062,6 +1062,10 @@ input.search-input {
     background-color: #eb0033;
 }
 
+.home-sidebar a {
+    display: block;
+}
+
 .home-sidebar img {
     max-width: 121px;
     max-height: 96px;

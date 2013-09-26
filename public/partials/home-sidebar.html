@@ -1,11 +1,13 @@
 <div ng-class="{'non-empty': for.length > 0}">
   <div ng-repeat="item in for">
-    <div ng-show="item.images.length">
-      <backend-image image="item.images[0]"></backend-image>
-      <div class="h2-wrapper h2-with-img"><h2>{{item.name | translate}}</h2></div>
-    </div>
-    <div ng-hide="item.images.length">
-      <div class="h2-wrapper"><h2>{{item.name | translate}}</h2></div>
-    </div>
+    <a href="{{item.link}}">
+      <div ng-show="item.images.length">
+        <backend-image image="item.images[0]"></backend-image>
+        <div class="h2-wrapper h2-with-img"><h2>{{item.name | translate}}</h2></div>
+      </div>
+      <div ng-hide="item.images.length">
+        <div class="h2-wrapper"><h2>{{item.name | translate}}</h2></div>
+      </div>
+    </a>
   </div>
 </div>
