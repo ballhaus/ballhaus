@@ -638,15 +638,14 @@ input.search-input {
     cursor: e-resize;
 }
 
-.media-browser > .nav {
-    width: 100%;
-    margin: 16px 0;
+.media-browser .nav {
+    margin: 6px 0;
     height: 20px;
 }
 
 .media-browser ul {
     list-style: none;
-    margin: 0;
+    margin: 16px 0;
 }
 
 .media-browser li {
