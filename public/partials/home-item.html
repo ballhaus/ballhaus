@@ -5,5 +5,7 @@
     <h2 ng-bind-html-unsafe="item.name | translate"></h1>
     <div ng-bind-html-unsafe="item.by | translate"></div>
     <div ng-bind-html-unsafe="item.contents | translate | onlyTeaser"></div>
+    <p>{{item.date | toDateWithTime}}</p>
+    <prices for="item" />
   </a>
 </div>

@@ -26,7 +26,7 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
 })
 .filter('toDateWithTime', function () {
     return function (input) {
-        return moment(input).format('Do MMMM YYYY, HH:mm [Uhr]');
+        return input && moment(input).format('Do MMMM YYYY, HH:mm [Uhr]');
     };
 })
 .filter('formatDate', function () {
