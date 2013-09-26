@@ -1,6 +1,6 @@
 <page-title></page-title>
 <div class="filter-set">
-  <a class="filter-set-reset filter-reset-line-up-with-hor-list" ng-class="{muted: date == curYear}" href="/archiv/{{curYear}}/{{category}}">Filter zurücksetzen</a>
+  <a class="filter-set-reset filter-reset-line-up-with-hor-list" ng-class="{muted: date == years[years.length - 1].name}" href="/archiv/{{years[years.length - 1].name}}/{{category}}">Filter zurücksetzen</a>
   <ul class="hor-list">
     <li ng-repeat="year in years | reverse">
       <a class="{{year.curClass}}" href="/archiv/{{year.name}}/{{category}}">{{year.name}}</a>
