@@ -145,7 +145,7 @@ function HomeController($scope, db, Page, schedule) {
             }
 
             $scope.columns = $scope.columns.map(function (c) {
-                return cleanColumn({width: 670, height: 426}, c);
+                return cleanColumn({width: 320, height: 204}, c);
             });
         }
 
