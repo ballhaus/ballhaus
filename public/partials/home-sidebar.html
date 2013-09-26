@@ -2,10 +2,10 @@
   <div ng-repeat="item in for">
     <div ng-show="item.images.length">
       <backend-image image="item.images[0]"></backend-image>
-      <h2>{{item.name | translate}}</h2>
+      <div class="h2-wrapper h2-with-img"><h2>{{item.name | translate}}</h2></div>
     </div>
     <div ng-hide="item.images.length">
-      <h2>{{item.name | translate}}</h2>
+      <div class="h2-wrapper"><h2>{{item.name | translate}}</h2></div>
     </div>
   </div>
 </div>

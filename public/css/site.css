@@ -1067,18 +1067,31 @@ input.search-input {
     max-height: 96px;
 }
 
-.home-sidebar h2 {
+#right .home-sidebar h2 {
     line-height: 22px;
-    border: #9C0033 2px solid;
-    color: #9C0033;
+    border: #ff0031 3px solid;
+    color: #ff0031;
     font-size: 16px;
     text-align: center;
     text-transform: uppercase;
     padding: 24px 20px;
 }
 
-.home-sidebar img + h2 {
+#right .home-sidebar .h2-wrapper:first-child {
+    background-image: url(/img/marg-reiter.png);
+    background-repeat: no-repeat;
+    margin-top: -13px;
+    padding-top: 13px;
+}
+
+#right .home-sidebar .h2-wrapper:first-child h2 {
+    border-top: 0;
+}
+
+#right .home-sidebar .h2-with-img {
     float: right;
+}
+#right .home-sidebar .h2-with-img h2 {
     width: 90px;
     height: 44px;
     padding: 24px 7px;
