@@ -462,7 +462,7 @@ app.service('search', function (db, $q) {
     });
     this.search = function (term) {
         var searchDeferred = $q.defer();
-        idxDeferred.then(function () {
+        idxDeferred.promise.then(function () {
             searchDeferred.resolve(idx.search(term));
         });
         return searchDeferred.promise;
