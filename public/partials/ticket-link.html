@@ -1,1 +1,4 @@
-<a ng-show="for.ticketLink && for.isCurrent()" ng-href="{{for.ticketLink}}" class="ticket-link ir" target="_blank">Ticket kaufen</a>
+<span>
+  <a ng-show="for.ticketLink && for.isCurrent()" ng-href="{{for.ticketLink}}" class="entry-link entry-link-ticket ir" target="_blank">Ticket kaufen</a>
+  <div ng-show="for.isCurrent() && for.freeEntry" class="entry-link entry-link-free ir">Eintritt frei</div>
+</span>

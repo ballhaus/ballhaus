@@ -785,20 +785,27 @@ input.search-input {
     position: relative; /* For the ticket shop link */
 }
 
-.events .ticket-link {
+.events .entry-link {
     position: absolute;
     right: -1px;
-    top: -3px;
     height: 26px;
     width: 117px;
     display: block;
-
-    background-image: url(/img/ticket-inaktiv.png);
 }
 
-.events .ticket-link:active,
-.events .ticket-link:focus,
-.events .ticket-link:hover {
+.events .entry-link-free {
+    background-image: url(/img/eintrittfrei.png);
+    top: -2px;
+}
+
+.events .entry-link-ticket {
+    background-image: url(/img/ticket-inaktiv.png);
+    top: -3px;
+}
+
+.events .entry-link-ticket:active,
+.events .entry-link-ticket:focus,
+.events .entry-link-ticket:hover {
     background-image: url(/img/ticket-aktiv.png);
 }
 
@@ -900,17 +907,24 @@ input.search-input {
     padding-right: 36px;
 }
 
-.piece-details .ticket-link {
+.piece-details .entry-link {
     display: inline-block;
     margin-bottom: -3px;
-    background-image: url(/img/ticket-inaktiv-klein.png);
     width: 97px;
     height: 21px;
 }
 
-.piece-details .ticket-link:hover,
-.piece-details .ticket-link:active,
-.piece-details .ticket-link:focus {
+.piece-details .entry-link-free {
+    display: none;
+}
+
+.piece-details .entry-link-ticket {
+    background-image: url(/img/ticket-inaktiv-klein.png);
+}
+
+.piece-details .entry-link-ticket:hover,
+.piece-details .entry-link-ticket:active,
+.piece-details .entry-link-ticket:focus {
     background-image: url(/img/ticket-aktiv-klein.png);
 }
 
