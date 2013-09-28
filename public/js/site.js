@@ -77,7 +77,7 @@ function peopleMatch(db, string) {
                     people: match[2].split(/\s*,\s*/).map(function (name) {
                         var res = { name: name };
                         var person = db.Person.getByName(name);
-                        if (person && person.bio && (person.bio.de || person.bio.en) && person.images && person.images.length) {
+                        if (person) {
                             res.link = person.link;
                         }
                         return res;
