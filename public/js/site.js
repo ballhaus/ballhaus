@@ -154,6 +154,8 @@ function HomeController($scope, db, Page, schedule) {
                 return box;
             }).map(function (box) {
                 if (box.images && box.images.length > 0) {
+                    box = Object.create(box);
+                    box.images = box.images.slice();
                     box.images[0] = intoRect(dimensions, box.images[0]);
                 }
                 return box;

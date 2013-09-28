@@ -1064,11 +1064,22 @@ input.search-input {
 
 .home-sidebar a {
     display: block;
+    position: relative;
+}
+
+.home-sidebar .img-wrapper {
+    position: relative;
+    height: 96px;
+    width: 121px;
 }
 
 .home-sidebar img {
-    max-width: 121px;
-    max-height: 96px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
 }
 
 #right .home-sidebar h2 {
@@ -1092,11 +1103,13 @@ input.search-input {
 }
 
 #right .home-sidebar .h2-with-img {
-    float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 #right .home-sidebar .h2-with-img h2 {
     width: 90px;
-    height: 44px;
+    height: 42px;
     padding: 24px 7px;
 }
 
