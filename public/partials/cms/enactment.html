@@ -39,5 +39,7 @@
   </div>
   <div>
     <button class="btn btn-small btn-danger" ng-click="deleteEnactment()">Aufführung löschen</button>
+    <button class="btn btn-small btn-success" ng-disabled="!hasChanged()" ng-click="saveChanges()">Online stellen</button>
+    <button class="btn btn-small btn-danger" ng-disabled="!hasChanged()" ng-click="discardChanges()">Änderungen verwerfen</button>
   </div>
 </form>

@@ -97,11 +97,31 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
         console.log('$routeChangeStart');
         db.maybeSaveChanges();
         if (db.hasChanged()) {
-            confirm($dialog, "Änderungen online stellen?", "Sollen die Änderungen übernommen werden?", function () {
-                db.pushToServer();
-            });
+            confirm($dialog, "Änderungen online stellen?", "Sollen die Änderungen übernommen werden?",
+                    function () {
+                        db.pushToServer();
+                    },
+                    function () {
+                        db.restoreFromServer(function () {
+                            window.location = window.location;
+                        });
+                    });
         }
     });
+
+    $scope.saveChanges = function () {
+        db.pushToServer();
+    }
+
+    $scope.discardChanges = function () {
+        db.restoreFromServer(function () {
+            window.location = window.location;
+        });
+    }
+
+    $scope.hasChanged = function () {
+        return db.hasChanged();
+    }
 
     $scope.uploadFile = function(files) {
         var formData = new FormData();
@@ -146,6 +166,7 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                     $rootScope.state = 'loggedOut';
                     db.editMode = false;
                 }
+                db.maybeSaveChanges();
                 setTimeout(pollLoginStatus, 1000);
             });
     }
@@ -293,7 +314,7 @@ function EventsController($scope) {
 }
 EventsController.$inject = ['$scope'];
 
-function confirm($dialog, title, message, callback) {
+function confirm($dialog, title, message, okCallback, cancelCallback) {
     $dialog
         .messageBox(title, message,
                     [ { result: 'cancel', label: 'Nein' },
@@ -301,7 +322,9 @@ function confirm($dialog, title, message, callback) {
         .open()
         .then(function (result) {
             if (result == 'ok') {
-                callback()
+                okCallback && okCallback();
+            } else {
+                cancelCallback && cancelCallback();
             }
         });
 }
@@ -658,7 +681,7 @@ angular.module('cmsApp.directives', [])
             }
         };
     }])
-    .directive("imageUploader", [ '$compile', 'db', function($compile, db) {
+    .directive("imageUploader", [ 'db', function(db) {
         return {
             restrict: 'E',
             replace: true,
@@ -688,7 +711,7 @@ angular.module('cmsApp.directives', [])
             }
         }
     }])
-    .directive("pdfUploader", [ '$compile', 'db', function($compile, db) {
+    .directive("pdfUploader", [ 'db', function(db) {
         return {
             restrict: 'E',
             replace: true,
@@ -728,7 +751,7 @@ angular.module('cmsApp.directives', [])
             }
         }
     }])
-    .directive("thumbnailImg", [ '$compile', function ($compile) {
+    .directive("thumbnailImg", [ function () {
         return {
             restrict: 'E',
             replace: true,
@@ -903,7 +926,7 @@ angular.module('cmsApp.directives', [])
             }
         }
     })
-    .directive('participantEditor', ['$dialog', '$compile', 'db', function ($dialog, $compile, db) {
+    .directive('participantEditor', ['$dialog', 'db', function ($dialog, db) {
         return {
             restrict: 'E',
             scope: { model: '=model' },
@@ -1036,6 +1059,21 @@ angular.module('cmsApp.directives', [])
                 var page = db.get(db.Page, attributes.page);
                 $scope.link = page ? page.link : "";
                 $scope.title = page ? page.name.de : "unknown page " + attributes.link;
+            }
+        };
+    }])
+    .directive("previewLink", [ '$compile', function ($compile) {
+        return {
+            restrict: 'E',
+            replace: true,
+            link: function ($scope, element, attributes) {
+                $scope.object = $scope.$eval(attributes.object);
+                console.log('prefix:', attributes.prefix, 'object:', $scope.object);
+                $scope.previewLink = attributes.prefix + $scope.object.link;
+                $scope.realLink = 'http://ballhausnaunynstrasse.de' + $scope.previewLink;
+                var contents = angular.element('<a class="preview" target="bhn-preview" href="{{previewLink}}">{{realLink}}</a>');
+                element.replaceWith(contents);
+                $compile(contents)($scope);
             }
         };
     }]);

@@ -6,10 +6,9 @@
         <td><input class="input-xxlarge" ng-model="person.name"/></td>
       </tr>
       <tr>
-        <th>Link</th>
+        <th>Preview</th>
         <td colspan="2">
-          <input type="text" class="input-xlarge" ng-model="person.link"/><br/>
-          <span type="link-demo">http://ballhausnaunynstrasse.de/leute/{{person.link}}</span>
+          <preview-link prefix="/person/" object="person"><preview-link>
         </td>
       </tr>
       <tr>
@@ -35,6 +34,8 @@
     </tbody>
   </table>
   <div>
-    <button class="btn btn-small btn-danger" ng-click="deletePerson()">Personeneintrag löschen</button>
+    <button class="btn btn-small btn-danger" ng-click="deletePerson()">Eintrag löschen</button>
+    <button class="btn btn-small btn-success" ng-disabled="!hasChanged()" ng-click="saveChanges()">Online stellen</button>
+    <button class="btn btn-small btn-danger" ng-disabled="!hasChanged()" ng-click="discardChanges()">Änderungen verwerfen</button>
   </div>
 </form>

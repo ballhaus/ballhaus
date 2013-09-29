@@ -12,10 +12,9 @@
           <td colspan="2"><input class="input-xxlarge" ng-model="piece.name"/></td>
         </tr>
         <tr>
-          <th>Link</th>
+          <th>Preview</th>
           <td colspan="2">
-            <input type="text" class="input-xlarge" ng-model="piece.link"/><br/>
-            <span type="link-demo">http://ballhausnaunynstrasse.de/stueck/{{piece.link}}</span>
+            <preview-link prefix="/stueck/" object="piece"><preview-link>
           </td>
         </tr>
         <tr data-bind="category">
@@ -108,5 +107,7 @@
   </div>
   <div>
     <button class="btn btn-small btn-danger" ng-click="deletePiece()">Stück löschen</button>
+    <button class="btn btn-small btn-success" ng-disabled="!hasChanged()" ng-click="saveChanges()">Online stellen</button>
+    <button class="btn btn-small btn-danger" ng-disabled="!hasChanged()" ng-click="discardChanges()">Änderungen verwerfen</button>
   </div>
 </form>

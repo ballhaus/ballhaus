@@ -13,10 +13,9 @@
           <td><input type="text" class="input-xxlarge" ng-model="page.name.en"/></td>
         </tr>
         <tr>
-          <th>Link</th>
+          <th>Preview</th>
           <td colspan="2">
-            <input type="text" class="input-xlarge" ng-model="page.link"/><br/>
-            <span type="link-demo">http://ballhausnaunynstrasse.de/{{page.link}}</span>
+            <preview-link prefix="/" object="page"><preview-link>
           </td>
         </tr>
         <tr>
@@ -40,5 +39,7 @@
   </div>
   <div style="display: {{deleteDisplay()}}">
     <button class="btn btn-small btn-danger" ng-click="deletePage()">Seite löschen</button>
+    <button class="btn btn-small btn-success" ng-disabled="!hasChanged()" ng-click="saveChanges()">Online stellen</button>
+    <button class="btn btn-small btn-danger" ng-disabled="!hasChanged()" ng-click="discardChanges()">Änderungen verwerfen</button>
   </div>
 </form>

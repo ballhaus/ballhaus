@@ -360,5 +360,9 @@ app.factory('db',
 
                  db.load();
 
+                 db.restoreFromServer = function (handler) {
+                     db.load(true, handler);
+                 }
+
                  return db;
              });
