@@ -317,8 +317,8 @@ EventsController.$inject = ['$scope'];
 function confirm($dialog, title, message, okCallback, cancelCallback) {
     $dialog
         .messageBox(title, message,
-                    [ { result: 'cancel', label: 'Nein' },
-                      { result: 'ok', label: 'Ja', cssClass: 'btn-danger' } ])
+                    [ { result: 'cancel', label: 'Nein', cssClass: 'btn-danger' },
+                      { result: 'ok', label: 'Ja' } ])
         .open()
         .then(function (result) {
             if (result == 'ok') {
