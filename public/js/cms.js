@@ -93,6 +93,17 @@ app.value('ui.config', {
 });
 
 function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
+
+    $scope.discardChanges = function () {
+        $dialog
+            .messageBox('Daten werden geladen', 'Die Daten werden vom Server neu geladen',
+                        [])
+            .open();
+        db.restoreFromServer(function () {
+            window.location = window.location;
+        });
+    }
+
     $scope.$on('$routeChangeStart', function (e) {
         console.log('$routeChangeStart');
         db.maybeSaveChanges();
@@ -101,22 +112,12 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                     function () {
                         db.pushToServer();
                     },
-                    function () {
-                        db.restoreFromServer(function () {
-                            window.location = window.location;
-                        });
-                    });
+                    $scope.discardChanges);
         }
     });
 
     $scope.saveChanges = function () {
         db.pushToServer();
-    }
-
-    $scope.discardChanges = function () {
-        db.restoreFromServer(function () {
-            window.location = window.location;
-        });
     }
 
     $scope.hasChanged = function () {
