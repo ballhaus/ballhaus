@@ -37,8 +37,8 @@
     </table>
     <br/>
   </div>
-  <div style="display: {{deleteDisplay()}}">
-    <button class="btn btn-small btn-danger" ng-click="deletePage()">Seite löschen</button>
+  <div>
+    <button ng-disabled="page.linkedFromMenu" class="btn btn-small btn-danger" ng-click="deletePage()">Seite löschen</button>
     <button class="btn btn-small btn-success" ng-disabled="!hasChanged()" ng-click="saveChanges()">Online stellen</button>
     <button class="btn btn-small btn-danger" ng-disabled="!hasChanged()" ng-click="discardChanges()">Änderungen verwerfen</button>
   </div>

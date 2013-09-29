@@ -429,10 +429,6 @@ function EditPageController($scope, $dialog, $routeParams, db) {
     $scope.page = db.get(db.Page, pageName) || new db.Page({ name: pageName, link: pageName });
     console.log('page', $scope.page);
 
-    $scope.deleteDisplay = function () {
-        return $scope.page.linkedFromMenu ? 'none' : 'block';
-    }
-
     $scope.deletePage = function () {
         confirm($dialog, 'Seite löschen', 'Die Seite wirklich löschen?',
                 function () {
