@@ -216,3 +216,7 @@ image-button {
 .fancy-editor {
     width: 97.8%;
 }
+
+.modal h1 {
+    font-size: 20px;
+}
