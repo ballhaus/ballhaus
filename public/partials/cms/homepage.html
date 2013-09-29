@@ -1,51 +1,54 @@
 <h2>Homepage bearbeiten</h2>
-<div ng-model="homepage.layout" class="homepage-layout" bs-tabs>
-  <div data-tab="Zweispaltig">
-    <table>
-      <tr>
-        <td>Nächste Aufführung</td>
-        <td><select ng-model="homepage.page1" ng-options="page as page.name.de for page in pages"></select></td>
-      </tr>
-      <tr>
-        <td><select ng-model="homepage.page2" ng-options="page as page.name.de for page in pages"></select></td>
-        <td><select ng-model="homepage.page3" ng-options="page as page.name.de for page in pages"></select></td>
-      </tr>
-      <tr>
-        <td><select ng-model="homepage.page4" ng-options="page as page.name.de for page in pages"></select></td>
-        <td><select ng-model="homepage.page5" ng-options="page as page.name.de for page in pages"></select></td>
-      </tr>
-    </table>
-  </div>
-  <div data-tab="Ein- und Zweispaltig">
-    <table>
-      <tr>
-        <td colspan="2"><select ng-model="homepage.page1" ng-options="page as page.name.de for page in pages"></select></td>
-      </tr>
-      <tr>
-        <td>Nächste Aufführung</td>
-        <td><select ng-model="homepage.page2" ng-options="page as page.name.de for page in pages"></select></td>
-      </tr>
-      <tr>
-        <td><select ng-model="homepage.page3" ng-options="page as page.name.de for page in pages"></select></td>
-        <td><select ng-model="homepage.page4" ng-options="page as page.name.de for page in pages"></select></td>
-      </tr>
-    </table>
-  </div>
-  <div data-tab="Theaterferien">
-    <table>
-      <tr>
-        <td><select ng-model="homepage.page1" ng-options="page as page.name.de for page in pages"></select></td>
-        <td><select ng-model="homepage.page2" ng-options="page as page.name.de for page in pages"></select></td>
-      </tr>
-      <tr>
-        <td><select ng-model="homepage.page3" ng-options="page as page.name.de for page in pages"></select></td>
-        <td><select ng-model="homepage.page4" ng-options="page as page.name.de for page in pages"></select></td>
-      </tr>
-      <tr>
-        <td><select ng-model="homepage.page5" ng-options="page as page.name.de for page in pages"></select></td>
-        <td><select ng-model="homepage.page6" ng-options="page as page.name.de for page in pages"></select></td>
-      </tr>
-    </table>
+<div>
+  <h3>Layout auswählen</h3>
+  <div ng-model="homepage.layout" class="homepage-layout" bs-tabs>
+    <div data-tab="Zweispaltig">
+      <table>
+        <tr>
+          <td>Nächste Aufführung</td>
+          <td><select ng-model="homepage.page1" ng-options="page as page.name.de for page in pages"></select></td>
+        </tr>
+        <tr>
+          <td><select ng-model="homepage.page2" ng-options="page as page.name.de for page in pages"></select></td>
+          <td><select ng-model="homepage.page3" ng-options="page as page.name.de for page in pages"></select></td>
+        </tr>
+        <tr>
+          <td><select ng-model="homepage.page4" ng-options="page as page.name.de for page in pages"></select></td>
+          <td><select ng-model="homepage.page5" ng-options="page as page.name.de for page in pages"></select></td>
+        </tr>
+      </table>
+    </div>
+    <div data-tab="Ein- und Zweispaltig">
+      <table>
+        <tr>
+          <td colspan="2"><select ng-model="homepage.page1" ng-options="page as page.name.de for page in pages"></select></td>
+        </tr>
+        <tr>
+          <td>Nächste Aufführung</td>
+          <td><select ng-model="homepage.page2" ng-options="page as page.name.de for page in pages"></select></td>
+        </tr>
+        <tr>
+          <td><select ng-model="homepage.page3" ng-options="page as page.name.de for page in pages"></select></td>
+          <td><select ng-model="homepage.page4" ng-options="page as page.name.de for page in pages"></select></td>
+        </tr>
+      </table>
+    </div>
+    <div data-tab="Theaterferien">
+      <table>
+        <tr>
+          <td><select ng-model="homepage.page1" ng-options="page as page.name.de for page in pages"></select></td>
+          <td><select ng-model="homepage.page2" ng-options="page as page.name.de for page in pages"></select></td>
+        </tr>
+        <tr>
+          <td><select ng-model="homepage.page3" ng-options="page as page.name.de for page in pages"></select></td>
+          <td><select ng-model="homepage.page4" ng-options="page as page.name.de for page in pages"></select></td>
+        </tr>
+        <tr>
+          <td><select ng-model="homepage.page5" ng-options="page as page.name.de for page in pages"></select></td>
+          <td><select ng-model="homepage.page6" ng-options="page as page.name.de for page in pages"></select></td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>
 <div>
