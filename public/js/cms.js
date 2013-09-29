@@ -1073,7 +1073,7 @@ angular.module('cmsApp.directives', [])
             link: function ($scope, element, attributes) {
                 if (attributes.object) {
                     $scope.object = $scope.$eval(attributes.object);
-                    $scope.previewLink = attributes.prefix + $scope.object.link;
+                    $scope.previewLink = attributes.prefix + ($scope.object.link || $scope.object.id);
                 } else {
                     $scope.previewLink = attributes.prefix;
                 }
