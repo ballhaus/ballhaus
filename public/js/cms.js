@@ -52,7 +52,7 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
       [ 'pieces' ],
       [ 'piece/:pieceId', EditPieceController ],
       [ 'enactment/:enactmentId', EditEnactmentController ],
-      [ 'people' ],
+      [ 'people', PeopleController ],
       [ 'homepage', EditHomepageController ],
       [ 'pages' ],
       [ 'page/:pageName', EditPageController ],
@@ -374,6 +374,13 @@ function EditEnactmentController($scope, $dialog, $routeParams, db) {
     }
 }
 EditPieceController.$inject = ['$scope', '$dialog', '$routeParams', 'db'];
+
+function PeopleController($scope) {
+    $scope.matchingPerson = function (person) {
+        return !$scope.query || (person.name.toLowerCase().indexOf($scope.query) != -1);
+    }
+}
+PeopleController.$inject = ['$scope'];
 
 function EditPersonController($scope, $dialog, $routeParams, db) {
     console.log('EditPersonController', $routeParams.personId);
