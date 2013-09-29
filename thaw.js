@@ -11,6 +11,7 @@ function Person (options) {
     }
 }
 function Piece () {}
+function ArchivedPiece () {}
 function Enactment () {}
 function Page () {}
 function Image (options) {
@@ -84,7 +85,7 @@ function Video() {}
 
 function thaw(data)
 {
-    return icebox.thaw(data, [ Event, Person, Piece, Image, Enactment, Video, Page, Homepage ]);
+    return icebox.thaw(data, [ Event, Person, Piece, ArchivedPiece, Image, Enactment, Video, Page, Homepage ]);
 }
 
 module.exports = thaw;

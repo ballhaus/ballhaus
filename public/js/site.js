@@ -403,7 +403,7 @@ function EventPageController($scope, db, $routeParams, Page, $compile) {
 function EnactmentPageController($scope, db, $routeParams, Page, $compile) {
     db.promise.then(function () {
         var enactment = db.get(db.Enactment, $routeParams.enactmentId);
-        $scope.enactment = angular.extend({}, enactment.__proto__, enactment.piece, enactment);
+        $scope.enactment = angular.extend({}, enactment.__proto__, enactment.piece, enactment.archivedPiece || {}, enactment);
         Page.setTitle($scope.enactment.name);
         Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
     });

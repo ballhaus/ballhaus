@@ -199,6 +199,14 @@ app.factory('db',
                  inherits(db.Piece, db.Extent);
 
                  // //////////////////////////////////////////////////////////////////////
+                 // ArchivedPiece
+
+                 db.ArchivedPiece = function ArchivedPiece (attributes) {
+                     db.Extent.call(this, attributes);
+                 }
+                 inherits(db.ArchivedPiece, db.Extent);
+
+                 // //////////////////////////////////////////////////////////////////////
                  // Page
 
                  db.Page = function Page (attributes) {
@@ -293,19 +301,50 @@ app.factory('db',
                      }
                  }
 
+                 function archiveEnactments() {
+                     // Archivierungslogik: Beim Laden der Datenbank
+                     // werden alle vergangenen Aufführungen
+                     // archiviert, indem die Beschreibung und die
+                     // Besetzungsliste in ein ArchivedPiece-Objekt
+                     // überführt und an das Enactment angehängt wird.
+                     // Die Archivierung wird nur persistent, wenn die
+                     // Datenbank abgespeichert wird.
+                     var now = moment();
+                     var archivedPieces = {};
+                     db
+                         .enactments()
+                         .filter(function (enactment) {
+                             return !enactment.isCurrent() && !enactment.archivedPiece;
+                         })
+                         .forEach(function (enactment) {
+                             console.log('archive', enactment);
+                             var piece = enactment.piece;
+                             if (!archivedPieces[piece.id]) {
+                                 archivedPieces[piece.id] = new db.ArchivedPiece({ participants: piece.participants,
+                                                                                   description: { de: piece.description.de, en: piece.description.en }});
+                             }
+                             enactment.archivedPiece = archivedPieces[piece.id];
+                         });
+                 }
+
                  function initializeObjects(data) {
                      db.objects = [];
                      db.Extent.lastId = 0;
                      db.Extent.extent = {};
-                     thaw(data, [ db.Event, db.Person, db.Piece, db.Image, db.Enactment, db.Page, db.Video, db.Homepage ]);
+                     thaw(data, [ db.Event, db.Person, db.Piece, db.ArchivedPiece, db.Image, db.Enactment, db.Page, db.Video, db.Homepage ]);
 
                      db.events = function () {
                          return db.findObjects(db.Event).concat(db.findObjects(db.Enactment));
                      }
+                     db.enactments = db.findObjects.bind(this, db.Enactment);
                      db.people = db.findObjects.bind(this, db.Person);
                      db.pieces = db.findObjects.bind(this, db.Piece);
                      db.images = db.findObjects.bind(this, db.Image);
                      db.pages = db.findObjects.bind(this, db.Page);
+
+                     archiveEnactments();
+
+                     // Schema migration for Page title translation
                      db.pages().forEach(function (page) {
                          if (typeof page.name == 'string') {
                              page.name = { de: page.name };
