@@ -1068,9 +1068,12 @@ angular.module('cmsApp.directives', [])
             restrict: 'E',
             replace: true,
             link: function ($scope, element, attributes) {
-                $scope.object = $scope.$eval(attributes.object);
-                console.log('prefix:', attributes.prefix, 'object:', $scope.object);
-                $scope.previewLink = attributes.prefix + $scope.object.link;
+                if (attributes.object) {
+                    $scope.object = $scope.$eval(attributes.object);
+                    $scope.previewLink = attributes.prefix + $scope.object.link;
+                } else {
+                    $scope.previewLink = attributes.prefix;
+                }
                 $scope.realLink = 'http://ballhausnaunynstrasse.de' + $scope.previewLink;
                 var contents = angular.element('<a class="preview" target="bhn-preview" href="{{previewLink}}">{{realLink}}</a>');
                 element.replaceWith(contents);

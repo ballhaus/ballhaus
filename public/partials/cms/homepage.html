@@ -1,4 +1,5 @@
 <h2>Homepage bearbeiten</h2>
+<p>Preview: <preview-link prefix="/"></preview-link></p>
 <div>
   <h3>Layout auswählen</h3>
   <div ng-model="homepage.layout" class="homepage-layout" bs-tabs>
@@ -56,4 +57,8 @@
   <select ng-model="homepage.marginal1" ng-options="page as page.name.de for page in pages"></select>
   <br/>
   <select ng-model="homepage.marginal2" ng-options="page as page.name.de for page in pages"></select>
+</div>
+<div>
+  <button class="btn btn-small btn-success" ng-disabled="!hasChanged()" ng-click="saveChanges()">Online stellen</button>
+  <button class="btn btn-small btn-danger" ng-disabled="!hasChanged()" ng-click="discardChanges()">Änderungen verwerfen</button>
 </div>
