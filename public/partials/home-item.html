@@ -9,5 +9,6 @@
     <div ng-bind-html-unsafe="item.contents | translate | onlyTeaser"></div>
     <p>{{item.date | toDateWithTime}}</p>
     <prices for="item" />
+    <div ng-bind-html-unsafe="item.description | translate | onlyTeaser"></div>
   </a>
 </div>
