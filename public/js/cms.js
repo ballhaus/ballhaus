@@ -426,6 +426,7 @@ EditDatabaseController.$inject = ['$scope', '$dialog', 'db'];
 
 function EditHomepageController($scope, db) {
     $scope.pages = db.pages().filter(function (page) { return !page.linkedFromMenu; });
+    $scope.pages.unshift(undefined);
     $scope.pieces = db.pieces();
     $scope.homepage = db.homepage;
 }
