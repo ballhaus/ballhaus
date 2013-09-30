@@ -165,7 +165,9 @@ function HomeController($scope, db, Page, schedule) {
         }
 
         Page.setTitle('');
-        Page.marginals(cleanColumn({width: 121, height: 96}, [ homepage.marginal1, homepage.marginal2 ]));
+        Page.marginals(cleanColumn({width: 121, height: 96}, [
+            homepage.marginal1, homepage.marginal2, homepage.marginal3
+        ]));
     });
 }
 
