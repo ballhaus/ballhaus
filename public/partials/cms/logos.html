@@ -1,0 +1,25 @@
+<div ng-controller="LogosController">
+  <logo-uploader model="newLogo"></logo-uploader>
+  <table class='table'>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Breite</th>
+        <th>Höhe</th>
+        <th>URL</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="logo in logos | orderBy:'filename'">
+        <td><img ng-src="{{logo.url}}" width="{{logo.width}}" height="{{logo.height}}"/></td>
+        <td>{{logo.filename}}</td>
+        <td>{{logo.width}}</td>
+        <td>{{logo.height}}</td>
+        <td>{{logo.url}}</td>
+        <td><button type="button" class="btn btn-danger" ng-click="deleteLogo(logo)">Löschen</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -149,6 +149,63 @@ app.post('/image', function (req, res) {
          });
 });
 
+// Logo Upload/Download
+app.get('/logo/:name', function (req, res) {
+    var name = req.params.name;
+    var filename = path.resolve("logo/" + name);
+    fs.stat(filename, function (err) {
+        if (err) {
+            res.send(404);
+        } else {
+            res.sendfile(filename);
+        }
+    });
+});
+
+app.post('/logo', function (req, res) {
+    var name = req.files.qqfile.name;
+    fs.renameSync(req.files.qqfile.path, 'logo/' + name);
+    res.json({
+        success: true,
+        logo: name
+    });
+});
+
+app.delete('/logo/:name', function (req, res) {
+    var name = req.params.name;
+    fs.unlink('logo/' + name);
+    res.json({
+        success: true,
+        logo: name
+    });
+});
+
+app.get('/logos', function (req, res) {
+    Step(
+        function () { fs.readdir('logo/', this) },
+        function (err, files) {
+            if (err) throw err;
+            var group = this.group();
+            files.forEach(function (file) {
+                var handler = group();
+                gm('logo/' + file).size(function (err, image) {
+                    if (err) {
+                        handler(null, null);
+                    } else {
+                        image.filename = file;
+                        handler(null, image);
+                    }
+                });
+            });
+        },
+        function (err, images) {
+            res.json({
+                success: true,
+                logos: images.filter(function (image) { return image; })
+            });
+        });
+});
+
 // PDF Upload/Download
 app.get('/pdf/:name', function (req, res) {
     var name = req.params.name;
@@ -170,7 +227,6 @@ app.post('/pdf', function (req, res) {
         pdf: name
     });
 });
-
 
 var repo = gift('.');
 

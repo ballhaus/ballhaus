@@ -62,6 +62,7 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
       [ 'tickets' ],
       [ 'flickr-sets' ],
       [ 'video/:videoId', VideoController ],
+      [ 'logos' ],
     ].forEach(function (pageDef) {
         var def = { name: pageDef[0], templateUrl: '/partials/cms/' + pageDef[0].replace(/\/.*$/, "") + '.html' };
         if (pageDef[1]) {
@@ -480,6 +481,28 @@ function NewNamedObjectController($scope, dialog, defaults) {
 }
 NewNamedObjectController.$inject  = ['$scope', 'dialog', 'defaults'];
 
+function LogosController($scope, $dialog, $http) {
+
+    $scope.deleteLogo = function (logo) {
+        confirm($dialog, 'Logo löschen', 'Logo ' + logo.filename + ' wirklich löschen?',
+                function () {
+                    $http.delete(logo.url)
+                        .success(function () {
+                            window.location = window.location;
+                        });
+                });
+    }
+
+    $http.get('/logos')
+        .success(function (result) {
+            $scope.logos = result.logos.map(function (logo) {
+                logo.url = '/logo/' + logo.filename;
+                return logo;
+            });
+        });
+}
+LogosController.$inject = ['$scope', '$dialog', '$http'];
+
 function ConfigurationController($scope) {
     $scope.editor = getConfig('editor');
     $scope.changeEditor = function (editor) {
@@ -749,6 +772,30 @@ angular.module('cmsApp.directives', [])
                                 $scope.model = response.pdf;
                                 $scope.$apply();
                             }
+                        }
+                    }
+                });
+            }
+        }
+    }])
+    .directive("logoUploader", [ 'db', function(db) {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/partials/cms/logo-uploader.html',
+            link: function($scope, element, attributes) {
+                new qq.FineUploader({
+                    element: $(element).find('#uploader')[0],
+                    request: {
+                        endpoint: '/logo'
+                    },
+                    validation: {
+                        allowedExtensions: ['png', 'gif', 'jpg']
+                    },
+                    callbacks: { 
+                        onComplete: function(id, fileName, response) {
+                            console.log('upload complete', id, 'fileName', fileName, 'response', JSON.stringify(response));
+                            window.location = window.location;
                         }
                     }
                 });
