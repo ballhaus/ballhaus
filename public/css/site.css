@@ -1047,6 +1047,12 @@ input.search-input {
     border-top: solid black 2px;
 }
 
+.column.with-head :first-child.home-next-piece {
+    padding-top: 0;
+    margin-top: 24px;
+    border-top: solid black 2px;
+}
+
 .home-next-piece-img-wrapper {
     min-height: 26px;
 }
