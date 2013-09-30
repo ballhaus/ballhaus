@@ -1049,6 +1049,10 @@ input.search-input {
     border-top: solid black 2px;
 }
 
+.home-next-piece-img-wrapper {
+    min-height: 26px;
+}
+
 .home-next-piece-date {
     position: absolute;
     color: #FFF;
