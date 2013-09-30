@@ -149,9 +149,7 @@ h1 {
     line-height: 1.2em;
     font-size: 18px;
     text-transform: uppercase;
-    letter-spacing: 1px;
     font-weight: normal;
-    font-family: Cillop-Bold, Helvetica, Arial, sans-serif;
     margin: 0;
 }
 
@@ -1069,6 +1067,7 @@ input.search-input {
 .home-sidebar a {
     display: block;
     position: relative;
+    color: black;
 }
 
 .home-sidebar .img-wrapper {
@@ -1086,24 +1085,28 @@ input.search-input {
     margin: auto;
 }
 
-#right .home-sidebar h2 {
-    line-height: 22px;
-    border: #ff0031 3px solid;
-    color: #ff0031;
-    font-size: 16px;
-    text-align: center;
-    text-transform: uppercase;
-    padding: 24px 20px;
-}
-
-#right .home-sidebar .h2-wrapper:first-child {
+#right .home-sidebar .sidebar-box-wrapper:first-child {
     background-image: url(/img/marg-reiter.png);
     background-repeat: no-repeat;
     padding-top: 13px;
 }
 
-#right .home-sidebar .h2-wrapper:first-child h2 {
+#right .home-sidebar .sidebar-box-wrapper:first-child .sidebar-box {
     border-top: 0;
+    padding-top: 23px;
+}
+
+#right .home-sidebar .sidebar-box {
+    border: #ff0031 3px solid;
+    color: #ff0031;
+    text-align: center;
+    padding: 20px;
+}
+
+#right .home-sidebar h2 {
+    line-height: 22px;
+    font-size: 16px;
+    text-transform: uppercase;
 }
 
 #right .home-sidebar .h2-with-img {
@@ -1115,6 +1118,10 @@ input.search-input {
     width: 90px;
     height: 42px;
     padding: 24px 7px;
+}
+
+#right .home-sidebar h2 + div {
+    padding-top: 1em;
 }
 
 /* Artist page */

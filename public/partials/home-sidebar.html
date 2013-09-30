@@ -5,10 +5,14 @@
         <div class="img-wrapper">
           <backend-image image="item.images[0]"></backend-image>
         </div>
-        <div class="h2-wrapper h2-with-img"><h2>{{item.name | translate}}</h2></div>
+        <h2 class="sidebar-box h2-with-img">{{item.name | translate}}</h2>
       </div>
-      <div ng-hide="item.images.length">
-        <div class="h2-wrapper"><h2>{{item.name | translate}}</h2></div>
+      <div ng-hide="item.images.length || item.contents">
+        <div class="sidebar-box-wrapper"><h2 class="sidebar-box">{{item.name | translate}}</h2></div>
+      </div>
+      <div ng-hide="item.images.length || !item.contents">
+        <h2>{{item.name | translate}}</h2>
+        <div ng-bind-html-unsafe="item.contents | translate | onlyTeaser"></div>
       </div>
     </a>
   </div>
