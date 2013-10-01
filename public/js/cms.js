@@ -504,7 +504,9 @@ function LogosController($scope, $dialog, $http) {
                 function () {
                     $http.delete(logo.url)
                         .success(function () {
-                            window.location = window.location;
+                            $scope.logos = $scope.logos.filter(function (otherLogo) {
+                                return otherLogo != logo;
+                            });
                         });
                 });
     }
