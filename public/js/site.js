@@ -48,10 +48,12 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
     };
 })
 .filter('noTeaser', function () {
-    return function (input) {
-        return input && input.replace('\u06DD', '');
-    };
+    return removeTeaserMarker;
 });
+
+function removeTeaserMarker(input) {
+    return input && input.replace('\u06DD', '');
+};
 
 var language = 'de';
 
@@ -163,7 +165,9 @@ function HomeController($scope, db, Page, schedule) {
         }
 
         Page.setTitle('');
-        Page.marginals(cleanColumn({width: 121, height: 96}, [ homepage.marginal1, homepage.marginal2 ]));
+        Page.marginals(cleanColumn({width: 121, height: 96}, [
+            homepage.marginal1, homepage.marginal2, homepage.marginal3
+        ]));
     });
 }
 
@@ -477,7 +481,7 @@ app.service('search', function (db, $q) {
           var objs = db.findObjects(c).map(function (obj) {
               obj = Object.create(obj);
               fields.forEach(function (f) {
-                  obj[f] = translate(obj[f]);
+                  obj[f] = removeTeaserMarker(translate(obj[f]));
               });
               return obj;
           });

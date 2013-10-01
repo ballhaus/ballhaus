@@ -9,5 +9,5 @@
     <span class="item-by" ng-bind-html-unsafe="piece.by | translate"></span>
     <span ng-transclude/>
   </div>
-  <p ng-bind-html-unsafe="piece.description | translate"></p>
+  <p ng-bind-html-unsafe="piece.description | translate | noTeaser"></p>
 </div>
