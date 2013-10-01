@@ -164,13 +164,6 @@ h1 {
     border-top: 2px solid black;
 }
 
-.sidebar-link-postmigranten {
-    display: block;
-    background-image: url(/img/postmig.png);
-    height: 83px;
-    width: 239px;
-}
-
 .sidebar-link-akademie {
     display: block;
     background-image: url(/img/ada_logo.png);
