@@ -152,8 +152,17 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
 
     function pollLoginStatus() {
         $http
-            .get('/login-status')
+            .get('/login-status', { params: { url: window.location.pathname } })
             .success(function (loginStatus) {
+                if (db.editMode && (loginStatus.uuid != localStorage.lockId)) {
+                    $dialog
+                        .messageBox("Sitzung beendet", "Das System hat Deine Sitzung beendet",
+                                    [ { result: 'ok', label: 'OK', cssClass: 'btn-danger' } ])
+                        .open()
+                        .then(function (result) {
+                            window.location = "/cms";
+                        });
+                }
                 if (loginStatus.uuid) {
                     if (loginStatus.uuid == localStorage.lockId) {
                         db.editMode = true;
@@ -167,9 +176,15 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                 } else {
                     $rootScope.state = 'loggedOut';
                     db.editMode = false;
+                    if (window.location.pathname != '/cms/home') {
+                        window.location = '/cms/home';
+                    }
                 }
                 db.maybeSaveChanges();
                 setTimeout(pollLoginStatus, 1000);
+            })
+            .error(function () {
+                setTimeout(pollLoginStatus, 10);
             });
     }
     
@@ -731,7 +746,7 @@ angular.module('cmsApp.directives', [])
                                     $scope.model = [];
                                 }
                                 $scope.model.push(new db.Image(response.image));
-                                $scope.$apply();
+                                $scope.$$phase || $scope.$apply();
                             }
                         }
                     }
@@ -771,7 +786,7 @@ angular.module('cmsApp.directives', [])
                             console.log('upload complete', id, 'fileName', fileName, 'response', JSON.stringify(response));
                             if (response.success) {
                                 $scope.model = response.pdf;
-                                $scope.$apply();
+                                $scope.$$phase || $scope.$apply();
                             }
                         }
                     }
@@ -866,7 +881,7 @@ angular.module('cmsApp.directives', [])
                     var end = ui.item.index();
                     
                     $scope.images.splice(end, 0, $scope.images.splice(start, 1)[0]);
-                    $scope.$apply();
+                    $scope.$$phase || $scope.$apply();
                 }
 
                 $(element).sortable({
@@ -973,7 +988,7 @@ angular.module('cmsApp.directives', [])
                 }
 
                 element.on('blur keyup change', function () {
-                    scope.$apply(parse);
+                    $scope.$$phase || scope.$apply(parse);
                 });
             }
         }

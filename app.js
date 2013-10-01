@@ -24,6 +24,8 @@ var dom = require('xmldom').DOMParser;
 var config = require('./config.json');
 var sha1 = require('./public/lib/sha1.js');
 
+var sessionTimeout = 15 * 60 * 1000;
+
 var flickr = new Flickr(config.flickr.apiKey, '');
 
 var app = express();
@@ -364,8 +366,28 @@ function loadUser(name) {
     }
 }
 
+var timeoutId;
+
+function sessionTimedOut() {
+    console.log(loginStatus.name, 'session time out');
+    loginStatus = {};
+}
+
+function touchSession() {
+    if (timeoutId) {
+        clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(sessionTimedOut, sessionTimeout);
+}
+
 app.get('/login-status',
         function (req, res) {
+            if (req.session
+                && req.session.loggedIn
+                && (req.session.lastUrl != req.query.url)) {
+                req.session.lastUrl = req.query.url;
+                touchSession();
+            }
             res.json(loginStatus);
         });
 
@@ -401,6 +423,7 @@ app.post('/login',
                                  uuid: uuid.v1() };
                  req.session.loggedIn = true;
                  res.json(loginStatus);
+                 console.log(loginStatus.name, 'logged in');
              } else {
                  res.send(401, 'Invalid login');
              }
@@ -411,6 +434,7 @@ app.post('/logout',
              if (!req.session.loggedIn && !req.query.force) {
                  res.send(400, 'Nicht angemeldet');
              } else {
+                 console.log(loginStatus.name, 'logged out');
                  loginStatus = {};
                  res.json({});
              }
