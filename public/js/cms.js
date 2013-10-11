@@ -990,7 +990,7 @@ angular.module('cmsApp.directives', [])
                 }
 
                 element.on('blur keyup change', function () {
-                    $scope.$$phase || scope.$apply(parse);
+                    scope.$$phase || scope.$apply(parse);
                 });
             }
         }
