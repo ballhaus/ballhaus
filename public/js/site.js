@@ -121,9 +121,9 @@ function HomeController($scope, db, Page, schedule) {
                 firstBox.howSoon = firstBox.date.isSame(moment(), 'day') ? 'today' : (
                     firstBox.date.isSame(moment().add('d', 1), 'day') ? 'tomorrow' : 'future');
                 firstBox.dateIntro = {
-                  today: 'heute,',
-                  tomorrow: 'morgen,',
-                  future: 'am'
+                    today: 'heute,',
+                    tomorrow: 'morgen,',
+                    future: 'am'
                 }[firstBox.howSoon];
                 setColumns();
             });
