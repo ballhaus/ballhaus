@@ -43,14 +43,15 @@ app.configure(function() {
     app.use(express.cookieParser(config.cookieSecret));
     app.use(express.session({cookie: { path: '/', httpOnly: true, expires: false }}));
     app.use(function (req, res, next) {
-        if (req.accepted && req.accepted.length && req.accepted[0].value == 'text/html' && req.method == 'GET') {
-                if (req.url.match('^/cms')) {
+        var browserPageRequest = req.accepted && req.accepted.length && req.accepted[0].value == 'text/html';
+        if (req.method == 'GET') {
+                if (browserPageRequest && req.url.match('^/cms')) {
                     console.log('REDIRECTING TO CMS');
                     res.render('cms');
                 } else if (req.url.match('^/browser-error')) {
                     console.log('BROWSER ERROR');
                     res.render('browser-error');
-                } else if (!req.url.match('^/pdf/') && !req.url.match('^/index.php')) {
+                } else if (browserPageRequest && !req.url.match('^/pdf/') && !req.url.match('^/index.php')) {
                     console.log('REDIRECTING TO DYNAMIC SITE');
                     res.render('site');
                 } else {

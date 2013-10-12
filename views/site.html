@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" ng-app="siteApp" ng-controller="PageController">
   <head>
-    <!--[if lt IE 8]><script type="text/javascript">window.location = '/browser-error';<![endif]-->
+    <script src="/js/check-old-browser.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title ng-cloak>Ballhaus Naunynstraße - {{Page.title() | translate}}</title>
@@ -82,7 +82,6 @@
     <div id="footer">
     </div>
 
-    <script src="/js/check-old-browser.js"></script>
     <script src="/lib/jquery-1.9.1.min.js"></script>
     <script src="/lib/angular/angular.js"></script>
     <script src="/lib/angular/angular-resource.js"></script>
