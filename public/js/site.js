@@ -528,10 +528,6 @@ function SearchController($scope, $routeParams, search, db) {
 function PageController($scope, $timeout, $location, Page, db) {
     // We inject the db in order to trigger db loading
 
-    if (!Object.create) {
-        window.location = '/browser-error';
-    }
-
     $scope.Page = Page;
 
     $scope.scrollPos = {}; // scroll position of each view
@@ -787,7 +783,7 @@ app
             scope: { 'for': '=' },
             link: function ($scope, element, attributes) {
                 db.promise.then(function () {
-                    $scope.participants = peopleMatch(db, $scope.for.participants);
+                    $scope.participants = peopleMatch(db, $scope['for'].participants);
                 });
             }
         };
