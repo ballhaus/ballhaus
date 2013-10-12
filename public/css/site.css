@@ -13,9 +13,10 @@ html, body {
 
 #container {
   min-height: 100%;
-  height: auto !important /*min-height hack*/
-  height: 100%;           /*min-height hack*/
   margin-bottom: -0em;    /*Negates #push on longer pages*/
+  width: 1024px;
+  background-color: #fff;
+  margin: auto;
 }
 
 #footer, #push {
@@ -101,12 +102,6 @@ h1 {
     font-family: Verdana, Geneva, sans-serif;
     font-weight: normal;
     text-transform: uppercase;
-}
-
-#container {
-    margin: auto;
-    width: 1024px;
-    background-color: #fff;
 }
 
 #main {
