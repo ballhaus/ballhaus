@@ -397,7 +397,9 @@ app.factory('db',
                      }
                  }
 
-                 db.load();
+                 $http.get('/login-status').success(function (loginStatus) {
+                     db.load((loginStatus.uuid != localStorage.lockId));
+                 });
 
                  db.restoreFromServer = function (handler) {
                      db.load(true, handler);
