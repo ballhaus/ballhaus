@@ -368,7 +368,7 @@ app.factory('db',
                                                       { name: 'project in/out' },
                                                       { name: 'Festival Black Lux' }
                                                     ] };
-                     localStorage['data'] = serverState = JSON.stringify(freeze(db.objects));
+                     serverState = JSON.stringify(freeze(db.objects));
                      db.loaded = true;
                      if (!$rootScope.$$phase) {
                          $rootScope.$apply(function () {
