@@ -77,6 +77,7 @@ function peopleMatch(db, string) {
         // console.log(match[1], match[2].split(/\s*,\s*/));
         data.push({ role: match[1],
                     people: match[2].split(/\s*,\s*/).map(function (name) {
+                        name = name.replace(/^ *(.*?) *$/, "$1");
                         var res = { name: name };
                         var person = db.Person.getByName(name);
                         if (person) {

@@ -1010,6 +1010,7 @@ angular.module('cmsApp.directives', [])
                     while ((match = re.exec(string)) !== null) {
                         data.push({ role: match[1],
                                     people: match[2].split(/\s*,\s*/).map(function (name) {
+                                        name = name.replace(/^ *(.*?) *$/, "$1");
                                         var person = db.Person.getByName(name);
                                         return { name: name,
                                                  link: (person ? person.link : utils.urlify(name)) };
