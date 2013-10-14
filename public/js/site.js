@@ -422,7 +422,9 @@ app.service('artists', function (db, $q) {
         var people = db.people().filter(function (person) {
             return person.bio && (person.bio.de || person.bio.en) && person.images && person.images.length;
         }).map(function (person) {
-            person.orderName = person.name.substr(person.name.lastIndexOf(' ') + 1);
+            var name = person.name;
+            name = name.replace(/^ *(.*?) *$/, "$1");
+            person.orderName = name.substr(name.lastIndexOf(' ') + 1);
             return person;
         });
         pDeferred.resolve(people);
