@@ -386,6 +386,12 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
 function PersonPageController($scope, db, $routeParams, Page) {
     db.promise.then(function () {
         $scope.person = db.get(db.Person, $routeParams.personId);
+        if ($scope.person) {
+          $scope.person = Object.create($scope.person);
+          $scope.person.images = $scope.person.images.map(function (img) {
+              return intoRect({height: 300, width: 300}, img);
+          });
+        }
         Page.setTitle($scope.person ? $scope.person.name : 'Person nicht gefunden');
     });
     Page.setSidebarContent('');
