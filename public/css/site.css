@@ -12,11 +12,11 @@ html, body {
 }
 
 #container {
-  min-height: 100%;
-  margin-bottom: -0em;    /*Negates #push on longer pages*/
-  width: 1024px;
-  background-color: #fff;
-  margin: auto;
+    min-height: 100%;
+    margin-bottom: -0em;    /*Negates #push on longer pages*/
+    width: 1024px;
+    background-color: #fff;
+    margin: auto;
 }
 
 #footer, #push {
@@ -97,7 +97,7 @@ h1 {
 }
 
 .item-name, h1 {
-    font-size: 19px;
+    font-size: 18px;
     line-height: 20px;
     font-family: Verdana, Geneva, sans-serif;
     font-weight: normal;
@@ -119,9 +119,11 @@ h1 {
     color: #9c0033;
 }
 
+#right a:focus,
+#right a:hover,
+#right a:active,
 #main a:focus,
 #main a:hover,
-#main a:active,
 #main a.active,
 /* Tags need to get the message twice */
 #main a:focus .item-tags,
@@ -233,7 +235,7 @@ input.newsletter-address {
 }
 
 .service-bar > :first-child {
-  padding-left: 9px;
+    padding-left: 9px;
 }
 
 .social-link-list {
@@ -250,88 +252,88 @@ input.newsletter-address {
 }
 
 .service-bar-icon {
-  width: 20px;
-  height: 20px;
-  display: block;
+    width: 20px;
+    height: 20px;
+    display: block;
 }
 
 .service-bar-icon-home {
-  background-image: url(/img/service-bar/home-inaktiv.png);
+    background-image: url(/img/service-bar/home-inaktiv.png);
 }
 
 .service-bar-icon-home:active,
 .service-bar-icon-home:hover,
 .service-bar-icon-home:focus {
-  background-image: url(/img/service-bar/home-aktiv.png);
+    background-image: url(/img/service-bar/home-aktiv.png);
 }
 
 .service-bar-icon-fb {
-  background-image: url(/img/service-bar/facebook-inaktiv.png);
+    background-image: url(/img/service-bar/facebook-inaktiv.png);
 }
 
 .service-bar-icon-fb:active,
 .service-bar-icon-fb:hover,
 .service-bar-icon-fb:focus {
-  background-image: url(/img/service-bar/facebook-aktiv.png);
+    background-image: url(/img/service-bar/facebook-aktiv.png);
 }
 
 .service-bar-icon-twitter {
-  background-image: url(/img/service-bar/twitter-inaktiv.png);
+    background-image: url(/img/service-bar/twitter-inaktiv.png);
 }
 
 .service-bar-icon-twitter:active,
 .service-bar-icon-twitter:hover,
 .service-bar-icon-twitter:focus {
-  background-image: url(/img/service-bar/twitter-aktiv.png);
+    background-image: url(/img/service-bar/twitter-aktiv.png);
 }
 
 .service-bar-icon-vimeo {
-  background-image: url(/img/service-bar/vimeo-inaktiv.png);
+    background-image: url(/img/service-bar/vimeo-inaktiv.png);
 }
 
 .service-bar-icon-vimeo:active,
 .service-bar-icon-vimeo:hover,
 .service-bar-icon-vimeo:focus {
-  background-image: url(/img/service-bar/vimeo-aktiv.png);
+    background-image: url(/img/service-bar/vimeo-aktiv.png);
 }
 
 .service-bar-english {
-  background-image: url(/img/service-bar/english-inaktiv.png);
-  display: block;
-  width: 40px;
-  height: 19px;
+    background-image: url(/img/service-bar/english-inaktiv.png);
+    display: block;
+    width: 40px;
+    height: 19px;
 }
 
 .service-bar-english:active,
 .service-bar-english:hover,
 .service-bar-english:focus {
-  background-image: url(/img/service-bar/english-aktiv.png);
+    background-image: url(/img/service-bar/english-aktiv.png);
 }
 
 .service-bar-kontakt {
-  background-image: url(/img/service-bar/kontakt-inaktiv.png);
-  display: block;
-  width: 64px;
-  height: 19px;
+    background-image: url(/img/service-bar/kontakt-inaktiv.png);
+    display: block;
+    width: 64px;
+    height: 19px;
 }
 
 .service-bar-kontakt:active,
 .service-bar-kontakt:hover,
 .service-bar-kontakt:focus {
-  background-image: url(/img/service-bar/kontakt-aktiv.png);
+    background-image: url(/img/service-bar/kontakt-aktiv.png);
 }
 
 .service-bar-impressum {
-  background-image: url(/img/service-bar/impressum-inaktiv.png);
-  display: block;
-  width: 62px;
-  height: 19px;
+    background-image: url(/img/service-bar/impressum-inaktiv.png);
+    display: block;
+    width: 62px;
+    height: 19px;
 }
 
 .service-bar-impressum:active,
 .service-bar-impressum:hover,
 .service-bar-impressum:focus {
-  background-image: url(/img/service-bar/impressum-aktiv.png);
+    background-image: url(/img/service-bar/impressum-aktiv.png);
 }
 
 .search-form {
@@ -613,6 +615,7 @@ input.search-input {
 
 .media-browser {
     width: 630px;
+    margin-bottom: 16px;
 }
 
 .media-browser .display {
@@ -625,7 +628,6 @@ input.search-input {
 }
 
 .media-browser .nav {
-    margin: 6px 0;
     height: 20px;
 }
 
@@ -646,37 +648,37 @@ input.search-input {
 
 .media-browser .icon-video,
 .media-browser .icon-picture {
-  background-position: 0 0;
-  height: 15px;
-  width: 15px;
+    background-position: 0 0;
+    height: 15px;
+    width: 15px;
 }
 
 .media-browser .icon-video {
-  background-image: url(/img/Video-inaktiv.png);
+    background-image: url(/img/Video-inaktiv.png);
 }
 
 .media-browser .icon-video:active,
 .media-browser .icon-video.active,
 .media-browser .icon-video:hover,
 .media-browser .icon-video:focus {
-  background-image: url(/img/Video-aktiv.png);
+    background-image: url(/img/Video-aktiv.png);
 }
 
 .media-browser .icon-picture {
-  background-image: url(/img/Foto-inaktiv.png);
+    background-image: url(/img/Foto-inaktiv.png);
 }
 
 .media-browser .icon-picture:active,
 .media-browser .icon-picture.active,
 .media-browser .icon-picture:hover,
 .media-browser .icon-picture:focus {
-  background-image: url(/img/Foto-aktiv.png);
+    background-image: url(/img/Foto-aktiv.png);
 }
 
-.media-credit {
+#main .media-credit {
     font-size: 10px;
     line-height: 10px;
-    padding-top: 16px;
+    margin-top: 6px;
 }
 
 /* General page content styles */
@@ -747,6 +749,7 @@ input.search-input {
 }
 
 .item-by p,
+#right p,
 #main p {
     margin: 0; /* The backend wraps everything in a paragraph */
 }
@@ -876,12 +879,6 @@ input.search-input {
 
 .piece-sidebar .participants-list li {
     line-height: 19px;
-}
-
-.piece-sidebar .participants-list a:hover,
-.piece-sidebar .participants-list a:focus,
-.piece-sidebar .participants-list a:active {
-    color: #EB0033;
 }
 
 .piece-details .item-name-wrapper {
@@ -1083,10 +1080,21 @@ input.search-input {
     padding: 20px;
 }
 
+#main .homepage h2 {
+    margin-top: 0;
+}
+
+#main .homepage img {
+    margin-bottom: 15px;
+}
+
+#main .homepage h2,
 #right .home-sidebar h2 {
-    line-height: 22px;
-    font-size: 16px;
     text-transform: uppercase;
+}
+
+#right .home-sidebar h2 {
+    font-size: 16px;
 }
 
 #right .home-sidebar h2 + div {
@@ -1101,6 +1109,19 @@ input.search-input {
     padding: 16px 20px;
 }
 
-.artist-single h1 {
-    margin: 30px 0 22px 0;
+#main .artist-single h2 {
+    margin: 26px 0 10px 0;
+}
+
+/* FIXME: These should actually be h3 */
+#main .box > a > div > h2 {
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: normal;
+    text-transform: none;
+    margin-top: 6px;
+}
+
+#main .box > a > div > p:first-of-type {
+    margin-top: 12px;
 }

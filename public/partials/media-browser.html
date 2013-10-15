@@ -8,8 +8,8 @@
     </div>
     <p class="media-credit">{{medium.credits}}</p>
   </div>
-  <div class="nav">
-    <ul ng-hide="media.length == 1">
+  <div ng-hide="media.length == 1" class="nav">
+    <ul>
       <li ng-repeat="medium in media">
         <a href="#" ng-click="clickMedium()"><span class="icon-{{medium.type}}" ng-class="{active: $index == mediumIndex}"></span></a>
       </li>
