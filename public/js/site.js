@@ -144,7 +144,7 @@ function HomeController($scope, db, Page, schedule) {
                 homepage['page' + (start+2)]
             ]];
 
-            if (homepage.layout === 0) {
+            if ([0, 2].indexOf(homepage.layout) !== -1) {
                 $scope.columns[0].push(homepage['page' + (start+3)]);
                 $scope.columns[1].push(homepage['page' + (start+4)]);
             }
