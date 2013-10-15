@@ -1,7 +1,7 @@
 <div ng-show="item" class="box" ng-class="{'home-next-piece': item.nextPiece}">
   <a href="{{item.link}}">
-    <div class="home-next-piece-img-wrapper">
-      <div class="home-next-piece-date" ng-show="item.nextPiece" ng-class="{'home-next-piece-today': item.howSoon == 'today'}">{{item.dateIntro}} {{item.date | formatDate:'dd, l'}}</div>
+    <div class="home-next-piece-img-wrapper" ng-show="item.nextPiece">
+      <div class="home-next-piece-date" ng-class="{'home-next-piece-today': item.howSoon == 'today'}">{{item.dateIntro}} {{item.date | formatDate:'dd, l'}}</div>
       <backend-image image="item.images[0]"></backend-image>
     </div>
     <h2 ng-bind-html-unsafe="item.name | translate"></h1>
