@@ -405,5 +405,9 @@ app.factory('db',
                      db.load(true, handler);
                  }
 
+                 db.previewMode = function () {
+                     return localStorage['data'];
+                 }
+
                  return db;
              });

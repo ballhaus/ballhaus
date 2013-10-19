@@ -536,8 +536,15 @@ function SearchController($scope, $routeParams, search, db) {
     });
 }
 
-function PageController($scope, $timeout, $location, Page, db) {
+function PageController($rootScope, $scope, $timeout, $location, Page, db) {
     // We inject the db in order to trigger db loading
+
+    $rootScope.previewMode = db.previewMode();
+
+    $rootScope.titlePrefix = "Ballhaus Naunynstraße";
+    if ($rootScope.previewMode) {
+        $rootScope.titlePrefix = "PREVIEW: " + $rootScope.titlePrefix;
+    }
 
     $scope.Page = Page;
 
@@ -571,14 +578,16 @@ function PageController($scope, $timeout, $location, Page, db) {
     });
 
 }
-app.factory('Page', function () {
+app.factory('Page', function ($rootScope) {
     var title = '';
     var sidebar = null;
     var marginals = null;
     var curMenuItem;
     return {
         title: function() { return title; },
-        setTitle: function(newTitle) { title = newTitle; },
+        setTitle: function(newTitle) {
+            $rootScope.pageTitle = $rootScope.titlePrefix + (newTitle ? (' - ' + newTitle) : '');
+        },
         customSidebar: function () { return sidebar !== null && typeof sidebar !== 'undefined'},
         marginals: function (newContent) {
             if (arguments.length === 0) {
