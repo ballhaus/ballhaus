@@ -92,11 +92,11 @@ function peopleMatch(db, string) {
 function intoRect(rect, item) {
     var res = Object.create(item);
     if (item.width / rect.width < item.height / rect.height) {
-      res.width = item.width * (rect.height / item.height);
+      res.width = Math.floor(item.width * (rect.height / item.height));
       res.height = rect.height;
     } else {
       res.width = rect.width;
-      res.height = item.height * (rect.width / item.width);
+      res.height = Math.floor(item.height * (rect.width / item.width));
     }
     return res;
 }
