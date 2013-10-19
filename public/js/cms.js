@@ -450,7 +450,7 @@ EditHomepageController.$inject = ['$scope', 'db'];
 function EditPageController($scope, $dialog, $routeParams, db) {
     var pageName = $routeParams.pageName;
     console.log('EditPageController', pageName);
-    $scope.page = db.get(db.Page, pageName) || new db.Page({ name: pageName, link: pageName });
+    $scope.page = db.get(db.Page, pageName);
     console.log('page', $scope.page);
 
     $scope.deletePage = function () {
@@ -569,8 +569,8 @@ angular.module('cmsApp.directives', [])
                            : $scope.object.title)
                     : $scope.object.name;
                 }
-                $scope.link = $scope.object.link || $scope.object.id;
-                var contents = angular.element('<a href="/cms/{{type}}/{{link}}">{{title}}</div>');
+                $scope.id = $scope.object.id;
+                var contents = angular.element('<a href="/cms/{{type}}/{{id}}">{{title}}</div>');
                 element.replaceWith(contents);
                 $compile(contents)($scope);
             }
@@ -1124,10 +1124,10 @@ angular.module('cmsApp.directives', [])
             restrict: 'E',
             replace: true,
             scope: true,
-            template: '<a href="/cms/page/{{link}}">{{title}}</a>',
+            template: '<a href="/cms/page/{{id}}">{{title}}</a>',
             link: function ($scope, element, attributes) {
                 var page = db.get(db.Page, attributes.page);
-                $scope.link = page ? page.link : "";
+                $scope.id = page ? page.id : "";
                 $scope.title = page ? page.name.de : "unknown page " + attributes.link;
             }
         };
