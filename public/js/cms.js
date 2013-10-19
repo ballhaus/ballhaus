@@ -826,8 +826,12 @@ angular.module('cmsApp.directives', [])
             replace: true,
             templateUrl: '/dialogs/thumbnail-image.html',
             link: function ($scope, element, attributes) {
-                var top = Math.floor(($(element).height() / 2) - ($scope.image.thumbnailHeight / 2));
-                var left = Math.floor(($(element).width() / 2) - ($scope.image.thumbnailWidth / 2));
+                var thumbnailHeight = Math.min($scope.image.thumbnailHeight, $(element).height());
+                var thumbnailWidth = Math.min($scope.image.thumbnailWidth, $(element).width());
+                var top = Math.floor(($(element).height() / 2) - (thumbnailHeight / 2));
+                var left = Math.floor(($(element).width() / 2) - (thumbnailWidth / 2));
+                console.log("element.width() =", $(element).width(), "thumbnailWidth =", thumbnailWidth, "left =", left);
+                console.log("element.height() =", $(element).height(), "thumbnailHeight =", thumbnailHeight, "top =", top);
                 $(element)
                     .on('mouseenter', function () {
                         $(element).find('div.actions').show('fade', {}, 150);
