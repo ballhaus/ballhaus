@@ -1125,3 +1125,14 @@ input.search-input {
 #main .box > a > div > p:first-of-type {
     margin-top: 12px;
 }
+
+#preview-marker {
+    background: red;
+    foreground: black;
+    position: fixed;
+    top: 3px;
+    right: 3px;
+    border: solid black 2px;
+    padding: 4px;
+    font-size: 12pt;
+}
