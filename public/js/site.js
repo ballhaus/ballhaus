@@ -523,7 +523,7 @@ function PageController($rootScope, $scope, $timeout, $location, Page, db) {
     }
 
     $rootScope.titlePrefix = "Ballhaus Naunynstraße";
-    if ($rootScope.previewMode) {
+    if ($rootScope.previewMode()) {
         $rootScope.titlePrefix = "PREVIEW: " + $rootScope.titlePrefix;
     }
 
