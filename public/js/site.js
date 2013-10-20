@@ -518,7 +518,9 @@ function SearchController($scope, $routeParams, search, db) {
 function PageController($rootScope, $scope, $timeout, $location, Page, db) {
     // We inject the db in order to trigger db loading
 
-    $rootScope.previewMode = db.previewMode();
+    $rootScope.previewMode = function () {
+        return db.previewMode();
+    }
 
     $rootScope.titlePrefix = "Ballhaus Naunynstraße";
     if ($rootScope.previewMode) {
