@@ -115,7 +115,7 @@ app.factory('db',
                              }
                          }
                      }
-                     // Fixme: All roots must all be traversed.  Maybe a list of roots should be kept?
+                     // Fixme: All roots must be traversed.  Maybe a list of roots should be kept?
                      deleteFrom(db.Extent.extent);
                      deleteFrom(convict.constructor.extent);
                      deleteFrom(db.objects);
@@ -275,7 +275,11 @@ app.factory('db',
                      var serverState;
                      db.maybeSaveChanges = function () {
                          if (db.editMode) {
-                             localStorage['data'] = JSON.stringify(freeze(db.objects))
+                             var newStorage = JSON.stringify(freeze(db.objects));
+                             if (localStorage['data'] != newStorage) {
+                                 console.log('SAVING objects');
+                                 localStorage['data'] = newStorage;
+                             }
                          }
                      }
 
@@ -288,6 +292,7 @@ app.factory('db',
                          serverState = JSON.stringify(freeze(db.objects));
                          $http.post('/db', serverState)
                              .success(function () {
+                                 console.log('SAVING serverState');
                                  localStorage['data'] = serverState;
                                  console.log('done saving');
                                  if (callback) {
@@ -379,30 +384,32 @@ app.factory('db',
                      }
                  }
 
-                 db.load = function (ignoreLocalstorage, handler) {
-                     if (localStorage['data'] && !ignoreLocalstorage) {
-                         console.log('loading from localStorage');
-                         initializeObjects(JSON.parse(localStorage['data']));
+                 db.load = function (editMode, handler) {
+                     function gotData() {
+                         db.editMode = editMode;
                          if (handler) {
                              handler();
                          }
+                     }
+                     if (localStorage['data'] && editMode) {
+                         console.log('loading from localStorage');
+                         initializeObjects(JSON.parse(localStorage['data']));
+                         gotData();
                      } else {
                          console.log('loading from server');
                          $http.get('/db').success(function (state) {
                              initializeObjects(state);
-                             if (handler) {
-                                 handler();
-                             }
+                             gotData();
                          });
                      }
                  }
 
                  $http.get('/login-status').success(function (loginStatus) {
-                     db.load((loginStatus.uuid != localStorage.lockId));
+                     db.load((loginStatus.uuid == localStorage.lockId));
                  });
 
                  db.restoreFromServer = function (handler) {
-                     db.load(true, handler);
+                     db.load(db.editMode, handler);
                  }
 
                  db.previewMode = function () {

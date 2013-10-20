@@ -165,17 +165,14 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                 }
                 if (loginStatus.uuid) {
                     if (loginStatus.uuid == localStorage.lockId) {
-                        db.editMode = true;
                         $rootScope.superuser = loginStatus.superuser;
                         $rootScope.state = 'loggedIn';
                     } else {
                         $rootScope.state = 'locked';
-                        db.editMode = false;
                         $rootScope.loggedInUser = loginStatus.name;
                     }
                 } else {
                     $rootScope.state = 'loggedOut';
-                    db.editMode = false;
                     if (window.location.pathname != '/cms/home') {
                         window.location = '/cms/home';
                     }
@@ -292,7 +289,6 @@ function LoginController($scope, $rootScope, $dialog, $http, $location, db) {
                     .success(function (loginStatus) {
                         $rootScope.state = 'loggedIn';
                         localStorage.lockId = loginStatus.uuid;
-                        db.editMode = true;
                         db.load(true, function () {
                             $location.path('/cms/events');
                         });
@@ -830,8 +826,6 @@ angular.module('cmsApp.directives', [])
                 var thumbnailWidth = Math.min($scope.image.thumbnailWidth, $(element).width());
                 var top = Math.floor(($(element).height() / 2) - (thumbnailHeight / 2));
                 var left = Math.floor(($(element).width() / 2) - (thumbnailWidth / 2));
-                console.log("element.width() =", $(element).width(), "thumbnailWidth =", thumbnailWidth, "left =", left);
-                console.log("element.height() =", $(element).height(), "thumbnailHeight =", thumbnailHeight, "top =", top);
                 $(element)
                     .on('mouseenter', function () {
                         $(element).find('div.actions').show('fade', {}, 150);
