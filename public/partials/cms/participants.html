@@ -1,10 +1,11 @@
 <div>
-  <div ng-repeat="rolePeople in rolePeoples()">
+  <div ng-repeat="rolePeople in model.rolesPeople">
     <b>{{rolePeople.role}}</b>
     <br/>
     <ul>
       <li ng-repeat="person in rolePeople.people">
-        <a ng-click="ensurePerson(person)" ng-href="/cms/person/{{person.link}}">{{person.name}}</a>
+        <a ng-show="person.person" ng-href="{{person.person.cmsLink()}}">{{person.name}}</a>
+        <span ng-show="!person.person"> {{person.name}} <a ng-href="/cms/person/{{person.link}}" ng-click="ensurePerson(person)">anlegen</a></span>
       </li>
     </ul>
   </div>

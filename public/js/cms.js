@@ -1000,38 +1000,29 @@ angular.module('cmsApp.directives', [])
             replace: true,
             templateUrl: '/partials/cms/participants.html',
             link: function ($scope, element, attrs, controller) {
+                var model = $scope.model;
+                if (typeof model.participants == 'string' && !model.rolesPeople) {
+                    model.processParticipants();
+                }
 
-                function peopleMatch(string) {
-                    var data = [];
-                    var re = /(.*):\s*(.*)/g;
-                    var match;
-                    while ((match = re.exec(string)) !== null) {
-                        data.push({ role: match[1],
-                                    people: match[2].split(/\s*,\s*/).map(function (name) {
-                                        name = name.replace(/^ *(.*?) *$/, "$1");
-                                        var person = db.Person.getByName(name);
-                                        return { name: name,
-                                                 link: (person ? person.link : utils.urlify(name)) };
-                                    })});
-                    }
-                    return data;
-                }
-                $scope.data = peopleMatch($scope.model);
-                $scope.rolePeoples = function () {
-                    return $scope.data;
-                }
+                $scope.data = $scope.model.participants;
                 $scope.ensurePerson = function (person) {
                     console.log('ensurePerson', person);
-                    db.Person.getByName(person.name) || new db.Person(person);
+                    var object = db.Person.getByName(person.name);
+                    if (!object) {
+                        object = new db.Person(person);
+                        $scope.model.processParticipants();
+                    }
                 }
                 $scope.openEditor = function () {
+                    console.log('openEditor');
                     $dialog
-                        .dialog({ resolve: { model: function () { return angular.copy($scope.model); } } })
+                        .dialog({ resolve: { model: function () { return angular.copy($scope.model.participants); } } })
                         .open('/dialogs/edit-participants.html', 'EditParticipantsController')
-                        .then(function(model) {
-                            if (model) {
-                                $scope.model = model;
-                                $scope.data = peopleMatch($scope.model);
+                        .then(function(participants) {
+                            if (participants) {
+                                $scope.model.participants = participants;
+                                $scope.model.processParticipants();
                             }
                         });
                 }

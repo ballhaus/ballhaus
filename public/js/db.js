@@ -56,6 +56,11 @@ app.factory('db',
                      Object.defineProperty(object, '$$hashKey', { enumerable: false, writable: true });
                      db.objects.unshift(object);
                  }
+
+                 db.Extent.prototype.cmsLink = function () {
+                     return "/cms/" + this.constructor.name.toLowerCase() + "/" + this.id;
+                 }
+
                  db.get = function (constructor, id) {
                      var constructorName = constructor.name || ieConstructorName(constructor)
                      if (db.Extent.extent[id]) {
@@ -123,6 +128,48 @@ app.factory('db',
                      db.pushToServer();
                  }
 
+                 db.processParticipants = function () {
+                     // The bi-directional association between Persons
+                     // and Events/Pieces/ArchivedPieces is maintained
+                     // in this function.  Whenever the textual
+                     // description of the participants of an
+                     // Event/Piece/ArchivedPiece changes, it is
+                     // called to update the links.
+
+                     // Remove all previous links to this Event/Piece/ArchivedPiece.
+                     var inWhat = this;
+                     if (this.rolesPeople) {
+                         this.rolesPeople.forEach(function (rolePeople) {
+                             console.log('cleaning', rolePeople);
+                             rolePeople.people.forEach(function (person) {
+                                 if (person.person && person.person.participations) {
+                                     person.person.participations = person.person.participations.filter(function (participation) {
+                                         return participation.inWhat != inWhat;
+                                     });
+                                 }
+                             });
+                         });
+                     }
+
+                     // Build new links
+                     this.rolesPeople = [];
+                     var participants = this.participants;
+                     if (participants) {
+                         this.rolesPeople = db.peopleMatch(participants);
+                         this.rolesPeople.forEach(function (rolePeople) {
+                             var role = rolePeople.role;
+                             rolePeople.people.forEach(function (person) {
+                                 if (person.person) {
+                                     if (!person.person.participations) {
+                                         person.person.participations = [];
+                                     }
+                                     person.person.participations.push({ role: role, inWhat: inWhat });
+                                 }
+                             });
+                         });
+                     }
+                 }
+
                  // //////////////////////////////////////////////////////////////////////
                  // Event
 
@@ -141,13 +188,15 @@ app.factory('db',
                      return !moment(this.date).isBefore(moment(), 'day');
                  };
 
+                 db.Event.prototype.processParticipants = db.processParticipants;
+
                  // //////////////////////////////////////////////////////////////////////
                  // Enactment
 
                  db.Enactment = function Enactment (attributes) {
                      db.Extent.call(this, attributes);
                  }
-                 inherits(db.Enactment, db.Extent);
+                 inherits(db.Enactment, db.Event);
 
                  db.Enactment.prototype.title = function () {
                      return this.name || this.piece.name;
@@ -156,6 +205,8 @@ app.factory('db',
                  db.Enactment.prototype.isCurrent = function () {
                      return !moment(this.date).isBefore(moment(), 'day');
                  };
+
+                 db.Enactment.prototype.processParticipants = db.processParticipants;
 
                  // //////////////////////////////////////////////////////////////////////
                  // Person
@@ -198,6 +249,8 @@ app.factory('db',
                  }
                  inherits(db.Piece, db.Extent);
 
+                 db.Piece.prototype.processParticipants = db.processParticipants;
+
                  // //////////////////////////////////////////////////////////////////////
                  // ArchivedPiece
 
@@ -205,6 +258,8 @@ app.factory('db',
                      db.Extent.call(this, attributes);
                  }
                  inherits(db.ArchivedPiece, db.Extent);
+
+                 db.ArchivedPiece.prototype.processParticipants = db.processParticipants;
 
                  // //////////////////////////////////////////////////////////////////////
                  // Page
@@ -330,6 +385,38 @@ app.factory('db',
                              }
                              enactment.archivedPiece = archivedPieces[piece.id];
                          });
+                 }
+
+                 db.peopleMatch = function (string) {
+                    var data = [];
+                    var re = /(.*):\s*(.*)/g;
+                    var match;
+                    while ((match = re.exec(string)) !== null) {
+                        data.push({ role: match[1],
+                                    people: match[2].split(/\s*,\s*/).map(function (name) {
+                                        name = name.replace(/^ *(.*?) *$/, "$1");
+                                        var retval = { name: name };
+                                        var person = db.Person.getByName(name);
+                                        if (person) {
+                                            retval.person = person;
+                                            retval.link = person.link;
+                                        } else {
+                                            retval.link = utils.urlify(name);
+                                        }
+                                        return retval;
+                                    })});
+                    }
+                    return data;
+                 }
+
+                 function processParticipation() {
+                     console.log('processParticipation');
+                     db.people().forEach(function (person) {
+                         person.participations = [];
+                     });
+                     db.events().forEach(function (event) {
+                     });
+                     console.log('processParticipation done');
                  }
 
                  function initializeObjects(data) {

@@ -68,27 +68,6 @@ function translate(what) {
     }
 };
 
-// FIXME: Ugly c&p from CMS
-function peopleMatch(db, string) {
-    var data = [];
-    var re = /(.*):\s*(.*)/g;
-    var match;
-    while ((match = re.exec(string)) !== null) {
-        // console.log(match[1], match[2].split(/\s*,\s*/));
-        data.push({ role: match[1],
-                    people: match[2].split(/\s*,\s*/).map(function (name) {
-                        name = name.replace(/^ *(.*?) *$/, "$1");
-                        var res = { name: name };
-                        var person = db.Person.getByName(name);
-                        if (person) {
-                            res.link = person.link;
-                        }
-                        return res;
-                    })});
-    }
-    return data;
-}
-
 function intoRect(rect, item) {
     var res = Object.create(item);
     if (item.width / rect.width < item.height / rect.height) {
@@ -802,8 +781,9 @@ app
             templateUrl: '/partials/piece-sidebar.html',
             scope: { 'for': '=' },
             link: function ($scope, element, attributes) {
+                console.log('pieceSidebar for', $scope['for']);
                 db.promise.then(function () {
-                    $scope.participants = peopleMatch(db, $scope['for'].participants);
+                    $scope.rolesPeople = $scope['for'].rolesPeople;
                 });
             }
         };

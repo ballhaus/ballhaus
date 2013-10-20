@@ -1,9 +1,9 @@
 <div class="piece-sidebar">
   <span>
-    <div ng-repeat="role in participants">
-      <em>{{role.role}}</em>
+    <div ng-repeat="rolePeople in rolesPeople">
+      <em>{{rolePeople.role}}</em>
       <ul class="participants-list">
-        <li ng-repeat="person in role.people">
+        <li ng-repeat="person in rolePeople.people">
           <a ng-show="person.link" href="/person/{{person.link}}">{{person.name}}</a>
           <span ng-hide="person.link">{{person.name}}</span>
         </li>
