@@ -503,5 +503,12 @@ app.factory('db',
                      return localStorage['data'];
                  }
 
+                 db.processAllParticipations = function () {
+                     db.events().forEach(function (event) { event.processParticipants(); })
+                     db.pieces().forEach(function (piece) { piece.processParticipants(); })
+                     db.enactments().forEach(function (enactment) { enactment.processParticipants(); })
+                     db.pushToServer();
+                 }
+
                  return db;
              });
