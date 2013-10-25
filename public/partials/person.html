@@ -5,4 +5,12 @@
   <p class="media-credit">{{person.images[0].credits}}</p>
   <h2>{{person.name}}</h2>
   <div ng-bind-html-unsafe="person.bio.de"></div>
+  <div class="participations">
+    Mitwirkung in:
+    <ul>
+      <li ng-repeat="participation in person.participations">
+        <a href="/{{participation.inWhat.link}}">{{participation.inWhat.name}}</a>
+      </li>
+    </ul>
+  </div>
 </div>

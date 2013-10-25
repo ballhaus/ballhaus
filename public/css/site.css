@@ -1113,6 +1113,10 @@ input.search-input {
     margin: 26px 0 10px 0;
 }
 
+.artist-single .participations {
+    margin-top: 1em;
+}
+
 /* FIXME: These should actually be h3 */
 #main .box > a > div > h2 {
     font-size: 14px;
