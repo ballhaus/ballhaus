@@ -1,14 +1,15 @@
 var system = require('system');
+var fs = require('fs');
+var webpage = require('webpage');
 
-function printConsole(msg) {
+var base_url = system.args[1] || 'http://localhost:3000';
+
+console.log('base url', base_url);
+var page = webpage.create();
+
+page.onConsoleMessage = function printConsole(msg) {
     system.stderr.writeLine('console: ' + msg);
-};
-
-var page = require('webpage').create();
-
-page.onConsoleMessage = printConsole;
-
-var base_url = 'http://localhost:3000';
+}
 
 function gotoPath(path) {
     console.log('gotoPath', path);
@@ -49,12 +50,25 @@ function getUrlsToLoad() {
     });
 }
 
+var currentPath = '/';
 function nextUrl() {
     if (pathsToLoad.length) {
-        gotoPath(pathsToLoad.pop());
+        currentPath = pathsToLoad.pop();
+        gotoPath(currentPath);
     } else {
         phantom.exit();
     }
+}
+
+function savePage() {
+    var directory = 'crawled/' + currentPath.replace(/(.*)\/.*$/, "$1");
+    var filename = currentPath.replace(/.*\/(.*)$/, "$1");
+    if (filename == '') {
+        filename = 'index';
+    }
+    filename += '.html';
+    fs.makeTree(directory);
+    fs.write(directory + '/' + filename, page.content, 'w');
 }
 
 page.onCallback = function (message) {
@@ -62,6 +76,7 @@ page.onCallback = function (message) {
     switch (message.type) {
     case 'dbLoaded':
     case 'pageLoaded':
+        savePage();
         getUrlsToLoad();
         nextUrl();
     }

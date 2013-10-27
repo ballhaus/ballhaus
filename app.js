@@ -43,7 +43,7 @@ app.configure(function() {
     app.use(express.cookieParser(config.cookieSecret));
     app.use(express.session({cookie: { path: '/', httpOnly: true, expires: false }}));
     app.use(function (req, res, next) {
-        var browserPageRequest = req.accepted && req.accepted.length && req.accepted[0].value == 'text/html';
+        var browserPageRequest = req.accepted && req.accepted.length && req.accepted[0].value == 'text/html' && !req.headers['user-agent'].match(/bot\//);
         if (req.method == 'GET') {
                 if (browserPageRequest && req.url.match('^/cms')) {
                     console.log('REDIRECTING TO CMS');
@@ -55,7 +55,14 @@ app.configure(function() {
                     console.log('REDIRECTING TO DYNAMIC SITE');
                     res.render('site');
                 } else {
-                    next();
+                    var crawledPath = 'crawled' + req.url + '.html';
+                    fs.exists(crawledPath, function (exists) {
+                        if (exists) {
+                            res.sendfile(crawledPath);
+                        } else {
+                            next();
+                        }
+                    });
                 }
         } else {
             next();
