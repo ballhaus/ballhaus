@@ -381,7 +381,8 @@ app.factory('db',
                              var piece = enactment.piece;
                              if (!archivedPieces[piece.id]) {
                                  archivedPieces[piece.id] = new db.ArchivedPiece({ participants: piece.participants,
-                                                                                   description: { de: piece.description.de, en: piece.description.en }});
+                                                                                   description: { de: piece.description && piece.description.de,
+                                                                                                  en: piece.description && piece.description.en }});
                              }
                              enactment.archivedPiece = archivedPieces[piece.id];
                          });
