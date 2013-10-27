@@ -1,66 +1,70 @@
-//PhantomJS http://phantomjs.org/ based web crawler Anton Ivanov anton.al.ivanov@gmail.com 2012
- 
-function Crawler(base_url) {
-    this.visitedURLs = {};
-    this.base_url = base_url;
+var system = require('system');
+
+function printConsole(msg) {
+    system.stderr.writeLine('console: ' + msg);
 };
 
-Crawler.webpage = require('webpage');
+var page = require('webpage').create();
 
-Crawler.prototype.crawl = function (url, depth, onSuccess, onFailure) {
-    if (depth == 0 || this.visitedURLs[url]) {
-        return;
-    };
-    var self = this;
-    var page = Crawler.webpage.create();
-    
-    page.open(this.base_url + url, function (status) {
-        if (status == 'fail') { 
-            onFailure({
-                url: url, 
-                status: status
-            });
-        } else {
-            var documentHTML = page.evaluate(function () {
-                return document.body && document.body.innerHTML ? document.body.innerHTML : "";
-            });
-            console.log('crawl', url);
-            self.crawlURLs(self.getAllURLs(page), depth - 1, onSuccess, onFailure);
-            self.visitedURLs[url] = true;
-            onSuccess({
-                url: url,
-                status: status,
-                content: documentHTML
-            });
-        };
-    });
-};
+page.onConsoleMessage = printConsole;
 
-Crawler.prototype.getAllURLs = function(page) {
-    return page.evaluate(function () {
-        return Array.prototype.slice.call(document.querySelectorAll("a"), 0)
-            .map(function (link) {
-                return link.getAttribute("href");
-            });
-    })
+var base_url = 'http://localhost:3000';
+
+function gotoPath(path) {
+    console.log('gotoPath', path);
+    page.evaluate(function (path) {
+        phantomGotoUrl(path);
+    }, path);
+}
+
+var pathsToLoad = [];
+var pathsScheduled = { '/': true };
+
+function getAllURLs() {
+    return page
+        .evaluate(function () {
+            return Array.prototype.slice.call(document.querySelectorAll("a"), 0)
+                .map(function (link) {
+                    return link.getAttribute("href");
+                });
+        })
         .filter(function (url) {
-            return !url.match(/^http/);
+            return (!url.match(/[:]/) || url.match(base_url))
+                && !url.match(/(#|\.pdf$)/)                 // avoid non-crawlable urls
+                && !url.match(/kuenstlerinnen\//)           // avoid bug in letter list
+                && url != '';
+        })
+        .map(function (url) {
+            return url.replace(base_url, "");
         });
 };
 
-Crawler.prototype.crawlURLs = function(urls, depth, onSuccess, onFailure) {
-    var self = this;
-    urls.forEach(function (url) {
-        self.crawl(url, depth, onSuccess, onFailure);
+function getUrlsToLoad() {
+    getAllURLs().forEach(function (url) {
+        if (!pathsScheduled[url]) {
+            console.log('add url', url);
+            pathsScheduled[url] = true;
+            pathsToLoad.push(url);
+        }
     });
-};
+}
 
-new Crawler("http://localhost:3000").crawl("/", 2, 
-    function onSuccess(page) {
-        console.log("Loaded page. URL = " + page.url + " content length = " + page.content.length + " status = " + page.status);
-    }, 
-    function onFailure(page) {
-        console.log("Could not load page. URL = " +  page.url + " status = " + page.status);
+function nextUrl() {
+    if (pathsToLoad.length) {
+        gotoPath(pathsToLoad.pop());
+    } else {
+        phantom.exit();
     }
-);
+}
 
+page.onCallback = function (message) {
+    console.log('got phantom message', message.type);
+    switch (message.type) {
+    case 'dbLoaded':
+    case 'pageLoaded':
+        getUrlsToLoad();
+        nextUrl();
+    }
+}
+
+page.open(base_url + '/');

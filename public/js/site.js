@@ -1,3 +1,29 @@
+// PhantomJS support (for crawling)
+Function.prototype.bind = Function.prototype.bind || function (thisp) {
+  var fn = this;
+  return function () {
+    return fn.apply(thisp, arguments);
+  };
+};
+
+var phantomGotoUrl;
+function saveLocationForPhantom($scope, $location) {
+    phantomGotoUrl = function (url) {
+        $location.path(url);
+        $scope.$$phase || $scope.$apply();
+    }
+}
+
+function sendMessageToPhantom(type, options) {
+    var message = options || {};
+    message.type = type;
+    if (typeof window.callPhantom == 'function') {
+        setTimeout(function () {
+            window.callPhantom(message);
+        }, 0);
+    }
+}
+
 var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.directives', 'ngSanitize'])
 .filter('join', function () {
     return function (input, arg) {
@@ -212,7 +238,7 @@ function PressImagesController($scope, db, Page) {
 }
 
 app.service('schedule', function (db, $q) {
-    function get (archive) {
+    function var get (archive) {
         var deferred = $q.defer();
         db.promise.then(function () {
             var events = db.events().filter(function (event) {
@@ -518,6 +544,11 @@ function SearchController($scope, $routeParams, search, db) {
 function PageController($rootScope, $scope, $timeout, $location, Page, db) {
     // We inject the db in order to trigger db loading
 
+    db.promise.then(function () {
+        saveLocationForPhantom($scope, $location);
+        sendMessageToPhantom('dbLoaded');
+    });
+
     $rootScope.previewMode = function () {
         return db.previewMode();
     }
@@ -534,7 +565,6 @@ function PageController($rootScope, $scope, $timeout, $location, Page, db) {
     $(window).on('scroll', function() {
         if ($scope.okSaveScroll) { // false between $routeChangeStart and $routeChangeSuccess
             $scope.scrollPos[$location.path()] = $(window).scrollTop();
-            console.log('save scroll position for', $location.path(), '=>', $scope.scrollPos[$location.path()]);
         }
     });
 
@@ -550,7 +580,6 @@ function PageController($rootScope, $scope, $timeout, $location, Page, db) {
     $scope.$on('$routeChangeSuccess', function (e, newRoute) {
         $timeout(function() { // wait for DOM, then restore scroll position
             var position = $scope.scrollPos[$location.path()] ? $scope.scrollPos[$location.path()] : 0;
-            console.log('restore scroll position for', $location.path(), '=>', position);
             $(window).scrollTop(position);
             $scope.okSaveScroll = true;
         }, 0);
@@ -577,7 +606,7 @@ app.factory('Page', function ($rootScope) {
             sidebar = null; marginals = newContent;
         },
         sidebarContent: function () { return sidebar; },
-        setSidebarContent: function (newSidebar) { sidebar = newSidebar; marginals = null},
+        setSidebarContent: function (newSidebar) { sidebar = newSidebar; marginals = null; sendMessageToPhantom('pageLoaded', { path: window.location.pathname }); },
         menuClass: function (item) { return item === curMenuItem ? 'active' : ''; },
         currentMenuItem: function (newCurMenuItem) { curMenuItem = newCurMenuItem; }
     };
