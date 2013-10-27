@@ -410,16 +410,6 @@ app.factory('db',
                     return data;
                  }
 
-                 function processParticipation() {
-                     console.log('processParticipation');
-                     db.people().forEach(function (person) {
-                         person.participations = [];
-                     });
-                     db.events().forEach(function (event) {
-                     });
-                     console.log('processParticipation done');
-                 }
-
                  function initializeObjects(data) {
                      db.objects = [];
                      db.Extent.lastId = 0;
