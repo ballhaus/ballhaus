@@ -238,7 +238,7 @@ function PressImagesController($scope, db, Page) {
 }
 
 app.service('schedule', function (db, $q) {
-    function var get (archive) {
+    function get (archive) {
         var deferred = $q.defer();
         db.promise.then(function () {
             var events = db.events().filter(function (event) {
