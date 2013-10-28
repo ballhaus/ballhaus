@@ -319,10 +319,12 @@ app.factory('db',
                          var ticketGroups = {};
                          db.ticketGroups = [];
                          tickets.forEach(function (ticket) {
-                             name = ticket.references.eventgroup[0].name;
-                             if (!ticketGroups[name]) {
-                                 ticketGroups[name] = true;
-                                 db.ticketGroups.push(name);
+                             if (ticket.references) {
+                                 name = ticket.references.eventgroup[0].name;
+                                 if (!ticketGroups[name]) {
+                                     ticketGroups[name] = true;
+                                     db.ticketGroups.push(name);
+                                 }
                              }
                          });
                          
