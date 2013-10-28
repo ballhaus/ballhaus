@@ -115,7 +115,8 @@ h1 {
     color: black;
 }
 
-#main p a {
+#main p a,
+#main ul.plain-list a {
     color: #9c0033;
 }
 
@@ -766,6 +767,11 @@ input.search-input {
 
 .big-list .image-container + .item-tags {
     margin-top: -6px;
+}
+
+.plain-list {
+    list-style: none;
+    margin-left: 0;
 }
 
 /* Spielplan */
