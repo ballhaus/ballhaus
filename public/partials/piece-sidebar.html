@@ -4,8 +4,8 @@
       <em>{{rolePeople.role}}</em>
       <ul class="participants-list">
         <li ng-repeat="person in rolePeople.people">
-          <a ng-show="person.link" href="/person/{{person.link}}">{{person.name}}</a>
-          <span ng-hide="person.link">{{person.name}}</span>
+          <a ng-show="person.person" href="/person/{{person.link}}">{{person.name}}</a>
+          <span ng-hide="person.person">{{person.name}}</span>
         </li>
       </ul>
     </div>
