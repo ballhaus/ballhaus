@@ -1,8 +1,9 @@
 // PhantomJS support (for crawling)
 Function.prototype.bind = Function.prototype.bind || function (thisp) {
   var fn = this;
+  var static_args = Array.prototype.slice.apply(arguments, 1);
   return function () {
-    return fn.apply(thisp, arguments);
+    return fn.apply(thisp, static_args.concat(Array.prototype.slice.apply(arguments)));
   };
 };
 
