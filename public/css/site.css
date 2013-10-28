@@ -1132,7 +1132,7 @@ input.search-input {
     margin-top: 6px;
 }
 
-#main .box > a > div > p:first-of-type {
+#main .box > a > div > p:first-child {
     margin-top: 12px;
 }
 
