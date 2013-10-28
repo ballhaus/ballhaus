@@ -71,6 +71,11 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
 })
 .filter('noTeaser', function () {
     return removeTeaserMarker;
+})
+.filter('linkTo', function (linker) {
+    return function (obj) {
+      return linker.linkTo(obj);
+    };
 });
 
 function removeTeaserMarker(input) {
@@ -233,7 +238,21 @@ function PressImagesController($scope, db, Page) {
     Page.setSidebarContent('');
 }
 
-app.service('schedule', function (db, $q) {
+app.service('linker', function (db) {
+    this.linkTo = function (obj) {
+        if (obj instanceof db.Enactment) {
+            return '/auffuehrung/' + obj.id;
+        } else if (obj instanceof db.Piece) {
+            return '/stueck/' + obj.link;
+        } else if (obj instanceof db.Event) {
+            return '/veranstaltung/' + obj.link;
+        } else {
+            return '/';
+        }
+    };
+});
+
+app.service('schedule', function (db, $q, linker) {
     function get (archive) {
         var deferred = $q.defer();
         db.promise.then(function () {
@@ -241,14 +260,8 @@ app.service('schedule', function (db, $q) {
               return Boolean(archive) !== event.isCurrent();
             }).map(function (event) {
                 var date = moment(event.date);
-                var link = event.link;
-                if (link) {
-                    link = '/veranstaltung/' + event.link;
-                } else {
-                    link = '/auffuehrung/' + event.id;
-                }
                 return angular.extend({}, event.__proto__, event.piece, event, {
-                    link: link,
+                    link: linker.linkTo(event),
                     month: date.format('MMMM'),
                     monthKey: date.format('MM-YYYY'),
                     epochSeconds: event.date.getTime()
@@ -388,10 +401,10 @@ function PersonPageController($scope, db, $routeParams, Page) {
     db.promise.then(function () {
         $scope.person = db.get(db.Person, $routeParams.personId);
         if ($scope.person) {
-          $scope.person = Object.create($scope.person);
-          $scope.person.images = $scope.person.images.map(function (img) {
-              return intoRect({height: 300, width: 300}, img);
-          });
+            $scope.person = Object.create($scope.person);
+            $scope.person.images = $scope.person.images.map(function (img) {
+                return intoRect({height: 300, width: 300}, img);
+            });
         }
         Page.setTitle($scope.person ? $scope.person.name : 'Person nicht gefunden');
     });

@@ -9,7 +9,7 @@
     Mitwirkung in:
     <ul class="plain-list">
       <li ng-repeat="participation in person.participations">
-        <a href="/{{participation.inWhat.link}}">{{participation.inWhat.name}}</a>
+        <a href="{{participation.inWhat | linkTo}}">{{participation.inWhat.name}}</a>
       </li>
     </ul>
   </div>
