@@ -424,6 +424,10 @@ input.search-input {
     margin-right: 5px;
 }
 
+.force-hide {
+    display: none !important;
+}
+
 .site-submenu-de-Programm {
     width: 143px;
 }
