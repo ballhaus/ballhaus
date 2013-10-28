@@ -64,11 +64,6 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
 .filter('translate', function () {
     return translate;
 })
-.filter('fromCharCode', function () {
-    return function (input) {
-        return String.fromCharCode(input);
-    };
-})
 .filter('onlyTeaser', function () {
     return function (input) {
         return input && input.substr(0, input.indexOf('\u06DD'));
@@ -447,14 +442,21 @@ app.service('artists', function (db, $q) {
     pDeferred.promise.then(function (people) {
         var letters = people.reduce(function (letters, person) {
             var c = utils.urlify(person.orderName.charAt(0)).toUpperCase().charCodeAt(0);
-            letters[c] = 'letter-present';
+            letters[c] = true;
             return letters;
         }, Array('Z'.charCodeAt(0) + 1));
 
-        letters.offset = 0;
-        while (letters[letters.offset++] !== 'letter-present' &&
-            letters.offset < 'A'.charCodeAt(0)) {
+        var firstLetter = 0;
+        while (letters[firstLetter++] !== true) {};
+
+        firstLetter = Math.min(firstLetter, 'A'.charCodeAt(0));
+
+        var newLetters = [];
+        for (var i = firstLetter; i < letters.length; ++i) {
+            newLetters.push({ letter: String.fromCharCode(i), present: letters[i] });
         }
+        letters = newLetters;
+
         lDeferred.resolve(letters);
     });
 
@@ -688,12 +690,7 @@ app
             scope: {cur: '='},
             link: function ($scope, element, attributes) {
                 artists.getLetters().then(function (letters) {
-                    $scope.letters = letters.slice();
-                    $scope.letters.offset = letters.offset;
-
-                    if ($scope.cur) {
-                        $scope.letters[$scope.cur.charCodeAt(0)] += ' active';
-                    }
+                    $scope.letters = letters;
                 });
             }
         };

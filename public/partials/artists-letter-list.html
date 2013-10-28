@@ -1,6 +1,6 @@
 <ul class="hor-list kuenstlerinnen-letters">
-  <li ng-repeat="letterPresent in letters" ng-hide="$index < letters.offset">
-    <a ng-show="letterPresent" ng-class="letterPresent" href="/kuenstlerinnen/{{$index | fromCharCode}}">{{$index | fromCharCode}}</a>
-    <span ng-hide="letterPresent" class="muted">{{$index | fromCharCode}}</span>
+  <li ng-repeat="letter in letters">
+    <a ng-show="letter.present" ng-class="{'active': cur == letter.letter}" href="/kuenstlerinnen/{{letter.letter}}">{{letter.letter}}</a>
+    <span ng-hide="letter.present" class="muted">{{letter.letter}}</span>
   </li>
 </ul>
