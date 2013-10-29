@@ -899,23 +899,28 @@ app
                 var maxHeight = 400;
                 var maxVideoHeight = 376;
 
-                $scope.media = ($scope.model && $scope.model.images || []).slice();
+                function initMedia() {
+                    $scope.media = ($scope.model && $scope.model.images || []).slice();
 
-                $scope.media = $scope.media.map(function (picture) {
-                    picture = intoRect({width: maxWidth, height: maxHeight}, picture);
-                    picture.type = 'picture';
-                    return picture;
-                });
+                    $scope.media = $scope.media.map(function (picture) {
+                        picture = intoRect({width: maxWidth, height: maxHeight}, picture);
+                        picture.type = 'picture';
+                        return picture;
+                    });
 
-                if ($scope.model && $scope.model.video) {
-                    $scope.model.video.type = 'video';
-                    $scope.model.video.vimeoId = $scope.model.video.vimeoId || $scope.model.video.url.match(/\/(\d+)$/)[1];
-                    $scope.model.video.width = maxWidth;
-                    $scope.model.video.height = maxVideoHeight;
-                    $scope.media.push($scope.model.video);
+                    if ($scope.model && $scope.model.video) {
+                        $scope.model.video.type = 'video';
+                        $scope.model.video.vimeoId = $scope.model.video.vimeoId || $scope.model.video.url.match(/\/(\d+)$/)[1];
+                        $scope.model.video.width = maxWidth;
+                        $scope.model.video.height = maxVideoHeight;
+                        $scope.media.push($scope.model.video);
+                    }
+
+                    $scope.mediumIndex = 0;
                 }
 
-                $scope.mediumIndex = 0;
+                $scope.$watch('model.images', initMedia);
+                $scope.$watch('model.video', initMedia);
 
                 $scope.clickMedium = function () {
                     $scope.mediumIndex = this.$index;
