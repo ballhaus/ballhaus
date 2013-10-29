@@ -32,7 +32,44 @@ var app = express();
 
 var access_logfile = fs.createWriteStream(__dirname + '/logs/access.log', { flags: 'a' });
 
+var nsg = require('node-sprite-generator');
+
 app.configure(function() {
+    app.use(nsg.middleware({
+        src: [
+          'public/img/menu/*.png',
+          'public/img/service-bar/*.png',
+          'public/img/newsletter/*.png',
+          'public/img/media-browser/*.png'
+//          'public/img/ticket*.png'
+//          'public/img/kreuz*.png'
+        ],
+        spritePath: 'public/sprite.png',
+        stylesheet: 'css',
+        stylesheetPath: 'public/css/sprites.css',
+        stylesheetOptions: {
+            nameMapping: function (fn) {
+                function activeSelector(base) {
+                    return base + ':hover, .' + base + ':active, .' + base + ':focus, .' + base + '.active';
+                }
+
+                var prefixes = {
+                    'menu': 'site-menuitem-de'
+                };
+                var match = fn.match(/^public\/img\/(?:([^\/]+)\/)?([^\/]+?)(-(in)?aktiv)?.png/);
+                var selector = match[2];
+
+                if (match[1]) {
+                    selector = (prefixes[match[1]] || match[1]) + '-' + selector;
+                }
+                if (match[3] === '-aktiv') {
+                    selector = activeSelector(selector);
+                }
+
+                return selector;
+            }
+        }
+    }));
     app.use(express.logger({ stream: access_logfile }));
     app.set('port', process.env.PORT || config.port || 3000);
     app.use(express.favicon(__dirname + '/public/img/favicon.ico'));

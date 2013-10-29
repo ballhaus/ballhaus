@@ -11,7 +11,7 @@
   <div ng-hide="media.length == 1" class="nav">
     <ul>
       <li ng-repeat="medium in media">
-        <a href="#" ng-click="clickMedium()"><span class="icon-{{medium.type}}" ng-class="{active: $index == mediumIndex}"></span></a>
+        <a href="#" ng-click="clickMedium()"><span class="media-browser-icon-{{medium.type}}" ng-class="{active: $index == mediumIndex}"></span></a>
       </li>
     </ul>
   </div>

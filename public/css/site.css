@@ -30,6 +30,7 @@ html, body {
  */
 
 .ir {
+    display: block;
     background-color: transparent;
     border: 0;
     overflow: hidden;
@@ -178,7 +179,6 @@ h1 {
 }
 
 input.newsletter-address {
-    background-image: url(/img/newsletterfeld.png);
     width: 173px;
     height: 17px;
     border: none !important;
@@ -192,14 +192,7 @@ input.newsletter-address {
     overflow: hidden;
     width: 40px;
     height: 25px;
-    background-image: url(/img/ok-inaktiv.png);
     color: transparent; /* for Firefox */
-}
-
-.newsletter-submit:active,
-.newsletter-submit:hover,
-.newsletter-submit:focus {
-    background-image: url(/img/ok-aktiv.png);
 }
 
 .newsletter-success {
@@ -252,91 +245,6 @@ input.newsletter-address {
     padding-left: 0;
 }
 
-.service-bar-icon {
-    width: 20px;
-    height: 20px;
-    display: block;
-}
-
-.service-bar-icon-home {
-    background-image: url(/img/service-bar/home-inaktiv.png);
-}
-
-.service-bar-icon-home:active,
-.service-bar-icon-home:hover,
-.service-bar-icon-home:focus {
-    background-image: url(/img/service-bar/home-aktiv.png);
-}
-
-.service-bar-icon-fb {
-    background-image: url(/img/service-bar/facebook-inaktiv.png);
-}
-
-.service-bar-icon-fb:active,
-.service-bar-icon-fb:hover,
-.service-bar-icon-fb:focus {
-    background-image: url(/img/service-bar/facebook-aktiv.png);
-}
-
-.service-bar-icon-twitter {
-    background-image: url(/img/service-bar/twitter-inaktiv.png);
-}
-
-.service-bar-icon-twitter:active,
-.service-bar-icon-twitter:hover,
-.service-bar-icon-twitter:focus {
-    background-image: url(/img/service-bar/twitter-aktiv.png);
-}
-
-.service-bar-icon-vimeo {
-    background-image: url(/img/service-bar/vimeo-inaktiv.png);
-}
-
-.service-bar-icon-vimeo:active,
-.service-bar-icon-vimeo:hover,
-.service-bar-icon-vimeo:focus {
-    background-image: url(/img/service-bar/vimeo-aktiv.png);
-}
-
-.service-bar-english {
-    background-image: url(/img/service-bar/english-inaktiv.png);
-    display: block;
-    width: 40px;
-    height: 19px;
-}
-
-.service-bar-english:active,
-.service-bar-english:hover,
-.service-bar-english:focus {
-    background-image: url(/img/service-bar/english-aktiv.png);
-}
-
-.service-bar-kontakt {
-    background-image: url(/img/service-bar/kontakt-inaktiv.png);
-    display: block;
-    width: 64px;
-    height: 19px;
-}
-
-.service-bar-kontakt:active,
-.service-bar-kontakt:hover,
-.service-bar-kontakt:focus {
-    background-image: url(/img/service-bar/kontakt-aktiv.png);
-}
-
-.service-bar-impressum {
-    background-image: url(/img/service-bar/impressum-inaktiv.png);
-    display: block;
-    width: 62px;
-    height: 19px;
-}
-
-.service-bar-impressum:active,
-.service-bar-impressum:hover,
-.service-bar-impressum:focus {
-    background-image: url(/img/service-bar/impressum-aktiv.png);
-}
-
 .search-form {
     line-height: 17px;
     font-size: 1em;
@@ -361,6 +269,7 @@ input.search-input {
     color: #666;
     border-color: #666;
     margin-left: 4px;
+    display: inline;
 
     background-position: -124px;
     width: 46px;
@@ -428,188 +337,12 @@ input.search-input {
     display: none !important;
 }
 
-.site-submenu-de-Programm {
+.site-submenu-de-programm {
     width: 143px;
 }
 
-.site-menuitem-de-Programm {
-    background: url(/img/menu/programm-inaktiv.png);
-    width: 143px;
-    height: 37px;
-    display: block;
-}
-
-.site-menuitem-de-Programm:hover,.site-menuitem-de-Programm:active,.site-menuitem-de-Programm:focus,.site-menuitem-de-Programm.active {
-    background: url(/img/menu/programm-aktiv.png);
-}
-
-.site-menuitem-de-kuenstlerinnen {
-    background: url(/img/menu/kuenstlerinnen-inaktiv.png);
-    width: 189px;
-    height: 37px;
-    display: block;
-}
-
-.site-menuitem-de-kuenstlerinnen:hover,.site-menuitem-de-kuenstlerinnen:active,.site-menuitem-de-kuenstlerinnen:focus,.site-menuitem-de-kuenstlerinnen.active {
-    background: url(/img/menu/kuenstlerinnen-aktiv.png);
-}
-
-.site-submenu-de-Haus {
+.site-submenu-de-haus {
     width: 91px;
-}
-
-.site-menuitem-de-Haus {
-    background: url(/img/menu/haus-inaktiv.png);
-    width: 91px;
-    height: 37px;
-    display: block;
-}
-
-.site-menuitem-de-Haus:hover,.site-menuitem-de-Haus:active,.site-menuitem-de-Haus:focus,.site-menuitem-de-Haus.active {
-    background: url(/img/menu/haus-aktiv.png);
-}
-
-.site-menuitem-de-tickets {
-    background: url(/img/menu/tickets-inaktiv.png);
-    width: 116px;
-    height: 37px;
-    display: block;
-}
-
-.site-menuitem-de-tickets:hover,.site-menuitem-de-tickets:active,.site-menuitem-de-tickets:focus,.site-menuitem-de-tickets.active {
-    background: url(/img/menu/tickets-aktiv.png);
-}
-
-.site-menuitem-de-Presse {
-    background: url(/img/menu/presse-inaktiv.png);
-    width: 110px;
-    height: 37px;
-    display: block;
-}
-
-.site-menuitem-de-Presse:hover,.site-menuitem-de-Presse:active,.site-menuitem-de-Presse:focus,.site-menuitem-de-Presse.active {
-    background: url(/img/menu/presse-aktiv.png);
-}
-
-.site-menuitem-de-spielplan {
-    background: url(/img/menu/spielplan-inaktiv.png);
-    width: 139px;
-    height: 42px;
-    display: block;
-}
-
-.site-menuitem-de-spielplan:hover,.site-menuitem-de-spielplan:active,.site-menuitem-de-spielplan:focus {
-    background: url(/img/menu/spielplan-aktiv.png);
-}
-
-.site-menuitem-de-repertoire {
-    background: url(/img/menu/repertoire-inaktiv.png);
-    width: 150px;
-    height: 42px;
-    display: block;
-}
-
-.site-menuitem-de-repertoire:hover,.site-menuitem-de-repertoire:active,.site-menuitem-de-repertoire:focus {
-    background: url(/img/menu/repertoire-aktiv.png);
-}
-
-.site-menuitem-de-reihen {
-    background: url(/img/menu/reihen-inaktiv.png);
-    width: 106px;
-    height: 42px;
-    display: block;
-}
-
-.site-menuitem-de-reihen:hover,.site-menuitem-de-reihen:active,.site-menuitem-de-reihen:focus {
-    background: url(/img/menu/reihen-aktiv.png);
-}
-
-.site-menuitem-de-archiv {
-    background: url(/img/menu/archiv-inaktiv.png);
-    width: 108px;
-    height: 42px;
-    display: block;
-}
-
-.site-menuitem-de-archiv:hover,.site-menuitem-de-archiv:active,.site-menuitem-de-archiv:focus {
-    background: url(/img/menu/archiv-aktiv.png);
-}
-
-.site-menuitem-de-geschichte {
-    background: url(/img/menu/geschichte-inaktiv.png);
-    width: 155px;
-    height: 42px;
-    display: block;
-}
-
-.site-menuitem-de-geschichte:hover,.site-menuitem-de-geschichte:active,.site-menuitem-de-geschichte:focus {
-    background: url(/img/menu/geschichte-aktiv.png);
-}
-
-.site-menuitem-de-team {
-    background: url(/img/menu/team-inaktiv.png);
-    width: 93px;
-    height: 42px;
-    display: block;
-}
-
-.site-menuitem-de-team:hover,.site-menuitem-de-team:active,.site-menuitem-de-team:focus {
-    background: url(/img/menu/team-aktiv.png);
-}
-
-.site-menuitem-de-auszeichnungen {
-    background: url(/img/menu/auszeichnungen-inaktiv.png);
-    width: 208px;
-    height: 42px;
-    display: block;
-}
-
-.site-menuitem-de-auszeichnungen:hover,.site-menuitem-de-auszeichnungen:active,.site-menuitem-de-auszeichnungen:focus {
-    background: url(/img/menu/auszeichnungen-aktiv.png);
-}
-
-.site-menuitem-de-postmigranten_on_tour {
-    background: url(/img/menu/postmigranten_on_tour-inaktiv.png);
-    width: 284px;
-    height: 42px;
-    display: block;
-}
-
-.site-menuitem-de-postmigranten_on_tour:hover,.site-menuitem-de-postmigranten_on_tour:active,.site-menuitem-de-postmigranten_on_tour:focus {
-    background: url(/img/menu/postmigranten_on_tour-aktiv.png);
-}
-
-.site-menuitem-de-partner {
-    background: url(/img/menu/partner-inaktiv.png);
-    width: 127px;
-    height: 42px;
-    display: block;
-}
-
-.site-menuitem-de-partner:hover,.site-menuitem-de-partner:active,.site-menuitem-de-partner:focus {
-    background: url(/img/menu/partner-aktiv.png);
-}
-
-.site-menuitem-de-pressemitteilungen {
-    background: url(/img/menu/pressemitteilungen-inaktiv.png);
-    width: 239px;
-    height: 42px;
-    display: block;
-}
-
-.site-menuitem-de-pressemitteilungen:hover,.site-menuitem-de-pressemitteilungen:active,.site-menuitem-de-pressemitteilungen:focus {
-    background: url(/img/menu/pressemitteilungen-aktiv.png);
-}
-
-.site-menuitem-de-bildmaterial {
-    background: url(/img/menu/bildmaterial-inaktiv.png);
-    width: 169px;
-    height: 42px;
-    display: block;
-}
-
-.site-menuitem-de-bildmaterial:hover,.site-menuitem-de-bildmaterial:active,.site-menuitem-de-bildmaterial:focus {
-    background: url(/img/menu/bildmaterial-aktiv.png);
 }
 
 #logo {
@@ -648,36 +381,6 @@ input.search-input {
 
 .media-browser ul li span {
     display: inline-block;
-    width: 13px;
-}
-
-.media-browser .icon-video,
-.media-browser .icon-picture {
-    background-position: 0 0;
-    height: 15px;
-    width: 15px;
-}
-
-.media-browser .icon-video {
-    background-image: url(/img/Video-inaktiv.png);
-}
-
-.media-browser .icon-video:active,
-.media-browser .icon-video.active,
-.media-browser .icon-video:hover,
-.media-browser .icon-video:focus {
-    background-image: url(/img/Video-aktiv.png);
-}
-
-.media-browser .icon-picture {
-    background-image: url(/img/Foto-inaktiv.png);
-}
-
-.media-browser .icon-picture:active,
-.media-browser .icon-picture.active,
-.media-browser .icon-picture:hover,
-.media-browser .icon-picture:focus {
-    background-image: url(/img/Foto-aktiv.png);
 }
 
 #main .media-credit {

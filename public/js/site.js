@@ -648,20 +648,20 @@ app.config(function($locationProvider, $routeProvider) {
 
     $locationProvider.html5Mode(true);
 
-    [ { name: 'repertoire', controller: RepertoireController, activeMenuItem: 'Programm' },
-      { name: 'archiv', controller: ArchiveController, activeMenuItem: 'Programm' },
-      { name: 'archiv/:date', controller: ArchiveController, activeMenuItem: 'Programm' },
-      { name: 'archiv/:date/:category', controller: ArchiveController, activeMenuItem: 'Programm' },
-      { name: 'spielplan', controller: ScheduleController, activeMenuItem: 'Programm' },
-      { name: 'spielplan/:month', controller: ScheduleController, activeMenuItem: 'Programm' },
+    [ { name: 'repertoire', controller: RepertoireController, activeMenuItem: 'programm' },
+      { name: 'archiv', controller: ArchiveController, activeMenuItem: 'programm' },
+      { name: 'archiv/:date', controller: ArchiveController, activeMenuItem: 'programm' },
+      { name: 'archiv/:date/:category', controller: ArchiveController, activeMenuItem: 'programm' },
+      { name: 'spielplan', controller: ScheduleController, activeMenuItem: 'programm' },
+      { name: 'spielplan/:month', controller: ScheduleController, activeMenuItem: 'programm' },
       { name: 'person/:personId', controller: PersonPageController, activeMenuItem: 'kuenstlerinnen' },
-      { name: 'stueck/:pieceId', controller: PiecePageController, activeMenuItem: 'Programm' },
-      { name: 'auffuehrung/:enactmentId', controller: EnactmentPageController, activeMenuItem: 'Programm' },
-      { name: 'veranstaltung/:eventId', controller: EventPageController, activeMenuItem: 'Programm' },
+      { name: 'stueck/:pieceId', controller: PiecePageController, activeMenuItem: 'programm' },
+      { name: 'auffuehrung/:enactmentId', controller: EnactmentPageController, activeMenuItem: 'programm' },
+      { name: 'veranstaltung/:eventId', controller: EventPageController, activeMenuItem: 'programm' },
       { name: 'kuenstlerinnen', controller: KuenstlerinnenController },
       { name: 'kuenstlerinnen/:letter', controller: KuenstlerinnenController, activeMenuItem: 'kuenstlerinnen' },
-      { name: 'pressemitteilungen', controller: PressPdfController, activeMenuItem: 'Presse' },
-      { name: 'bildmaterial', controller: PressImagesController, activeMenuItem: 'Presse' },
+      { name: 'pressemitteilungen', controller: PressPdfController, activeMenuItem: 'presse' },
+      { name: 'bildmaterial', controller: PressImagesController, activeMenuItem: 'presse' },
       { name: '', templateName: 'home', controller: HomeController },
       { name: 'suche/:term', controller: SearchController }
     ].forEach(function (pageDef) {
@@ -782,14 +782,14 @@ app
 
                 $scope.Page.setSidebarContent();
                 $scope.Page.currentMenuItem({
-                    'haus': 'Haus',
-                    'geschichte': 'Haus',
-                    'team': 'Haus',
-                    'auszeichnungen': 'Haus',
-                    'postmigranten_on_tour': 'Haus',
-                    'partner': 'Haus',
+                    'haus': 'haus',
+                    'geschichte': 'haus',
+                    'team': 'haus',
+                    'auszeichnungen': 'haus',
+                    'postmigranten_on_tour': 'haus',
+                    'partner': 'haus',
                     'tickets': 'tickets',
-                    'reihen': 'Programm'
+                    'reihen': 'programm'
                 }[pageName]);
 
                 db.promise.then(function () {

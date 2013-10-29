@@ -7,6 +7,7 @@
     <title ng-bind="pageTitle"></title>
     <link rel="stylesheet" href="/css/bootstrap-combined.min.css"/>
     <link rel="stylesheet" href="/css/MyFontsWebfontsKit.css"/>
+    <link rel="stylesheet" href="/css/sprites.css"/>
     <link rel="stylesheet" href="/css/site.css"/>
   </head>
   <body>
@@ -16,7 +17,7 @@
         <ul class="service-bar">
           <li><a href="/" class="ir service-bar-icon service-bar-icon-home" title="Startseite">Startseite</a></li>
           <li><ul class="social-link-list">
-            <li><a href="https://www.facebook.com/ballhausnaunynstrasse" class="ir service-bar-icon service-bar-icon-fb" title="Das Ballhaus Naunynstraße auf Facebook" target="_blank">Facebook</a></li>
+            <li><a href="https://www.facebook.com/ballhausnaunynstrasse" class="ir service-bar-icon service-bar-icon-facebook" title="Das Ballhaus Naunynstraße auf Facebook" target="_blank">Facebook</a></li>
             <li><a href="https://twitter.com/ballhausnow" class="ir service-bar-icon service-bar-icon-twitter" title="Das Ballhaus Naunynstraße auf Twitter" target="_blank">Twitter</a></li>
             <li><a href="http://vimeo.com/ballhausnow/videos" class="ir service-bar-icon service-bar-icon-vimeo" title="Das Ballhaus Naunynstraße auf Vimeo" target="_blank">Vimeo</a></li>
           </ul></li>
@@ -31,14 +32,14 @@
         <div id="site-menu" ng-cloak>
           <!-- achtung, bei änderungen public/partials/cms/pages.html und currentMenuItem-Aufrufe anpassen -->
           <menu>
-            <sub-menu name="Programm" link="/spielplan">
+            <sub-menu name="programm" link="/spielplan">
               <menu-item>Spielplan</menu-item>
               <menu-item>Repertoire</menu-item>
               <menu-item>Reihen</menu-item>
               <menu-item>Archiv</menu-item>
             </sub-menu>
             <menu-item to='kuenstlerinnen'>Künstlerinnen</menu-item>
-            <sub-menu name="Haus" link="/haus">
+            <sub-menu name="haus" link="/haus">
               <menu-item>Geschichte</menu-item>
               <menu-item>Team</menu-item>
               <menu-item>Auszeichnungen</menu-item>
@@ -46,7 +47,7 @@
               <menu-item>Partner</menu-item>
             </sub-menu>
             <menu-item>Tickets</menu-item>
-            <sub-menu name="Presse" link="/presse">
+            <sub-menu name="presse" link="/presse">
               <menu-item>Pressemitteilungen</menu-item>
               <menu-item>Bildmaterial</menu-item>
             </sub-menu>

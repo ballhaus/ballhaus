@@ -22,6 +22,7 @@
         "read": "*",
         "nodemailer": "*",
         "xpath": "*",
-        "xmldom": "*"
+        "xmldom": "*",
+        "node-sprite-generator": "*"
     }
 }
