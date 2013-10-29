@@ -734,7 +734,7 @@ app
                 $scope.lang = language;
 
                 // Make sure the CSS-based menu closes on click
-                element.find('a').on('click', function () {
+                element.find('ul a').on('click', function () {
                     var $ul = $('ul', element);
                     $ul.addClass('force-hide');
                     $(element).mouseleave(function () {
