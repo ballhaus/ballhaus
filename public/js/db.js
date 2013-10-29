@@ -333,15 +333,15 @@ app.factory('db',
                      db.maybeSaveChanges = function () {
                          if (db.editMode) {
                              var newStorage = JSON.stringify(freeze(db.objects));
-                             if (localStorage['data'] != newStorage) {
+                             if (localStorage.ballhausData != newStorage) {
                                  console.log('SAVING objects');
-                                 localStorage['data'] = newStorage;
+                                 localStorage.ballhausData = newStorage;
                              }
                          }
                      }
 
                      db.hasChanged = function () {
-                         return serverState && localStorage['data'] && (localStorage['data'] != serverState);
+                         return serverState && localStorage.ballhausData && (localStorage.ballhausData != serverState);
                      }
 
                      db.pushToServer = function (callback) {
@@ -350,7 +350,7 @@ app.factory('db',
                          $http.post('/db', serverState)
                              .success(function () {
                                  console.log('SAVING serverState');
-                                 localStorage['data'] = serverState;
+                                 localStorage.ballhausData = serverState;
                                  console.log('done saving');
                                  if (callback) {
                                      callback();
@@ -471,9 +471,9 @@ app.factory('db',
                              handler();
                          }
                      }
-                     if (localStorage['data'] && editMode) {
+                     if (localStorage.ballhausData && editMode) {
                          console.log('loading from localStorage');
-                         initializeObjects(JSON.parse(localStorage['data']));
+                         initializeObjects(JSON.parse(localStorage.ballhausData));
                          gotData();
                      } else {
                          console.log('loading from server');
@@ -493,7 +493,7 @@ app.factory('db',
                  }
 
                  db.previewMode = function () {
-                     return localStorage['data'];
+                     return localStorage.ballhausData;
                  }
 
                  db.processAllParticipations = function () {
@@ -502,6 +502,8 @@ app.factory('db',
                      db.enactments().forEach(function (enactment) { enactment.processParticipants(); })
                      db.pushToServer();
                  }
+
+                 localStorage.data = '';
 
                  return db;
              });
