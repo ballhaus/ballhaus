@@ -1,3 +1,9 @@
+/* Actually hide cloaked elements */
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none;
+}
+
 /* The following rules courtesy of ryanfait.com
  * (http://stackoverflow.com/questions/7527152/div-with-dynamic-min-height-based-on-browser-window-height)
  * always make the main content area in the middle fill the full
