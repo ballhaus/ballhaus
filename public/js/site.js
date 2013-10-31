@@ -278,21 +278,32 @@ app.service('schedule', function (db, $q, linker) {
 
 
 function ScheduleController($scope, $routeParams, schedule, Page) {
+    function swapMonthYear(monthYear) {
+        return monthYear.substr(3) + '-' + monthYear.substr(0, 2);
+    }
+
     $scope.month = $routeParams.month || moment().format('MM-YYYY');
 
     schedule.getUpcoming().then(function (events) {
         // Determine months
         $scope.months = events.reduce(function (state, event) {
             if (event.monthKey != state.oldMonthKey) {
+                var isCur = event.monthKey === $scope.month;
+                // Switch to next month with event if month has not explicitly been set via URL
+                if (!isCur && !state.hadCur && !$routeParams.month && swapMonthYear(event.monthKey) > swapMonthYear($scope.month)) {
+                    isCur = true;
+                    $scope.month = event.monthKey;
+                }
                 state.months.push({
                     name: event.month,
                     key: event.monthKey,
-                    curClass: event.monthKey === $scope.month ? 'active' : ''
+                    curClass: isCur ? 'active' : ''
                 });
+                state.hadCur = state.hadCur || isCur;
                 state.oldMonthKey = event.monthKey;
             }
             return state;
-        }, {months: [], oldMonthKey: undefined}).months;
+        }, {months: [], oldMonthKey: undefined, hadCur: false}).months;
 
         $scope.years = Object.keys($scope.months.reduce(function (ys, m) {
             ys[m.key.substr(3)] = true;
