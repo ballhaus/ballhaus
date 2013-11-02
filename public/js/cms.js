@@ -306,8 +306,8 @@ function LoginController($scope, $rootScope, $dialog, $http, $location, db) {
     $scope.uploadChanges = true;
 
     $scope.logout = function (force) {
-        localStorage['data'] = '';
-        localStorage.lockId = '';
+        delete localStorage.ballhausData;
+        delete localStorage.lockId;
         $http.post(force ? '/logout?force=1' : '/logout')
             .success(function () {
                 window.location = '/cms';
@@ -415,13 +415,13 @@ function EditDatabaseController($scope, $dialog, db) {
         mode: 'javascript',
         json: true
     };
-    $scope.database = JSON.stringify(JSON.parse(localStorage.data), null, 2);
+    $scope.database = JSON.stringify(JSON.parse(localStorage.ballhausData), null, 2);
     console.log('loaded', db.objects.length, 'objects');
     $scope.saveChanges = function () {
         try {
             var data = JSON.parse($scope.database);
             console.log('saving', data.length, 'objects');
-            localStorage.data = JSON.stringify(data);
+            localStorage.ballhausData = JSON.stringify(data);
             location = '/cms';
         }
         catch (e) {

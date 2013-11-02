@@ -503,7 +503,7 @@ app.factory('db',
                      db.pushToServer();
                  }
 
-                 localStorage.data = '';
+                 delete localStorage.data;
 
                  return db;
              });
