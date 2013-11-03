@@ -108,40 +108,39 @@ function intoRect(rect, item) {
 }
 
 function HomeController($scope, db, Page, schedule) {
-    db.ensure().then(function () {
-        var homepage = db.homepage;
-        var start = 1;
-        var firstBox;
-        if (homepage.layout === 1) {
-            $scope.headColumn = cleanColumn({width: 670, height: 426}, [ homepage.page1 ]);
-            ++start;
-        }
-        if (homepage.layout === 2) {
-            firstBox = homepage.page1;
-            ++start;
-        }
-        if (!firstBox) {
-            schedule.getUpcoming().then(function (upcoming) {
-                if (upcoming && upcoming.length > 0) {
-                    firstBox = Object.create(upcoming[0]);
-                    firstBox.nextPiece = true;
-                    firstBox.date = moment(firstBox.date);
-                    firstBox.howSoon = firstBox.date.isSame(moment(), 'day') ? 'today' : (
-                        firstBox.date.isSame(moment().add('d', 1), 'day') ? 'tomorrow' : 'future');
-                    firstBox.dateIntro = {
-                        today: 'heute,',
-                        tomorrow: 'morgen,',
-                        future: 'am'
-                    }[firstBox.howSoon];
-                }
-                setColumns();
-            });
-        } else {
+    var homepage = db.homepage;
+    var start = 1;
+    var firstBox;
+    if (homepage.layout === 1) {
+        $scope.headColumn = cleanColumn({width: 670, height: 426}, [ homepage.page1 ]);
+        ++start;
+    }
+    if (homepage.layout === 2) {
+        firstBox = homepage.page1;
+        ++start;
+    }
+    if (!firstBox) {
+        schedule.getUpcoming().then(function (upcoming) {
+            if (upcoming && upcoming.length > 0) {
+                firstBox = Object.create(upcoming[0]);
+                firstBox.nextPiece = true;
+                firstBox.date = moment(firstBox.date);
+                firstBox.howSoon = firstBox.date.isSame(moment(), 'day') ? 'today' : (
+                    firstBox.date.isSame(moment().add('d', 1), 'day') ? 'tomorrow' : 'future');
+                firstBox.dateIntro = {
+                    today: 'heute,',
+                    tomorrow: 'morgen,',
+                    future: 'am'
+                }[firstBox.howSoon];
+            }
             setColumns();
-        }
+        });
+    } else {
+        setColumns();
+    }
 
-        function setColumns() {
-            $scope.columns = [
+    function setColumns() {
+        $scope.columns = [
             [
                 firstBox,
                 homepage['page' + (start+1)]
@@ -150,53 +149,50 @@ function HomeController($scope, db, Page, schedule) {
                 homepage['page' + (start+2)]
             ]];
 
-            if ([0, 2].indexOf(homepage.layout) !== -1) {
-                $scope.columns[0].push(homepage['page' + (start+3)]);
-                $scope.columns[1].push(homepage['page' + (start+4)]);
+        if ([0, 2].indexOf(homepage.layout) !== -1) {
+            $scope.columns[0].push(homepage['page' + (start+3)]);
+            $scope.columns[1].push(homepage['page' + (start+4)]);
+        }
+
+        $scope.columns = $scope.columns.map(function (c) {
+            return cleanColumn({width: 320, height: 240}, c);
+        });
+    }
+
+    function cleanColumn(dimensions, c) {
+        return c.filter(function (box) {
+            return box;
+        }).map(function (box) {
+            if (box.images && box.images.length > 0) {
+                box = Object.create(box);
+                box.images = box.images.slice();
+                box.images[0] = intoRect(dimensions, box.images[0]);
             }
+            return box;
+        });
+    }
 
-            $scope.columns = $scope.columns.map(function (c) {
-                return cleanColumn({width: 320, height: 240}, c);
-            });
-        }
-
-        function cleanColumn(dimensions, c) {
-            return c.filter(function (box) {
-                return box;
-            }).map(function (box) {
-                if (box.images && box.images.length > 0) {
-                    box = Object.create(box);
-                    box.images = box.images.slice();
-                    box.images[0] = intoRect(dimensions, box.images[0]);
-                }
-                return box;
-            });
-        }
-
-        Page.setTitle('');
-        Page.marginals(cleanColumn({width: 121, height: 96}, [
-            homepage.marginal1, homepage.marginal2, homepage.marginal3
-        ]));
-    });
+    Page.setTitle('');
+    Page.marginals(cleanColumn({width: 121, height: 96}, [
+        homepage.marginal1, homepage.marginal2, homepage.marginal3
+    ]));
 }
 
 function RepertoireController($scope, db, Page) {
     var seen = {};
     $scope.pieces = [];
     var now = moment();
-    db.ensure().then(function () {
-        db.events().forEach(function (event) {
-            if (!event.piece || seen[event.piece.id]) {
-                return;
+    db.events().forEach(function (event) {
+        if (!event.piece || seen[event.piece.id]) {
+            return;
+        }
+        if ((!moment(event.date).isBefore(now, 'day')) || event.piece.repertoire) {
+            if (event.piece.images && event.piece.images[0]) {
+                event.piece.imageSize = intoRect({width: 176, height: 112}, event.piece.images[0]);
             }
-            if ((!moment(event.date).isBefore(now, 'day')) || event.piece.repertoire) {
-                if (event.piece.images && event.piece.images[0]) {
-                  event.piece.imageSize = intoRect({width: 176, height: 112}, event.piece.images[0]);
-                }
-                $scope.pieces.push(event.piece);
-                seen[event.piece.id] = true;
-            }
-        });
+            $scope.pieces.push(event.piece);
+            seen[event.piece.id] = true;
+        }
     });
 
     Page.setTitle('Repertoire');
@@ -204,36 +200,32 @@ function RepertoireController($scope, db, Page) {
 }
 
 function PressPdfController($scope, db, Page) {
-    db.ensure().then(function () {
-        $scope.events = db.findObjects(db.Event).concat(db.pieces())
-            .filter(function (event) {
-                return event.presse;
-            })
-            .map(function (event) {
-                console.log('event ' + event);
-                return {
-                    name: event.name || (event.piece && event.piece.name),
-                    date: event.date && moment(event.date).format('Do MMMM YYYY'),
-                    epochSeconds: event.date && event.date.getTime(),
-                    pdf: event.presse
-                };
-            });
-    });
+    $scope.events = db.findObjects(db.Event).concat(db.pieces())
+        .filter(function (event) {
+            return event.presse;
+        })
+        .map(function (event) {
+            console.log('event ' + event);
+            return {
+                name: event.name || (event.piece && event.piece.name),
+                date: event.date && moment(event.date).format('Do MMMM YYYY'),
+                epochSeconds: event.date && event.date.getTime(),
+                pdf: event.presse
+            };
+        });
     Page.setTitle('Pressemitteilungen');
     Page.setSidebarContent('');
 }
 
 function PressImagesController($scope, db, Page) {
-    db.ensure().then(function () {
-        $scope.sets = db.pieces()
-            .filter(function (piece) { return piece.flickrSet; })
-            .map(function (piece) {
-                return {
-                    id: piece.flickrSet.id,
-                    name: piece.name
-                };
-            });
-    });
+    $scope.sets = db.pieces()
+        .filter(function (piece) { return piece.flickrSet; })
+        .map(function (piece) {
+            return {
+                id: piece.flickrSet.id,
+                name: piece.name
+            };
+        });
     Page.setTitle('Bildmaterial');
     Page.setSidebarContent('');
 }
@@ -255,21 +247,19 @@ app.service('linker', function (db) {
 app.service('schedule', function (db, $q, linker) {
     function get (archive) {
         var deferred = $q.defer();
-        db.ensure().then(function () {
-            var events = db.events().filter(function (event) {
-              return Boolean(archive) !== event.isCurrent();
-            }).map(function (event) {
-                var date = moment(event.date);
-                return angular.extend({}, event.__proto__, event.piece, event, {
-                    link: linker.linkTo(event),
-                    month: date.format('MMMM'),
-                    monthKey: date.format('MM-YYYY'),
-                    epochSeconds: event.date.getTime()
-                });
-            }).sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
+        var events = db.events().filter(function (event) {
+            return Boolean(archive) !== event.isCurrent();
+        }).map(function (event) {
+            var date = moment(event.date);
+            return angular.extend({}, event.__proto__, event.piece, event, {
+                link: linker.linkTo(event),
+                month: date.format('MMMM'),
+                monthKey: date.format('MM-YYYY'),
+                epochSeconds: event.date.getTime()
+            });
+        }).sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
 
-            deferred.resolve(events);
-        });
+        deferred.resolve(events);
         return deferred.promise;
     }
     this.getUpcoming = get.bind(null, false);
@@ -379,15 +369,13 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
             .reverse();
     });
 
-    db.ensure().then(function () {
-        $scope.availableTags = db.tags().map(function (tag) {
-            var urlTag = utils.urlify(tag.name);
-            if ($scope.category === urlTag) {
-                tag['class'] = 'selected';
-            }
-            tag.urlName = urlTag;
-            return tag;
-        });
+    $scope.availableTags = db.tags().map(function (tag) {
+        var urlTag = utils.urlify(tag.name);
+        if ($scope.category === urlTag) {
+            tag['class'] = 'selected';
+        }
+        tag.urlName = urlTag;
+        return tag;
     });
 
     $scope.showFilterSet = $scope.category;
@@ -409,103 +397,84 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
 }
 
 function PersonPageController($scope, db, $routeParams, Page) {
-    db.ensure().then(function () {
-        $scope.person = db.get(db.Person, $routeParams.personId);
-        if ($scope.person) {
-            $scope.person = Object.create($scope.person);
-            $scope.person.images = $scope.person.images.map(function (img) {
-                return intoRect({height: 300, width: 300}, img);
-            });
-        }
-        Page.setTitle($scope.person ? $scope.person.name : 'Person nicht gefunden');
-    });
+    $scope.person = db.get(db.Person, $routeParams.personId);
+    if ($scope.person) {
+        $scope.person = Object.create($scope.person);
+        $scope.person.images = $scope.person.images.map(function (img) {
+            return intoRect({height: 300, width: 300}, img);
+        });
+    }
+    Page.setTitle($scope.person ? $scope.person.name : 'Person nicht gefunden');
     Page.setSidebarContent('');
 }
 
 function PiecePageController($scope, db, $routeParams, Page, $compile) {
-    db.ensure().then(function () {
-        $scope.piece = db.get(db.Piece, $routeParams.pieceId);
-        Page.setTitle($scope.piece.name);
-        Page.setSidebarContent($compile('<piece-sidebar for="piece"/>')($scope));
-    });
+    $scope.piece = db.get(db.Piece, $routeParams.pieceId);
+    Page.setTitle($scope.piece.name);
+    Page.setSidebarContent($compile('<piece-sidebar for="piece"/>')($scope));
 }
 
 function EventPageController($scope, db, $routeParams, Page, $compile) {
-    db.ensure().then(function () {
-        $scope.event = db.get(db.Event, $routeParams.eventId);
-        Page.setTitle($scope.event.name);
-        Page.setSidebarContent($compile('<piece-sidebar for="event"/>')($scope));
-    });
+    $scope.event = db.get(db.Event, $routeParams.eventId);
+    Page.setTitle($scope.event.name);
+    Page.setSidebarContent($compile('<piece-sidebar for="event"/>')($scope));
 }
 
 function EnactmentPageController($scope, db, $routeParams, Page, $compile) {
-    db.ensure().then(function () {
-        var enactment = db.get(db.Enactment, $routeParams.enactmentId);
-        $scope.enactment = angular.extend({}, enactment.__proto__, enactment.piece, enactment.archivedPiece || {}, enactment);
-        Page.setTitle($scope.enactment.name);
-        Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
-    });
+    var enactment = db.get(db.Enactment, $routeParams.enactmentId);
+    $scope.enactment = angular.extend({}, enactment.__proto__, enactment.piece, enactment.archivedPiece || {}, enactment);
+    Page.setTitle($scope.enactment.name);
+    Page.setSidebarContent($compile('<piece-sidebar for="enactment"/>')($scope));
 }
 
 app.service('artists', function (db, $q) {
-    var pDeferred = $q.defer();
-    var lDeferred = $q.defer();
-
-    db.ensure().then(function () {
-        var people = db.people().filter(function (person) {
-            return person.bio && (person.bio.de || person.bio.en) && person.images && person.images.length;
-        }).map(function (person) {
-            var name = person.name;
-            name = name.replace(/^ *(.*?) *$/, "$1");
-            person.orderName = name.substr(name.lastIndexOf(' ') + 1);
-            return person;
-        });
-        pDeferred.resolve(people);
+    var people = db.people().filter(function (person) {
+        return person.bio && (person.bio.de || person.bio.en) && person.images && person.images.length;
+    }).map(function (person) {
+        var name = person.name;
+        name = name.replace(/^ *(.*?) *$/, "$1");
+        person.orderName = name.substr(name.lastIndexOf(' ') + 1);
+        return person;
     });
 
-    pDeferred.promise.then(function (people) {
-        var letters = people.reduce(function (letters, person) {
-            var c = utils.urlify(person.orderName.charAt(0)).toUpperCase().charCodeAt(0);
-            letters[c] = true;
-            return letters;
-        }, Array('Z'.charCodeAt(0) + 1));
+    var letters = people.reduce(function (letters, person) {
+        var c = utils.urlify(person.orderName.charAt(0)).toUpperCase().charCodeAt(0);
+        letters[c] = true;
+        return letters;
+    }, Array('Z'.charCodeAt(0) + 1));
 
-        var firstLetter = 0;
-        while (letters[firstLetter++] !== true) {};
+    var firstLetter = 0;
+    while (letters[firstLetter++] !== true) {};
 
-        firstLetter = Math.min(firstLetter, 'A'.charCodeAt(0));
+    firstLetter = Math.min(firstLetter, 'A'.charCodeAt(0));
 
-        var newLetters = [];
-        for (var i = firstLetter; i < letters.length; ++i) {
-            newLetters.push({ letter: String.fromCharCode(i), present: letters[i] });
-        }
-        letters = newLetters;
-
-        lDeferred.resolve(letters);
-    });
-
-    this.getPeople = function () {
-        return pDeferred.promise;
-    };
+    var newLetters = [];
+    for (var i = firstLetter; i < letters.length; ++i) {
+        newLetters.push({ letter: String.fromCharCode(i), present: letters[i] });
+    }
+    letters = newLetters;
 
     this.getLetters = function () {
-        return lDeferred.promise;
+        return letters;
+    }
+    this.getPeople = function () {
+        return people;
     }
 });
 
 function KuenstlerinnenController($scope, $routeParams, Page, artists) {
-    artists.getPeople().then(function (people) {
-        $scope.people = people.map(function (person) {
-          person.imageSize = intoRect({width: 120, height: 80}, person.images[0]);
-            return person;
-        });
+    people = artists.getPeople();
 
-        if ($routeParams.letter) {
-            $scope.people = $scope.people.filter(function (person) {
-                return utils.urlify(person.orderName.charAt(0)).toUpperCase() === $routeParams.letter;
-            });
-        }
+    $scope.people = people.map(function (person) {
+        person.imageSize = intoRect({width: 120, height: 80}, person.images[0]);
+        return person;
     });
+
+    if ($routeParams.letter) {
+        $scope.people = $scope.people.filter(function (person) {
+            return utils.urlify(person.orderName.charAt(0)).toUpperCase() === $routeParams.letter;
+        });
+    }
 
     $scope.curLetter = $routeParams.letter;
 
@@ -571,10 +540,8 @@ function SearchController($scope, $routeParams, search, db) {
 function PageController($rootScope, $scope, $timeout, $location, Page, db) {
     // We inject the db in order to trigger db loading
 
-    db.ensure().then(function () {
-        saveLocationForPhantom($scope, $location);
-        sendMessageToPhantom('dbLoaded');
-    });
+    saveLocationForPhantom($scope, $location);
+    sendMessageToPhantom('dbLoaded');
 
     $rootScope.titlePrefix = "Ballhaus Naunynstraße";
 
@@ -671,6 +638,7 @@ app.config(function($locationProvider, $routeProvider) {
     ].forEach(function (pageDef) {
         pageDef.templateUrl = '/partials/' + (pageDef.templateName || pageDef.name.replace(/\/.*$/, "")) + '.html';
         pageDef.activeMenuItem = pageDef.activeMenuItem || pageDef.name;
+        pageDef.resolve = { database: function($q, db) { return db.ensure(); } },
         $routeProvider.when('/' + pageDef.name, pageDef);
     });
 
@@ -706,9 +674,7 @@ app
             templateUrl: '/partials/artists-letter-list.html',
             scope: {cur: '='},
             link: function ($scope, element, attributes) {
-                artists.getLetters().then(function (letters) {
-                    $scope.letters = letters;
-                });
+                $scope.letters = artists.getLetters();
             }
         };
     })
@@ -770,9 +736,7 @@ app
             link: function ($scope, element, attributes) {
                 // pageName is only set in scope when it refers to something in
                 // the parent scope.
-                db.ensure().then(function () {
-                    $scope.page = db.get(db.Page, $scope.pageName || attributes.pageName);
-                });
+                $scope.page = db.get(db.Page, $scope.pageName || attributes.pageName);
             }
         };
     })
@@ -837,9 +801,7 @@ app
             scope: { 'for': '=' },
             link: function ($scope, element, attributes) {
                 console.log('pieceSidebar for', $scope['for']);
-                db.ensure().then(function () {
-                    $scope.rolesPeople = $scope['for'].rolesPeople;
-                });
+                $scope.rolesPeople = $scope['for'].rolesPeople;
             }
         };
     })
