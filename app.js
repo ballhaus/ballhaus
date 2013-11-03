@@ -26,6 +26,9 @@ var sha1 = require('./public/lib/sha1.js');
 
 var sessionTimeout = 15 * 60 * 1000;
 
+var maxImageWidth = 630;
+var maxImageHeight = 400;
+
 var flickr = new Flickr(config.flickr.apiKey, '');
 
 var app = express();
@@ -174,9 +177,19 @@ app.post('/image', function (req, res) {
                      message: err.toString()
                  });
                  return;
-             }                 
-             this.size = size;
-             fs.rename(req.files.qqfile.path, 'images/' + name, this);
+             }
+             this.size = {};
+             if (size.width > size.height) {
+                 this.size.width = Math.min(maxImageWidth, size.width);
+                 this.size.height = Math.floor(size.height / (size.width / this.size.width));
+             } else {
+                 this.size.height = Math.min(maxImageHeight, size.height);
+                 this.size.width = Math.floor(size.width / (size.height / this.size.height));
+             }
+             console.log('resizing', name, 'from', size.width, 'x', size.height, 'to', this.size.width, 'x', this.size.height);
+             gm(req.files.qqfile.path)
+                 .resize(this.size.width, this.size.height)
+                 .write('images/' + name, this);
          },
          function (err) {
              if (err) {
