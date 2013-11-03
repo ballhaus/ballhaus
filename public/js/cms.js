@@ -163,10 +163,12 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                             window.location = "/cms";
                         });
                 }
+                db.editMode = false;
                 if (loginStatus.uuid) {
                     if (loginStatus.uuid == localStorage.lockId) {
                         $rootScope.superuser = loginStatus.superuser;
                         $rootScope.state = 'loggedIn';
+                        db.editMode = true;
                     } else {
                         $rootScope.state = 'locked';
                         $rootScope.loggedInUser = loginStatus.name;
@@ -181,7 +183,7 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                 setTimeout(pollLoginStatus, 1000);
             })
             .error(function () {
-                setTimeout(pollLoginStatus, 10);
+                setTimeout(pollLoginStatus, 1000);
             });
     }
     
