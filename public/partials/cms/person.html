@@ -32,7 +32,7 @@
         <td colspan="2">
           <ul>
             <li ng-repeat="participation in person.participations">
-              <a href="{{participation.inWhat.cmsLink()}}">{{participation.inWhat.name}}</a> {{participation.role}}
+              <a href="{{participation.inWhat.cmsLink()}}">{{participation.inWhat.title()}}</a> {{participation.role}}
             </li>
           </ul>
         </td>

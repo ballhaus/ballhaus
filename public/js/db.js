@@ -124,7 +124,6 @@ app.factory('db',
                      deleteFrom(db.Extent.extent);
                      deleteFrom(convict.constructor.extent);
                      deleteFrom(db.objects);
-                     db.maybeSaveChanges();
                      db.pushToServer();
                  }
 
@@ -329,29 +328,12 @@ app.factory('db',
                          });
                          
                      });
-                     var serverState;
-                     db.maybeSaveChanges = function () {
-                         if (db.editMode) {
-                             var newStorage = JSON.stringify(freeze(db.objects));
-                             if (localStorage.ballhausData != newStorage) {
-                                 console.log('SAVING objects');
-                                 localStorage.ballhausData = newStorage;
-                             }
-                         }
-                     }
-
-                     db.hasChanged = function () {
-                         return serverState && localStorage.ballhausData && (localStorage.ballhausData != serverState);
-                     }
 
                      db.pushToServer = function (callback) {
                          console.log('saving to server');
-                         serverState = JSON.stringify(freeze(db.objects));
-                         $http.post('/db', serverState)
+                         db.serverState = JSON.stringify(freeze(db.objects));
+                         $http.post('/db', db.serverState)
                              .success(function () {
-                                 console.log('SAVING serverState');
-                                 localStorage.ballhausData = serverState;
-                                 console.log('done saving');
                                  if (callback) {
                                      callback();
                                  }
@@ -453,7 +435,7 @@ app.factory('db',
                                                       { name: 'project in/out' },
                                                       { name: 'Festival Black Lux' }
                                                     ] };
-                     serverState = JSON.stringify(freeze(db.objects));
+                     db.serverState = JSON.stringify(freeze(db.objects));
                      db.loaded = true;
                      if (!$rootScope.$$phase) {
                          $rootScope.$apply(function () {
@@ -464,36 +446,43 @@ app.factory('db',
                      }
                  }
 
-                 db.load = function (editMode, handler) {
-                     function gotData() {
-                         db.editMode = editMode;
-                         if (handler) {
-                             handler();
-                         }
-                     }
-                     if (localStorage.ballhausData && editMode) {
-                         console.log('loading from localStorage');
-                         initializeObjects(JSON.parse(localStorage.ballhausData));
-                         gotData();
-                     } else {
-                         console.log('loading from server');
-                         $http.get('/db').success(function (state) {
-                             initializeObjects(state);
-                             gotData();
-                         });
+                 function saveLocalState() {
+                     if (db.serverState) {
+                         db.localState = JSON.stringify(freeze(db.objects));
                      }
                  }
 
-                 $http.get('/login-status').success(function (loginStatus) {
-                     db.load((loginStatus.uuid == localStorage.lockId));
-                 });
+                 setInterval(saveLocalState, 1000);
+
+                 db.hasChanged = function () {
+                     return db.serverState && db.localState && (db.localState != db.serverState);
+                 }
+
+                 db.open = function (editMode) {
+                     db.editMode = editMode;
+                     console.log('loading from server');
+                     $http.get('/db').success(function (state) {
+                         initializeObjects(state);
+                     });
+                     db.opened = true;
+
+                     return db.promise;
+                 }
+
+                 db.ensure = function () {
+                     if (!db.opened) {
+                         db.open();
+                     }
+                     return db.promise;
+                 }
+
+                 db.close = function () {
+                     db.opened = false;
+                 }
 
                  db.restoreFromServer = function (handler) {
-                     db.load(db.editMode, handler);
-                 }
-
-                 db.previewMode = function () {
-                     return localStorage.ballhausData;
+                     db.close();
+                     db.open(db.editMode).then(handler);
                  }
 
                  db.processAllParticipations = function () {
@@ -502,8 +491,6 @@ app.factory('db',
                      db.enactments().forEach(function (enactment) { enactment.processParticipants(); })
                      db.pushToServer();
                  }
-
-                 delete localStorage.data;
 
                  return db;
              });

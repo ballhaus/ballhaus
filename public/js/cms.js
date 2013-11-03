@@ -58,7 +58,6 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
       [ 'page/:pageName', EditPageController ],
       [ 'person/:personId', EditPersonController ],
       [ 'videos' ],
-      [ 'db', EditDatabaseController ],
       [ 'tickets' ],
       [ 'flickr-sets' ],
       [ 'video/:videoId', VideoController ],
@@ -105,18 +104,6 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
         });
     }
 
-    $scope.$on('$routeChangeStart', function (e) {
-        console.log('$routeChangeStart');
-        db.maybeSaveChanges();
-        if (db.hasChanged()) {
-            confirm($dialog, "Änderungen online stellen?", "Sollen die Änderungen übernommen werden?",
-                    function () {
-                        db.pushToServer();
-                    },
-                    $scope.discardChanges);
-        }
-    });
-
     $scope.saveChanges = function () {
         db.pushToServer();
     }
@@ -154,7 +141,9 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
         $http
             .get('/login-status', { params: { url: window.location.pathname } })
             .success(function (loginStatus) {
-                if (db.editMode && (loginStatus.uuid != localStorage.lockId)) {
+                if (localStorage.lockId && (loginStatus.uuid != localStorage.lockId)) {
+                    delete localStorage.lockId;
+                    db.close();
                     $dialog
                         .messageBox("Sitzung beendet", "Das System hat Deine Sitzung beendet",
                                     [ { result: 'ok', label: 'OK', cssClass: 'btn-danger' } ])
@@ -163,12 +152,11 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                             window.location = "/cms";
                         });
                 }
-                db.editMode = false;
                 if (loginStatus.uuid) {
                     if (loginStatus.uuid == localStorage.lockId) {
                         $rootScope.superuser = loginStatus.superuser;
                         $rootScope.state = 'loggedIn';
-                        db.editMode = true;
+                        db.ensure();
                     } else {
                         $rootScope.state = 'locked';
                         $rootScope.loggedInUser = loginStatus.name;
@@ -179,7 +167,6 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                         window.location = '/cms/home';
                     }
                 }
-                db.maybeSaveChanges();
                 setTimeout(pollLoginStatus, 1000);
             })
             .error(function () {
@@ -291,7 +278,7 @@ function LoginController($scope, $rootScope, $dialog, $http, $location, db) {
                     .success(function (loginStatus) {
                         $rootScope.state = 'loggedIn';
                         localStorage.lockId = loginStatus.uuid;
-                        db.load(true, function () {
+                        db.open(true).then(function () {
                             $location.path('/cms/events');
                         });
                     })
@@ -308,7 +295,7 @@ function LoginController($scope, $rootScope, $dialog, $http, $location, db) {
     $scope.uploadChanges = true;
 
     $scope.logout = function (force) {
-        delete localStorage.ballhausData;
+        db.close();
         delete localStorage.lockId;
         $http.post(force ? '/logout?force=1' : '/logout')
             .success(function () {
@@ -409,33 +396,6 @@ function EditPersonController($scope, $dialog, $routeParams, db) {
     }
 }
 EditPersonController.$inject = ['$scope', '$dialog', '$routeParams', 'db'];
-
-function EditDatabaseController($scope, $dialog, db) {
-    $scope.editorOptions = {
-        lineWrapping : true,
-        lineNumbers: true,
-        mode: 'javascript',
-        json: true
-    };
-    $scope.database = JSON.stringify(JSON.parse(localStorage.ballhausData), null, 2);
-    console.log('loaded', db.objects.length, 'objects');
-    $scope.saveChanges = function () {
-        try {
-            var data = JSON.parse($scope.database);
-            console.log('saving', data.length, 'objects');
-            localStorage.ballhausData = JSON.stringify(data);
-            location = '/cms';
-        }
-        catch (e) {
-            $dialog
-                .messageBox('Fehler beim Abspeichern',
-                            'Datenbank konnte nicht gespeichert werden: ' + e,
-                            [ { label: 'OK' } ])
-                .open();
-        }
-    }
-}
-EditDatabaseController.$inject = ['$scope', '$dialog', 'db'];
 
 function EditHomepageController($scope, db) {
     $scope.pages = db.pages().filter(function (page) { return !page.linkedFromMenu; });
@@ -542,7 +502,7 @@ angular.module('cmsApp.filters', []).
     .filter('eventDate', function () {
         return function (events, historic) {
             var now = new Date();
-            return events.filter(function (event) {
+            return events && events.filter(function (event) {
                 var isHistoric = (new Date(event.date)).getTime() < now.getTime();
                 return historic ? isHistoric : !isHistoric;
             });

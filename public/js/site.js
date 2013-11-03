@@ -108,7 +108,7 @@ function intoRect(rect, item) {
 }
 
 function HomeController($scope, db, Page, schedule) {
-    db.promise.then(function () {
+    db.ensure().then(function () {
         var homepage = db.homepage;
         var start = 1;
         var firstBox;
@@ -184,7 +184,7 @@ function RepertoireController($scope, db, Page) {
     var seen = {};
     $scope.pieces = [];
     var now = moment();
-    db.promise.then(function () {
+    db.ensure().then(function () {
         db.events().forEach(function (event) {
             if (!event.piece || seen[event.piece.id]) {
                 return;
@@ -204,7 +204,7 @@ function RepertoireController($scope, db, Page) {
 }
 
 function PressPdfController($scope, db, Page) {
-    db.promise.then(function () {
+    db.ensure().then(function () {
         $scope.events = db.findObjects(db.Event).concat(db.pieces())
             .filter(function (event) {
                 return event.presse;
@@ -224,7 +224,7 @@ function PressPdfController($scope, db, Page) {
 }
 
 function PressImagesController($scope, db, Page) {
-    db.promise.then(function () {
+    db.ensure().then(function () {
         $scope.sets = db.pieces()
             .filter(function (piece) { return piece.flickrSet; })
             .map(function (piece) {
@@ -255,7 +255,7 @@ app.service('linker', function (db) {
 app.service('schedule', function (db, $q, linker) {
     function get (archive) {
         var deferred = $q.defer();
-        db.promise.then(function () {
+        db.ensure().then(function () {
             var events = db.events().filter(function (event) {
               return Boolean(archive) !== event.isCurrent();
             }).map(function (event) {
@@ -379,7 +379,7 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
             .reverse();
     });
 
-    db.promise.then(function () {
+    db.ensure().then(function () {
         $scope.availableTags = db.tags().map(function (tag) {
             var urlTag = utils.urlify(tag.name);
             if ($scope.category === urlTag) {
@@ -409,7 +409,7 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
 }
 
 function PersonPageController($scope, db, $routeParams, Page) {
-    db.promise.then(function () {
+    db.ensure().then(function () {
         $scope.person = db.get(db.Person, $routeParams.personId);
         if ($scope.person) {
             $scope.person = Object.create($scope.person);
@@ -423,7 +423,7 @@ function PersonPageController($scope, db, $routeParams, Page) {
 }
 
 function PiecePageController($scope, db, $routeParams, Page, $compile) {
-    db.promise.then(function () {
+    db.ensure().then(function () {
         $scope.piece = db.get(db.Piece, $routeParams.pieceId);
         Page.setTitle($scope.piece.name);
         Page.setSidebarContent($compile('<piece-sidebar for="piece"/>')($scope));
@@ -431,7 +431,7 @@ function PiecePageController($scope, db, $routeParams, Page, $compile) {
 }
 
 function EventPageController($scope, db, $routeParams, Page, $compile) {
-    db.promise.then(function () {
+    db.ensure().then(function () {
         $scope.event = db.get(db.Event, $routeParams.eventId);
         Page.setTitle($scope.event.name);
         Page.setSidebarContent($compile('<piece-sidebar for="event"/>')($scope));
@@ -439,7 +439,7 @@ function EventPageController($scope, db, $routeParams, Page, $compile) {
 }
 
 function EnactmentPageController($scope, db, $routeParams, Page, $compile) {
-    db.promise.then(function () {
+    db.ensure().then(function () {
         var enactment = db.get(db.Enactment, $routeParams.enactmentId);
         $scope.enactment = angular.extend({}, enactment.__proto__, enactment.piece, enactment.archivedPiece || {}, enactment);
         Page.setTitle($scope.enactment.name);
@@ -451,7 +451,7 @@ app.service('artists', function (db, $q) {
     var pDeferred = $q.defer();
     var lDeferred = $q.defer();
 
-    db.promise.then(function () {
+    db.ensure().then(function () {
         var people = db.people().filter(function (person) {
             return person.bio && (person.bio.de || person.bio.en) && person.images && person.images.length;
         }).map(function (person) {
@@ -519,7 +519,7 @@ app.service('search', function (db, $q) {
         fields.forEach(this.field.bind(this));
     });
     var idxDeferred = $q.defer();
-    db.promise.then(function () {
+    db.ensure().then(function () {
         [ db.Person, db.Event, db.Piece, db.Page ].forEach(function (c) {
           var objs = db.findObjects(c).map(function (obj) {
               obj = Object.create(obj);
@@ -571,19 +571,12 @@ function SearchController($scope, $routeParams, search, db) {
 function PageController($rootScope, $scope, $timeout, $location, Page, db) {
     // We inject the db in order to trigger db loading
 
-    db.promise.then(function () {
+    db.ensure().then(function () {
         saveLocationForPhantom($scope, $location);
         sendMessageToPhantom('dbLoaded');
     });
 
-    $rootScope.previewMode = function () {
-        return db.previewMode();
-    }
-
     $rootScope.titlePrefix = "Ballhaus Naunynstraße";
-    if ($rootScope.previewMode()) {
-        $rootScope.titlePrefix = "PREVIEW: " + $rootScope.titlePrefix;
-    }
 
     $scope.Page = Page;
 
@@ -777,7 +770,7 @@ app
             link: function ($scope, element, attributes) {
                 // pageName is only set in scope when it refers to something in
                 // the parent scope.
-                db.promise.then(function () {
+                db.ensure().then(function () {
                     $scope.page = db.get(db.Page, $scope.pageName || attributes.pageName);
                 });
             }
@@ -803,7 +796,7 @@ app
                     'reihen': 'programm'
                 }[pageName]);
 
-                db.promise.then(function () {
+                db.ensure().then(function () {
                     var page = db.get(db.Page, pageName);
 
                     var html;
@@ -844,7 +837,7 @@ app
             scope: { 'for': '=' },
             link: function ($scope, element, attributes) {
                 console.log('pieceSidebar for', $scope['for']);
-                db.promise.then(function () {
+                db.ensure().then(function () {
                     $scope.rolesPeople = $scope['for'].rolesPeople;
                 });
             }
