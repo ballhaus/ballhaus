@@ -192,10 +192,9 @@ app.post('/image', function (req, res) {
                                    });
              image.makeThumbnail(function (err) {
                  if (err) throw err;
-                 res.json(icebox.freeze({
-                     success: true,
-                     image: image
-                 }))
+                 res.json({ success: true,
+                            image: image
+                          })
              });
          });
 });
