@@ -105,6 +105,17 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
         });
     }
 
+    $scope.$on('$routeChangeStart', function (e) {
+        console.log('$routeChangeStart');
+        if (db.hasChanged()) {
+            confirm($dialog, "Änderungen online stellen?", "Sollen die Änderungen übernommen werden?",
+                    function () {
+                        db.pushToServer();
+                    },
+                    $scope.discardChanges);
+        }
+    });
+
     $scope.saveChanges = function () {
         db.pushToServer();
     }
