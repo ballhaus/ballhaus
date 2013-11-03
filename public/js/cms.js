@@ -40,38 +40,39 @@ var app = angular.module('cmsApp', ['ui',
                                     '$strap.directives',
                                     'ngResource',
                                     'cmsApp.filters',
-                                    'cmsApp.directives']);
+                                    'cmsApp.directives'],
+                         ['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+                             
+                             $locationProvider.html5Mode(true);
 
-app.config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+                             [ [ 'home' ],
+                               [ 'events' ],
+                               [ 'event/:eventId', EditEventController ],
+                               [ 'pieces' ],
+                               [ 'piece/:pieceId', EditPieceController ],
+                               [ 'enactment/:enactmentId', EditEnactmentController ],
+                               [ 'people', PeopleController ],
+                               [ 'homepage', EditHomepageController ],
+                               [ 'pages' ],
+                               [ 'page/:pageName', EditPageController ],
+                               [ 'person/:personId', EditPersonController ],
+                               [ 'videos' ],
+                               [ 'tickets' ],
+                               [ 'flickr-sets' ],
+                               [ 'video/:videoId', VideoController ],
+                               [ 'logos' ],
+                             ].forEach(function (pageDef) {
+                                 var def = { name: pageDef[0],
+                                             resolve: { database: function($q, db) { return db.ensure(); } },
+                                             templateUrl: '/partials/cms/' + pageDef[0].replace(/\/.*$/, "") + '.html' };
+                                 if (pageDef[1]) {
+                                     def.controller = pageDef[1];
+                                 }
+                                 $routeProvider.when('/cms/' + pageDef[0], def);
+                             });
 
-    $locationProvider.html5Mode(true);
-
-    [ [ 'home' ],
-      [ 'events' ],
-      [ 'event/:eventId', EditEventController ],
-      [ 'pieces' ],
-      [ 'piece/:pieceId', EditPieceController ],
-      [ 'enactment/:enactmentId', EditEnactmentController ],
-      [ 'people', PeopleController ],
-      [ 'homepage', EditHomepageController ],
-      [ 'pages' ],
-      [ 'page/:pageName', EditPageController ],
-      [ 'person/:personId', EditPersonController ],
-      [ 'videos' ],
-      [ 'tickets' ],
-      [ 'flickr-sets' ],
-      [ 'video/:videoId', VideoController ],
-      [ 'logos' ],
-    ].forEach(function (pageDef) {
-        var def = { name: pageDef[0], templateUrl: '/partials/cms/' + pageDef[0].replace(/\/.*$/, "") + '.html' };
-        if (pageDef[1]) {
-            def.controller = pageDef[1];
-        }
-        $routeProvider.when('/cms/' + pageDef[0], def);
-    });
-
-    $routeProvider
-        .otherwise({ redirectTo: '/cms/home' });
+                             $routeProvider
+                                 .otherwise({ redirectTo: '/cms/home' });
 }]);
 
 app.value('ui.config', {
