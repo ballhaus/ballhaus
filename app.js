@@ -27,7 +27,7 @@ var sha1 = require('./public/lib/sha1.js');
 var sessionTimeout = 15 * 60 * 1000;
 
 var maxImageWidth = 630;
-var maxImageHeight = 400;
+var maxImageHeight = 420;
 
 var flickr = new Flickr(config.flickr.apiKey, '');
 
