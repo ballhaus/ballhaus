@@ -2,8 +2,8 @@
   Suchen: <input ng-model="query" autofocus>
 </div>
 <ul class="data">
-  <li ng-repeat="person in db.people() | filter:matchingPerson | orderBy:'name'">
-    <ref type="person" object="person"/>
+  <li ng-repeat="person in people | filter:matchingPerson | orderBy:'lastName'">
+    <ref type="person" object="person.person"/>
   </li>
 </ul>
 

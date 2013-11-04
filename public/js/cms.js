@@ -388,12 +388,16 @@ function EditEnactmentController($scope, $dialog, $routeParams, db) {
 }
 EditPieceController.$inject = ['$scope', '$dialog', '$routeParams', 'db'];
 
-function PeopleController($scope) {
+function PeopleController($scope, db) {
     $scope.matchingPerson = function (person) {
-        return !$scope.query || (person.name.toLowerCase().indexOf($scope.query) != -1);
+        return !$scope.query || (person.person.name.toLowerCase().indexOf($scope.query) != -1);
     }
+    $scope.people = db.people().map(function (person) {
+        return { person: person,
+                 lastName: person.name.replace(/.* (.)/, "$1") };
+    });
 }
-PeopleController.$inject = ['$scope'];
+PeopleController.$inject = ['$scope', 'db'];
 
 function EditPersonController($scope, $dialog, $routeParams, db) {
     console.log('EditPersonController', $routeParams.personId);
