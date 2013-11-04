@@ -876,7 +876,7 @@ app
 
                     if ($scope.model && $scope.model.video) {
                         $scope.model.video.type = 'video';
-                        $scope.model.video.vimeoId = $scope.model.video.vimeoId || $scope.model.video.url.match(/\/(\d+)$/)[1];
+                        $scope.model.video.vimeoId = $scope.model.video.vimeoId || ($scope.model.video.url && $scope.model.video.url.match(/\/(\d+)$/)[1]);
                         $scope.model.video.width = maxWidth;
                         $scope.model.video.height = maxVideoHeight;
                         $scope.media.push($scope.model.video);
