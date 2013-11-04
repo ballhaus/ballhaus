@@ -248,6 +248,10 @@ app.factory('db',
                  }
                  inherits(db.Piece, db.Extent);
 
+                 db.Piece.prototype.title = function () {
+                     return this.name;
+                 };
+
                  db.Piece.prototype.processParticipants = db.processParticipants;
 
                  // //////////////////////////////////////////////////////////////////////
