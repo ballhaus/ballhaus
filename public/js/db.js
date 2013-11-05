@@ -318,7 +318,7 @@ app.factory('db',
                          };
                      }
 
-                     db.tickets = $resource('/tickets').query(function (tickets) {
+                     db.tickets = $resource('/ticket-data').query(function (tickets) {
                          var ticketGroups = {};
                          db.ticketGroups = [];
                          tickets.forEach(function (ticket) {

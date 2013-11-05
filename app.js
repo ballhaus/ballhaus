@@ -361,7 +361,7 @@ app.get('/download-flickr-set/:setId', function (req, res) {
 });
 
 app.get('/video', forwardJson.bind(this, 'http://vimeo.com/api/v2/' + config.vimeoUserName + '/videos.json'));
-app.get('/tickets',
+app.get('/ticket-data',
         function (req, res) {
             var chunk_size = 200;
             var page = 0;
@@ -370,15 +370,20 @@ app.get('/tickets',
             function getNextPage() {
                 restler.get('https://www.reservix.de/api/1/sale/event?api-key=' + config.reservixApiKey + '&limit=' + chunk_size + '&page=' + page++)
                     .on('complete', function (data) {
-                        tickets = tickets.concat(data.data);
-                        if (data.limit < chunk_size) {
-                            for (var i in tickets) {
-                                var ticket = tickets[i];
-                                ticket.date_time = ticket.startdate + ' ' + ticket.starttime + ':00';
-                            }
-                            res.send(tickets);
+                        if (data.errorCode) {
+                            console.log('error', data.errorCode, 'getting ticket data:', data.errorMessage);
+                            res.send(data.errorCode, data.errorMessage);
                         } else {
-                            getNextPage();
+                            tickets = tickets.concat(data.data);
+                            if (data.limit < chunk_size) {
+                                for (var i in tickets) {
+                                    var ticket = tickets[i];
+                                    ticket.date_time = ticket.startdate + ' ' + ticket.starttime + ':00';
+                                }
+                                res.send(tickets);
+                            } else {
+                                getNextPage();
+                            }
                         }
                     });
             }
