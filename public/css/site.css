@@ -339,6 +339,10 @@ input.search-input {
     margin-right: 5px;
 }
 
+#site-menu a {
+    outline-width: 0px; // For Gecko
+}
+
 .force-hide {
     display: none !important;
 }
