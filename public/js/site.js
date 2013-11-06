@@ -862,7 +862,7 @@ app
             scope: { model: '=' },
             link: function ($scope, element, attributes) {
                 var maxWidth = 630;
-                var maxHeight = 400;
+                var maxHeight = 420;
                 var maxVideoHeight = 376;
 
                 function initMedia() {

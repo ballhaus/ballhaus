@@ -363,8 +363,7 @@ input.search-input {
 }
 
 .media-browser .display {
-    width: 100%;
-    height: 400px;
+    height: 420px;
 }
 
 .media-browser .display:not(.display-only-medium) {
