@@ -862,7 +862,7 @@ app
             scope: { model: '=' },
             link: function ($scope, element, attributes) {
                 var maxWidth = 630;
-                var maxHeight = 400;
+                var maxHeight = 420;
                 var maxVideoHeight = 376;
 
                 function initMedia() {
@@ -874,7 +874,7 @@ app
                         return picture;
                     });
 
-                    if ($scope.model && $scope.model.video) {
+                    if ($scope.model && $scope.model.video && ($scope.model.video.vimeoId || $scope.model.video.url)) {
                         $scope.model.video.type = 'video';
                         $scope.model.video.vimeoId = $scope.model.video.vimeoId || ($scope.model.video.url && $scope.model.video.url.match(/\/(\d+)$/)[1]);
                         $scope.model.video.width = maxWidth;

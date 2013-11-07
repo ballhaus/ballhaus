@@ -339,6 +339,10 @@ input.search-input {
     margin-right: 5px;
 }
 
+#site-menu a {
+    outline-width: 0px; // For Gecko
+}
+
 .force-hide {
     display: none !important;
 }
@@ -363,8 +367,7 @@ input.search-input {
 }
 
 .media-browser .display {
-    width: 100%;
-    height: 400px;
+    height: 420px;
 }
 
 .media-browser .display:not(.display-only-medium) {
@@ -391,7 +394,7 @@ input.search-input {
 
 #main .media-credit {
     font-size: 10px;
-    line-height: 10px;
+    line-height: 15px;
     margin-top: 6px;
 }
 
