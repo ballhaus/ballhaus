@@ -149,11 +149,13 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
 
     }
 
+    var statusPolled;                                       // "Sitzung beendet"-Meldung nicht anzeigen, wenn CMS frisch geladen wird
+
     function pollLoginStatus() {
         $http
             .get('/login-status', { params: { url: window.location.pathname } })
             .success(function (loginStatus) {
-                if (localStorage.lockId && (loginStatus.uuid != localStorage.lockId)) {
+                if (statusPolled && localStorage.lockId && (loginStatus.uuid != localStorage.lockId)) {
                     delete localStorage.lockId;
                     db.close();
                     $dialog
@@ -164,6 +166,7 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                             window.location = "/cms";
                         });
                 }
+                statusPolled == true;
                 if (loginStatus.uuid) {
                     if (loginStatus.uuid == localStorage.lockId) {
                         $rootScope.superuser = loginStatus.superuser;
