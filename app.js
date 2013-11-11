@@ -84,7 +84,8 @@ app.configure(function() {
     app.use(express.cookieParser(config.cookieSecret));
     app.use(express.session({cookie: { path: '/', httpOnly: true, expires: false }}));
     app.use(function (req, res, next) {
-        var browserPageRequest = req.accepted && req.accepted.length && req.accepted[0].value == 'text/html' && !req.headers['user-agent'].match(/bot\//);
+        req.botRequest = req.headers['user-agent'] && req.headers['user-agent'].match(/bot\//);
+        var browserPageRequest = req.accepted && req.accepted.length && req.accepted[0].value == 'text/html' && !req.botRequest;
         if (req.method == 'GET') {
                 if (browserPageRequest && req.url.match('^/cms')) {
                     console.log('REDIRECTING TO CMS');
@@ -121,7 +122,11 @@ app.configure('development', function() {
 });
 
 app.get('/', function (req, res) {
-    res.render('site');
+    if (req.botRequest) {
+        res.redirect('/index');
+    } else {
+        res.render('site');
+    }
 });
 
 var thaw = require('./thaw');

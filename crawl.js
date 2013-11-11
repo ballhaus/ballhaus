@@ -69,12 +69,15 @@ function savePage() {
     filename += '.html';
     fs.makeTree(directory);
     fs.write(directory + '/' + filename, page.content, 'w');
+    console.log('wrote', directory + '/' + filename);
 }
 
 page.onCallback = function (message) {
     console.log('got phantom message', message.type);
     switch (message.type) {
     case 'dbLoaded':
+        console.log('database loaded in client');
+        break;
     case 'pageLoaded':
         savePage();
         getUrlsToLoad();

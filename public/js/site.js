@@ -16,6 +16,7 @@ function saveLocationForPhantom($scope, $location) {
 }
 
 function sendMessageToPhantom(type, options) {
+    console.log('sendMessageToPhantom', type);
     var message = options || {};
     message.type = type;
     if (typeof window.callPhantom == 'function') {
@@ -176,6 +177,7 @@ function HomeController($scope, db, Page, schedule) {
     Page.marginals(cleanColumn({width: 121, height: 96}, [
         homepage.marginal1, homepage.marginal2, homepage.marginal3
     ]));
+    sendMessageToPhantom('pageLoaded', { path: window.location.pathname });
 }
 
 function RepertoireController($scope, db, Page) {
