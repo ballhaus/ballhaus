@@ -96,7 +96,7 @@ app.configure(function() {
                     console.log('REDIRECTING TO DYNAMIC SITE');
                     res.render('site');
                 } else {
-                    var crawledPath = 'crawled' + req.url + '.html';
+                    var crawledPath = 'crawled' + (req.url == '/' ? '/home' : req.url) + '.html';
                     fs.exists(crawledPath, function (exists) {
                         if (exists) {
                             res.sendfile(crawledPath);
