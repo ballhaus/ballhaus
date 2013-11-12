@@ -6,6 +6,7 @@ var base_url = system.args[1] || 'http://localhost:3000';
 
 console.log('base url', base_url);
 var page = webpage.create();
+var sitemap = '';
 
 page.onConsoleMessage = function printConsole(msg) {
     system.stderr.writeLine('console: ' + msg);
@@ -56,6 +57,12 @@ function nextUrl() {
         currentPath = pathsToLoad.pop();
         gotoPath(currentPath);
     } else {
+        fs.write('public/sitemap.xml',
+                 '<?xml version="1.0" encoding="UTF-8"?>\n'
+                 + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">\n'
+                 + sitemap
+                 + '</urlset>\n',
+                 'w');
         phantom.exit();
     }
 }
@@ -70,6 +77,17 @@ function savePage() {
     fs.makeTree(directory);
     fs.write(directory + '/' + filename, page.content, 'w');
     console.log('wrote', directory + '/' + filename);
+    sitemap += '<url>\n  <loc>http://ballhausnaunynstrasse.de/' + currentPath.replace(/^\//, "") + '</loc>\n';
+    var images
+        = page.evaluate(function () {
+            return $('img').map(function (_, img) { return img.src; });
+        });
+    for (var i = 0; i < images.length; i++) {
+        if (!images[i].match(/header.png$/) && images[i].match(/\.(jpe?g|png)$/)) {
+            sitemap += '  <image:image><image:loc>' + images[i] + '</image:loc></image:image>\n';
+        }
+    }
+    sitemap += '</url>\n';
 }
 
 page.onCallback = function (message) {
