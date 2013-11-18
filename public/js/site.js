@@ -87,12 +87,12 @@ var language = 'de';
 
 moment.lang(language);
 
-function translate(what) {
+function translate(what, lang) {
     switch (typeof what) {
     case 'string':
         return what;
     case 'object':
-        return what[language];
+        return what[lang || language];
     }
 };
 
