@@ -11,4 +11,6 @@
     </div>
   </span>
   <span ng-bind-html-unsafe="for.sponsors | translate" />
+  <p>&nbsp;</p>
+  <span ng-show="for.premiere"><p class="for-premiere">Uraufführung {{for.premiere | toDate}}</p></span>
 </div>
