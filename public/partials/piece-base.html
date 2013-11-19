@@ -9,14 +9,12 @@
     <span class="item-by" ng-bind-html-unsafe="piece.by | translate"></span>
     <span ng-transclude/>
   </div>
-  <p ng-show="piece.description.en">english version see below</p>
+  <p class="english-version-hint" ng-show="piece.description.en">English version below.</p>
   <p>&nbsp;</p>
   <p ng-bind-html-unsafe="piece.description | translate | noTeaser"></p>
   <div ng-show="piece.description.en">
     <p>&nbsp;</p>
-    <p>---------------------------------------------------------------</p>
-    <p>&nbsp;</p>
-    <p>{{piece.name}}</p>
+    <p>.......................................</p>
     <p>&nbsp;</p>
     <p ng-bind-html-unsafe="piece.by | translate:'en'"></p>
     <p>&nbsp;</p>
