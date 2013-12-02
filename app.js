@@ -146,7 +146,7 @@ app.get('/db', function (req, res) {
     res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
     res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
     res.setHeader("Expires", "0"); // Proxies.
-    res.send(icebox.freeze(db));
+    res.send(JSON.stringify(icebox.freeze(db)));
 });
 
 app.post('/db', function (req, res) {
