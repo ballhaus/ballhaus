@@ -89,7 +89,11 @@ app.factory('db',
                      return retval;
                  }
 
-                 db.deleteObject = function(convict) {
+                 db.deleteObject = function (convict) {
+                     db.deleteObjects([convict]);
+                 }
+
+                 db.deleteObjects = function (convicts) {
                      var seenObjects = [];
                      function seen(object) {
                          return seenObjects.indexOf(object) != -1;
@@ -100,29 +104,33 @@ app.factory('db',
                          }
                      }
                      function deleteFrom(parent) {
-                         seenObjects.push(parent);
-                         if (length in parent) {
-                             var i = parent.length;
-                             while (i--) {
-                                 if (parent[i] === convict) {
-                                     parent.splice(i, 1);
-                                 } else {
-                                     maybeChase(parent[i]);
+                         if (parent) {
+                             seenObjects.push(parent);
+                             if (length in parent) {
+                                 var i = parent.length;
+                                 while (i--) {
+                                     if (convicts.indexOf(parent[i]) != -1) {
+                                         parent.splice(i, 1);
+                                     } else {
+                                         maybeChase(parent[i]);
+                                     }
                                  }
-                             }
-                         } else {
-                             for (var key in parent) {
-                                 if (parent[key] === convict) {
-                                     delete parent[key];
-                                 } else {
-                                     maybeChase(parent[key]);
+                             } else {
+                                 for (var key in parent) {
+                                     if (convicts.indexOf(parent[key]) != -1) {
+                                         delete parent[key];
+                                     } else {
+                                         maybeChase(parent[key]);
+                                     }
                                  }
                              }
                          }
                      }
                      // Fixme: All roots must be traversed.  Maybe a list of roots should be kept?
                      deleteFrom(db.Extent.extent);
-                     deleteFrom(convict.constructor.extent);
+                     convicts.forEach(function (convict) {
+                         deleteFrom(convict.constructor.extent);
+                     });
                      deleteFrom(db.objects);
                      db.pushToServer();
                  }
@@ -345,7 +353,6 @@ app.factory('db',
                              .error(function () {
                                  alert('Daten konnten nicht auf dem Server gespeichert werden!');
                              });
-
                      }
                  }
 
