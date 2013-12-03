@@ -366,14 +366,7 @@ function EditPieceController($scope, $dialog, $routeParams, db) {
         confirm($dialog, 'Stück löschen', 'Das Stück "' + $scope.piece.name + '" und alle Aufführungen wirklich löschen?',
                 function () {
                     console.log('delete piece', $scope.piece.name);
-                    var objects = [];
-                    db.enactments().forEach(function (enactment) {
-                        if (enactment.piece === $scope.piece) {
-                            objects.push(enactment);
-                        }
-                    });
-                    objects.push($scope.piece);
-                    db.deleteObjects(objects);
+                    $scope.piece.remove();
                     window.history.back();
                 });
     }

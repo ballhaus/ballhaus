@@ -262,6 +262,18 @@ app.factory('db',
 
                  db.Piece.prototype.processParticipants = db.processParticipants;
 
+                 db.Piece.prototype.remove = function () {
+                     var piece = this;
+                     var objects = [];
+                     db.enactments().forEach(function (enactment) {
+                         if (enactment.piece === piece) {
+                             objects.push(enactment);
+                         }
+                     });
+                     objects.push(piece);
+                     db.deleteObjects(objects);
+                 }
+
                  // //////////////////////////////////////////////////////////////////////
                  // ArchivedPiece
 
@@ -501,6 +513,20 @@ app.factory('db',
                      db.pieces().forEach(function (piece) { piece.processParticipants(); })
                      db.enactments().forEach(function (enactment) { enactment.processParticipants(); })
                      db.pushToServer();
+                 }
+
+                 db.removeDupPieces = function () {
+                     var pieces = db.pieces();
+                     pieces = pieces.sort(function (a, b) { return b.id - a.id; });
+                     var convicts = [];
+                     for (var i = 0; i < pieces.length; i++) {
+                         for (var j = i + 1; j < pieces.length; j++) {
+                             if (pieces[i].name == pieces[j].name) {
+                                 convicts.push(pieces[j]);
+                             }
+                         }
+                     }
+                     convicts.map(function (piece) { piece.remove(); });
                  }
 
                  return db;
