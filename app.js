@@ -16,6 +16,7 @@ var restler = require('restler');
 var dirty = require('dirty');
 var icebox = require('icebox');
 var gm = require('gm');
+var moment = require('moment');
 var Flickr = require('flickr').Flickr;
 var uuid = require('node-uuid');
 var xpath = require('xpath');
@@ -147,6 +148,22 @@ app.get('/db', function (req, res) {
     res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
     res.setHeader("Expires", "0"); // Proxies.
     res.send(JSON.stringify(icebox.freeze(db)));
+});
+
+app.get('/archive-db', function (req, res) {
+    var oldPath = dirtyDb.path;
+    var newPath;
+    if (fs.existsSync(oldPath)) {
+        newPath = oldPath.replace(/\.dat/, moment().format('YYYYMMDD-hhmmss') + '.dat');
+        fs.renameSync(oldPath, newPath);
+    }
+    console.log('old path', oldPath, 'new path', newPath);
+    var data = dirtyDb.get('data');
+    var lastUpdate = dirtyDb.get('lastUpdate');
+    dirtyDb = dirty(oldPath);
+    dirtyDb.set('data', data);
+    dirtyDb.set('lastUpdate', lastUpdate);
+    res.send({status: 'ok', path: newPath});
 });
 
 app.post('/db', function (req, res) {
