@@ -168,7 +168,6 @@ app.get('/archive-db', function (req, res) {
 
 app.post('/db', function (req, res) {
     console.log('update database');
-    fs.appendFileSync('database-debug.log', JSON.stringify(req.body) + "\n");
     db = thaw(req.body);
     dirtyDb.set('data', req.body);
     dirtyDb.set('lastUpdate', { name: loginStatus.name, time: (new Date).toString() });
