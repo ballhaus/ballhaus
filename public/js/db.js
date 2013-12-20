@@ -361,6 +361,8 @@ app.factory('db',
                          
                      });
 
+                     db.maxDelta = 100;
+
                      db.freeze = function () {
                          var objectCount = 0;
                          var frozen = JSON.stringify(freeze(db.objects, function (object) {
@@ -370,9 +372,11 @@ app.factory('db',
 
                          if (db.objectCount) {
                              var delta = objectCount - db.objectCount;
-                             if (Math.abs(delta) > 100) {
-                                 alert("Interner Datenbankfehler!  Bitte merke Dir möglichst genau, was Du gemacht hast, und setze Dich mit Hans (hans.huebner@gmail.com) in Verbindung");
-                                 throw new Error("Unexpected change in number of objects: " + delta);
+                             if (Math.abs(delta) > db.maxDelta) {
+                                 alert("Interner Datenbankfehler!  Bitte merke Dir möglichst genau, was Du gemacht hast, "
+                                       + "und setze Dich mit Hans (hans.huebner@gmail.com) in Verbindung (Insgesamt "
+                                       + delta + " geänderte Objekte)");
+                                 window.location = window.location;
                              }
                          }
 
@@ -543,6 +547,18 @@ app.factory('db',
 
                  db.processAllParticipations = function () {
                      db.showSpinner();
+                     var keepPersons = {};
+                     var deletePersons = [];
+                     db.people().forEach(function (person) {
+                         if (keepPersons[person.name]) {
+                             deletePersons.push(person);
+                         } else {
+                             keepPersons[person.name] = person;
+                             person.participations = [];
+                         }
+                     });
+                     console.log('delete', deletePersons.length, 'persons');
+                     db.deleteObjects(deletePersons);
                      db.events().forEach(function (event) { event.processParticipants(); })
                      db.pieces().forEach(function (piece) { piece.processParticipants(); })
                      db.enactments().forEach(function (enactment) { enactment.processParticipants(); })
