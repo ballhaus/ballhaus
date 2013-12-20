@@ -161,17 +161,22 @@ app.get('/archive-db', function (req, res) {
     var data = dirtyDb.get('data');
     var lastUpdate = dirtyDb.get('lastUpdate');
     dirtyDb = dirty(oldPath);
-    dirtyDb.set('data', data);
-    dirtyDb.set('lastUpdate', lastUpdate);
-    res.send({status: 'ok', path: newPath});
+    dirtyDb.set('data', data, function () {
+        dirtyDb.set('lastUpdate', lastUpdate, function () {
+            res.send({status: 'ok', path: newPath});
+        });
+    });
 });
 
 app.post('/db', function (req, res) {
     console.log('update database');
     db = thaw(req.body);
-    dirtyDb.set('data', req.body);
-    dirtyDb.set('lastUpdate', { name: loginStatus.name, time: (new Date).toString() });
-    res.send("ok");
+    dirtyDb.set('data', req.body, function () {
+        dirtyDb.set('lastUpdate', { name: loginStatus.name, time: (new Date).toString() }, function () {
+            console.log('sending reply');
+            res.send("ok");
+        });
+    });
 });
 
 // Image upload/download
