@@ -169,7 +169,7 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                 if (!statusPolled) {
                     $('#spinner').hide();
                 }
-                statusPolled == true;
+                statusPolled = true;
                 if (loginStatus.uuid) {
                     if (loginStatus.uuid == localStorage.lockId) {
                         $rootScope.superuser = loginStatus.superuser;
