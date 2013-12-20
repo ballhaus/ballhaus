@@ -488,7 +488,10 @@ app.factory('db',
                                                       { name: 'project in/out' },
                                                       { name: 'Festival Black Lux' }
                                                     ] };
-                     db.serverState = db.freeze();
+
+                     if (db.freeze) {
+                         db.serverState = db.freeze();
+                     }
                      db.loaded = true;
                      if (!$rootScope.$$phase) {
                          $rootScope.$apply(function () {
