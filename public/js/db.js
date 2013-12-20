@@ -11,6 +11,14 @@ app.factory('db',
                  console.log('cmsMode: ' + cmsMode);
 
                  dB = db;                                // for debugging
+
+                 db.showSpinner = function () {
+                     jQuery('#spinner').show();
+                 }
+
+                 db.hideSpinner = function () {
+                     jQuery('#spinner').hide();
+                 }
                  
                  db.version = '(unknown)';
                  $resource('/version').get(function (version) {
@@ -53,7 +61,6 @@ app.factory('db',
                          object.constructor.extent = {};
                      }
                      object.constructor.extent[object.id] = object;
-                     Object.defineProperty(object, '$$hashKey', { enumerable: false, writable: true });
                      db.objects.unshift(object);
                  }
 
@@ -94,6 +101,7 @@ app.factory('db',
                  }
 
                  db.deleteObjects = function (convicts) {
+                     db.showSpinner();
                      var seenObjects = [];
                      function seen(object) {
                          return seenObjects.indexOf(object) != -1;
@@ -353,11 +361,33 @@ app.factory('db',
                          
                      });
 
+                     db.freeze = function () {
+                         var objectCount = 0;
+                         var frozen = JSON.stringify(freeze(db.objects, function (object) {
+                             Object.defineProperty(object, '$$hashKey', { enumerable: false, writable: true });
+                             objectCount += 1;
+                         }));
+
+                         if (db.objectCount) {
+                             var delta = objectCount - db.objectCount;
+                             if (Math.abs(delta) > 100) {
+                                 alert("Interner Datenbankfehler!  Bitte merke Dir möglichst genau, was Du gemacht hast, und setze Dich mit Hans (hans.huebner@gmail.com) in Verbindung");
+                                 throw new Error("Unexpected change in number of objects: " + delta);
+                             }
+                         }
+
+                         db.objectCount = objectCount;
+
+                         return frozen;
+                     }
+
                      db.pushToServer = function (callback) {
                          console.log('saving to server');
-                         db.serverState = JSON.stringify(freeze(db.objects));
+                         db.showSpinner();
+                         db.serverState = db.freeze();
                          $http.post('/db', db.serverState)
                              .success(function () {
+                                 db.hideSpinner();
                                  if (callback) {
                                      callback();
                                  }
@@ -458,7 +488,7 @@ app.factory('db',
                                                       { name: 'project in/out' },
                                                       { name: 'Festival Black Lux' }
                                                     ] };
-                     db.serverState = JSON.stringify(freeze(db.objects));
+                     db.serverState = db.freeze();
                      db.loaded = true;
                      if (!$rootScope.$$phase) {
                          $rootScope.$apply(function () {
@@ -471,7 +501,7 @@ app.factory('db',
 
                  function saveLocalState() {
                      if (db.serverState) {
-                         db.localState = JSON.stringify(freeze(db.objects));
+                         db.localState = db.freeze();
                      }
                  }
 
@@ -509,6 +539,7 @@ app.factory('db',
                  }
 
                  db.processAllParticipations = function () {
+                     db.showSpinner();
                      db.events().forEach(function (event) { event.processParticipants(); })
                      db.pieces().forEach(function (piece) { piece.processParticipants(); })
                      db.enactments().forEach(function (enactment) { enactment.processParticipants(); })

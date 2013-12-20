@@ -166,6 +166,9 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                             window.location = "/cms";
                         });
                 }
+                if (!statusPolled) {
+                    $('#spinner').hide();
+                }
                 statusPolled == true;
                 if (loginStatus.uuid) {
                     if (loginStatus.uuid == localStorage.lockId) {
