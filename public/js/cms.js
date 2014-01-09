@@ -378,6 +378,9 @@ EditPieceController.$inject = ['$scope', '$dialog', '$routeParams', 'db'];
 
 function EditEnactmentController($scope, $dialog, $routeParams, db) {
     $scope.enactment = db.get(db.Enactment, $routeParams.enactmentId);
+    if ($scope.enactment.rolesPeople && !$scope.enactment.rolesPeople.length) {
+        delete $scope.enactment.rolesPeople;
+    }
     $scope.deleteEnactment = function () {
         confirm($dialog, 'Aufführung löschen', 'Die Aufführung wirklich löschen?',
                 function () {
