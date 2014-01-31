@@ -49,17 +49,17 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
 })
 .filter('toDate', function () {
     return function (input) {
-        return moment(input).format('Do MMMM YYYY');
+        return moment(input).tz('Europe/Berlin').format('Do MMMM YYYY');
     };
 })
 .filter('toDateWithTime', function () {
     return function (input) {
-        return input && moment(input).format('Do MMMM YYYY, HH:mm [Uhr]');
+        return input && moment(input).tz('Europe/Berlin').format('Do MMMM YYYY, HH:mm [Uhr]');
     };
 })
 .filter('formatDate', function () {
     return function (input, format) {
-        return moment(input).format(format);
+        return moment(input).tz('Europe/Berlin').format(format);
     };
 })
 .filter('translate', function () {
@@ -210,7 +210,7 @@ function PressPdfController($scope, db, Page) {
             console.log('event ' + event);
             return {
                 name: event.name || (event.piece && event.piece.name),
-                date: event.date && moment(event.date).format('Do MMMM YYYY'),
+                date: event.date && moment(event.date).tz('Europe/Berlin').format('Do MMMM YYYY'),
                 epochSeconds: event.date && event.date.getTime(),
                 pdf: event.presse
             };
@@ -255,8 +255,8 @@ app.service('schedule', function (db, $q, linker) {
             var date = moment(event.date);
             return angular.extend({}, event.__proto__, event.piece, event, {
                 link: linker.linkTo(event),
-                month: date.format('MMMM'),
-                monthKey: date.format('MM-YYYY'),
+                month: date.tz('Europe/Berlin').format('MMMM'),
+                monthKey: date.tz('Europe/Berlin').format('MM-YYYY'),
                 epochSeconds: event.date.getTime()
             });
         }).sort(function (a, b) { return a.epochSeconds - b.epochSeconds });
@@ -274,7 +274,7 @@ function ScheduleController($scope, $routeParams, schedule, Page) {
         return monthYear.substr(3) + '-' + monthYear.substr(0, 2);
     }
 
-    $scope.month = $routeParams.month || moment().format('MM-YYYY');
+    $scope.month = $routeParams.month || moment().tz('Europe/Berlin').format('MM-YYYY');
 
     schedule.getUpcoming().then(function (events) {
         // Determine months
@@ -313,7 +313,7 @@ function ScheduleController($scope, $routeParams, schedule, Page) {
 }
 
 function ArchiveController(db, $scope, $routeParams, schedule, Page) {
-    $scope.date = $routeParams.date || moment().format('YYYY'); // FIXME: last available year, not current
+    $scope.date = $routeParams.date || moment().tz('Europe/Berlin').format('YYYY'); // FIXME: last available year, not current
     $scope.curYear = ($scope.date.length > 4) ? $scope.date.substr(3) : $scope.date;
     $scope.category = $routeParams.category;
 
@@ -321,8 +321,8 @@ function ArchiveController(db, $scope, $routeParams, schedule, Page) {
     for (var i = 1; i <= 12; ++i) {
       var m = moment(i + '-' + $scope.curYear, 'M-YYYY');
       $scope.months[i] = {
-        name: m.format('MMMM'),
-        key: m.format('MM-YYYY'),
+        name: m.tz('Europe/Berlin').format('MMMM'),
+        key: m.tz('Europe/Berlin').format('MM-YYYY'),
         curClass: 'muted'
       };
     }
