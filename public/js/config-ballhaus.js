@@ -1,5 +1,6 @@
 var siteConfig = {
-    name: 'ada';
+    name: 'ballhaus',
+    url: 'http://ballhausnaunynstrasse.de',
     tags: [ { name: 'Theater' },
             { name: 'Tanz' },
             { name: 'Performance' },

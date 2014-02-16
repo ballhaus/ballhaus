@@ -1,5 +1,6 @@
 var siteConfig = {
     name: 'ada',
+    url: 'http://akademie-der-autodidakten.de',
     tags: [ { name: 'Theater' },
             { name: 'Tanz' },
             { name: 'Performance' },

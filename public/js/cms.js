@@ -1123,7 +1123,7 @@ angular.module('cmsApp.directives', [])
                 } else {
                     $scope.previewLink = attributes.prefix;
                 }
-                $scope.realLink = 'http://ballhausnaunynstrasse.de' + $scope.previewLink;
+                $scope.realLink = siteConfig.url + $scope.previewLink;
                 var contents = angular.element('<a class="preview" target="bhn-preview" href="{{previewLink}}">{{realLink}}</a>');
                 element.replaceWith(contents);
                 $compile(contents)($scope);
