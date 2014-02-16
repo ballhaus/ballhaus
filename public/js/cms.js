@@ -101,6 +101,7 @@ app.value('ui.config', {
 
 function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
 
+    $scope.logo = siteConfig.logo;
     $scope.discardChanges = function () {
         $dialog
             .messageBox('Daten werden geladen', 'Die Daten werden vom Server neu geladen',
@@ -595,7 +596,7 @@ angular.module('cmsApp.directives', [])
                     if (urlMatch && $scope.directoryMatch.test(urlMatch[1])) {
                         classes.push("active");
                     }
-                    return classes.join('');
+                    return classes.join(' ');
                 }
                 $scope.to = attributes.to;
             }

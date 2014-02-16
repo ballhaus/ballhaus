@@ -1,5 +1,6 @@
 var siteConfig = {
     name: 'ada',
+    logo: 'Ada-Hund.jpg',
     url: 'http://akademie-der-autodidakten.de',
     tags: [ { name: 'Theater' },
             { name: 'Tanz' },

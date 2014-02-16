@@ -1,5 +1,6 @@
 var siteConfig = {
     name: 'ballhaus',
+    logo: 'bn_logo.gif',
     url: 'http://ballhausnaunynstrasse.de',
     tags: [ { name: 'Theater' },
             { name: 'Tanz' },
