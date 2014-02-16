@@ -1,0 +1,42 @@
+<page-directory>
+  <div>
+    <ul class="edit-menu">
+      <li><span>Projekte</span></li>
+      <li><span>Über uns</span><li>
+        <ul>
+          <li><page-edit-ref page="team"/></li>
+          <li><page-edit-ref page="haus"/></li>
+          <li><page-edit-ref page="partner"/></li>
+          <li><page-edit-ref page="auszeichnungen" /></li>
+        </ul>
+      <li><span>Programm</span></li>
+        <ul>
+          <li><page-edit-ref page="autodidakten-on-tour"/></li>
+          <li><span>Archiv</span></li>
+        </ul>
+      <li><span><page-edit-ref page="kiez-monatsschau"/></span></li>
+      <li><span>Service</span></li>
+        <ul>
+          <li><page-edit-ref page="pressekontakt"/></li>
+          <li><page-edit-ref page="presse-und-info-pdf"/></li>
+          <li><page-edit-ref page="bildmaterial"/></li>
+        </ul>
+      </li>
+      <br/>
+      <li><page-edit-ref page="impressum"/></li>
+      <li><page-edit-ref page="kontakt"/></li>
+    </ul>
+  </div>
+  <hr/>
+  <h3>Weitere Seiten</h3>
+  <p>
+    <ul class="data">
+      <li ng-repeat="page in freePages">
+        <ref object="page" title="page.name.de"/>
+      </li>
+    </ul>
+  </p>
+  <div class="actions control-group">
+    <button ng-click="newPage()" class="btn btn-small btn-primary">Neue Seite</button>
+  </div>
+<page-directory>

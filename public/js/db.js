@@ -480,18 +480,7 @@ app.factory('db',
                      } else {
                          db.homepage = new db.Homepage;
                      }
-                     db.tags = function () { return [ { name: 'Theater' },
-                                                      { name: 'Tanz' },
-                                                      { name: 'Performance' },
-                                                      { name: 'Film' },
-                                                      { name: 'Musik' },
-                                                      { name: 'Literatur' },
-                                                      { name: 'Ausstellung' },
-                                                      { name: 'Denken' },
-                                                      { name: 'akademie der autodidakten' },
-                                                      { name: 'project in/out' },
-                                                      { name: 'Festival Black Lux' }
-                                                    ] };
+                     db.tags = function () { return siteConfig.tags; };
 
                      if (db.freeze) {
                          db.serverState = db.freeze();
