@@ -222,6 +222,23 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                 }
             });
     }
+    $scope.newProject = function () {
+        $dialog
+            .dialog({ controller: 'NewNamedObjectController',
+                      resolve: { defaults: function () { return { } } },
+                      templateUrl: '/dialogs/new-project.html' })
+            .open()
+            .then(function(name) {
+                if (name) {
+                    var link = utils.urlify(name);
+                    new db.Piece({ name: name,
+                                   link: link });
+                    db.pushToServer(function () {
+                        $location.path('/cms/piece/' + link);
+                    });
+                }
+            });
+    }
     $scope.newEvent = function () {
         $dialog
             .dialog({ controller: 'NewNamedObjectController',
