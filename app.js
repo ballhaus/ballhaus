@@ -24,6 +24,7 @@ var dom = require('xmldom').DOMParser;
 
 var config = require('./config.json');
 var sha1 = require('./public/lib/sha1.js');
+var site = config.site || 'ballhaus';
 
 var sessionTimeout = 15 * 60 * 1000;
 
@@ -48,7 +49,7 @@ app.configure(function() {
     // nsg middleware has to run after bodyParser
     app.use(nsg.middleware({
         src: [
-          'public/img/menu/*.png',
+          'public/img/menu-' + site + '/*.png',
           'public/img/service-bar/*.png',
           'public/img/newsletter/*.png',
           'public/img/media-browser/*.png'
@@ -65,7 +66,8 @@ app.configure(function() {
                 }
 
                 var prefixes = {
-                    'menu': 'site-menuitem-de'
+                    'menu-ada': 'site-menuitem-de',
+                    'menu-ballhaus': 'site-menuitem-de'
                 };
                 var match = fn.match(/^public\/img\/(?:([^\/]+)\/)?([^\/]+?)(-(in)?aktiv)?.png/);
                 var selector = match[2];
@@ -96,7 +98,7 @@ app.configure(function() {
                     res.render('browser-error');
                 } else if (browserPageRequest && !req.url.match('^/pdf/') && !req.url.match('^/index.php')) {
                     console.log('REDIRECTING TO DYNAMIC SITE');
-                    res.render('site');
+                    res.render('site-' + site);
                 } else {
                     var crawledPath = 'crawled' + (req.url == '/' ? '/home' : req.url) + '.html';
                     fs.exists(crawledPath, function (exists) {
@@ -126,7 +128,7 @@ app.get('/', function (req, res) {
     if (req.botRequest) {
         res.redirect('/index');
     } else {
-        res.render('site');
+        res.render('site-' + site);
     }
 });
 
