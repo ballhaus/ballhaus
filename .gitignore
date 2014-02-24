@@ -9,5 +9,6 @@ node_modules
 .settings
 .idea/*
 ballhaus.dat
+ballhaus*.dat
 config.json
 database-debug.log
