@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/MyFontsWebfontsKit.css"/>
     <link rel="stylesheet" href="/css/sprites.css"/>
     <link rel="stylesheet" href="/css/site.css"/>
+    <link rel="stylesheet" href="/css/site-ada.css"/>
   </head>
   <body class="ada">
     <div id="container">
@@ -26,17 +27,18 @@
           <li><a href="/impressum" class="ir service-bar-impressum">Impressum</a></li>
           <li><form class="search-form" ng-submit="search()" ng-controller="SearchFormController"><input ng-model="term" class="search-input"/> <button type="submit" class="search-button ir" value="Such!"/></form></li>
         </ul>
-        <a href="/"><img id="logo" src="/img/header-ada.png" width="992" height="83"/></a>
+        <a href="/"><img id="logo" src="/img/header-ada.png" width="992" height="39"/></a>
+        <a href="/"><img id="logo-extra" src="/img/ada-logo-header-oben.png" width="288" height="86"/></a>
       </div>
       <div id="site-menu-street">
         <div id="site-menu" ng-cloak>
           <!-- achtung, bei änderungen public/partials/cms/pages.html und currentMenuItem-Aufrufe anpassen -->
           <menu>
             <sub-menu name="programm" link="/spielplan">
-              <menu-item>Autodidakten on Tour</menu-item>
+              <menu-item to="autodidakten-on-tour">Autodidakten on Tour</menu-item>
               <menu-item>Archiv</menu-item>
             </sub-menu>
-            <menu-item>Projekte</menu-item>
+            <menu-item to="repertoire">Projekte</menu-item>
             <sub-menu name="ueber_uns" link="/ueber-uns">
               <menu-item>Team</menu-item>
               <menu-item>Partner</menu-item>
@@ -45,7 +47,7 @@
             <menu-item>Kiez-Monatsschau</menu-item>
             <sub-menu name="service">
               <menu-item>Pressekontakt</menu-item>
-              <menu-item to="presse_und_info_pdfs">Presse-/Info-PDFs</menu-item>
+              <menu-item to="pressemitteilungen">Presse-/Info-PDFs</menu-item>
               <menu-item>Bildmaterial</menu-item>
             </sub-menu>
           </menu>
@@ -86,6 +88,7 @@
     <script src="/lib/moment-timezone-data.js"></script>
     <script src="/lib/icebox.js"></script>
     <script src="/lib/super.min.js"></script>
+    <script src="/js/config-ada.js"></script>
     <script src="/js/utils.js"></script>
     <script src="/js/site.js"></script>
     <script src="/js/db.js"></script>

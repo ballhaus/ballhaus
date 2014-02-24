@@ -386,6 +386,12 @@ body.ada #site-menu-street {
     bottom: 5px;
 }
 
+#logo-extra {
+    position: absolute;
+    left: 736px;
+    bottom: 41px;
+}
+
 .media-browser {
     width: 630px;
     margin-bottom: 16px;
