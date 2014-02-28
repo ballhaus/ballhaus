@@ -2,3 +2,7 @@
     width: 121px;
 }
 
+#site-menu > nav > ul > li {
+    margin-right: 6px;
+}
+
