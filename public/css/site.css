@@ -376,10 +376,20 @@ body.ada #site-menu-street {
     width: 91px;
 }
 
+.site-submenu-de-ueber_uns {
+    width: 111px;
+}
+
 #logo {
     position: absolute;
     left: 32px;
     bottom: 5px;
+}
+
+#logo-extra {
+    position: absolute;
+    left: 736px;
+    bottom: 41px;
 }
 
 .media-browser {
