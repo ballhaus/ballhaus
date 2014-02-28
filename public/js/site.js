@@ -201,6 +201,27 @@ function RepertoireController($scope, db, Page) {
     Page.setSidebarContent('');
 }
 
+function ProjekteController($scope, db, Page) {
+    var seen = {};
+    $scope.pieces = [];
+    var now = moment();
+    db.events().forEach(function (event) {
+        if (!event.piece || seen[event.piece.id]) {
+            return;
+        }
+        if ((!moment(event.date).isBefore(now, 'day')) || event.piece.projekte) {
+            if (event.piece.images && event.piece.images[0]) {
+                event.piece.imageSize = intoRect({width: 176, height: 112}, event.piece.images[0]);
+            }
+            $scope.pieces.push(event.piece);
+            seen[event.piece.id] = true;
+        }
+    });
+
+    Page.setTitle('Projekte');
+    Page.setSidebarContent('');
+}
+
 function PressPdfController($scope, db, Page) {
     $scope.events = db.findObjects(db.Event).concat(db.pieces())
         .filter(function (event) {
@@ -547,7 +568,7 @@ function PageController($rootScope, $scope, $timeout, $location, Page, db) {
     saveLocationForPhantom($scope, $location);
     sendMessageToPhantom('dbLoaded');
 
-    $rootScope.titlePrefix = "Ballhaus Naunynstraße";
+    $rootScope.titlePrefix = siteConfig.title || "Ballhaus Naunynstraße";
 
     $scope.Page = Page;
 
@@ -624,6 +645,7 @@ app.config(function($locationProvider, $routeProvider) {
     $locationProvider.html5Mode(true);
 
     [ { name: 'repertoire', controller: RepertoireController, activeMenuItem: 'programm' },
+      { name: 'projekte', controller: RepertoireController, activeMenuItem: 'projekte' },
       { name: 'archiv', controller: ArchiveController, activeMenuItem: 'programm' },
       { name: 'archiv/:date', controller: ArchiveController, activeMenuItem: 'programm' },
       { name: 'archiv/:date/:category', controller: ArchiveController, activeMenuItem: 'programm' },

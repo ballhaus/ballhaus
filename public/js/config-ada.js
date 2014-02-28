@@ -2,6 +2,7 @@ var siteConfig = {
     name: 'ada',
     logo: 'Ada-Hund.jpg',
     url: 'http://akademie-der-autodidakten.de',
+    title: 'akademie der autodidakten',
     tags: [ { name: 'Theater' },
             { name: 'Tanz' },
             { name: 'Performance' },
@@ -11,6 +12,7 @@ var siteConfig = {
             { name: 'Ausstellung' },
             { name: 'Denken' },
             { name: 'Workshop' },
-            { name: 'autodidakten on tour' }
+            { name: 'autodidakten on tour' },
+            { name: 'Kiez-Monatsschau' }
           ]
 };
