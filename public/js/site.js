@@ -774,7 +774,7 @@ app
                         html = '<static-page page-name="page"></static-page>';
                     } else if (pageName === 'english') {
                         $scope.Page.setTitle('English page');
-                        html = '<p>We are working on the English version of our website, which will soon be available here.</p>';
+                        html = '<p>Please find an English version of the play/performance descriptions below the German texts. English surtitles will be provided in all performances tagged with "mit engl. ÜT".</p>';
                     } else {
                         $scope.Page.setTitle('Seite nicht gefunden');
                         html = '<p>Die Seite "' + pageName + '" wurde nicht gefunden</p>';
