@@ -9,9 +9,5 @@
     <span class="item-by" ng-bind-html-unsafe="piece.by | translate"></span>
     <span ng-transclude/>
   </div>
-  <div ng-show="piece.description.en"><p>Please find an English
-  version of the play/performance descriptions below the German texts.
-  English surtitles will be provided in all performances tagged with
-  "mit engl. ÜT"..</p><p>&nbsp;</p></div>
   <p ng-bind-html-unsafe="piece.description | translate | noTeaser"></p>
 </div>
