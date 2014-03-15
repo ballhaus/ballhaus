@@ -466,6 +466,12 @@ app.factory('db',
                      db.images = db.findObjects.bind(this, db.Image);
                      db.pages = db.findObjects.bind(this, db.Page);
 
+		     db.findObjects(db.ArchivedPiece).map(function (piece) {
+			 if (piece.description.de && piece.description.de.match(/English version below/)) {
+			     delete piece.description.en;
+			 }
+		     });
+
                      archiveEnactments();
 
                      // Schema migration for Page title translation
