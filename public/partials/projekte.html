@@ -1,0 +1,14 @@
+<h1 class="page-title">Produktionen</h1>
+<div class="hor-list-space"></div>
+<ul class="repertoire big-list">
+  <li class="piece" ng-repeat="piece in pieces | orderBy:'name'">
+    <a href="/stueck/{{piece.link}}">
+      <div class="image-container">
+        <thumbnail for="piece" />
+      </div>
+      <div class="item-tags">{{piece.tags | join:" / " | orSpace}}</div>
+      <div class="item-name">{{piece.name}}</div>
+      <div class="by" ng-bind-html-unsafe="piece.by.de | orSpace"></div>
+    </a>
+  </li>
+</ul>

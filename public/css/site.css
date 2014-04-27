@@ -89,9 +89,16 @@ body {
     background-attachment: fixed;
     background-size: 100%;
     background-repeat: no-repeat;
-    background-image: url(/img/background.jpg);
     background-color: #bcbcbc;
     border-top: 4px solid black;
+}
+
+body.ballhaus {
+    background-image: url(/img/background-ballhaus.jpg);
+}
+
+body.ada {
+    background-image: url(/img/background-ada.jpg);
 }
 
 a {
@@ -173,6 +180,13 @@ h1 {
     display: block;
     background-image: url(/img/ada_logo.png);
     height: 76px;
+    width: 238px;
+}
+
+.sidebar-link-ballhaus {
+    display: block;
+    background-image: url(/img/ballh_logo.png);
+    height: 65px;
     width: 238px;
 }
 
@@ -298,8 +312,15 @@ input.search-input {
     position: relative;
     background-size: 100%;
     background-repeat: no-repeat;
-    background-image: url(/img/ballh_header-strip.png);
     border-bottom: 2px solid black;
+}
+
+body.ballhaus #site-menu-street {
+    background-image: url(/img/ballh_header-strip.png);
+}
+
+body.ada #site-menu-street {
+    background-image: url(/img/ada_header-strip.png);
 }
 
 #site-menu {
@@ -355,10 +376,20 @@ input.search-input {
     width: 91px;
 }
 
+.site-submenu-de-ueber_uns {
+    width: 111px;
+}
+
 #logo {
     position: absolute;
     left: 32px;
     bottom: 5px;
+}
+
+#logo-extra {
+    position: absolute;
+    left: 736px;
+    bottom: 41px;
 }
 
 .media-browser {

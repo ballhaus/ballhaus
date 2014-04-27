@@ -16,7 +16,7 @@
         "dirty": "*",
         "moment": "*",
         "gm": "*",
-	"super": "*",
+	"super": "0.2.1",
         "http-get": "*",
         "flickr": "*",
         "node-uuid": "*",

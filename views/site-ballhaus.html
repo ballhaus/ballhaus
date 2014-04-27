@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" ng-app="siteApp" ng-controller="PageController">
+  <head>
+    <script src="/js/check-old-browser.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=1024">
+    <title ng-bind="pageTitle"></title>
+    <link rel="stylesheet" href="/css/bootstrap-combined.min.css"/>
+    <link rel="stylesheet" href="/css/MyFontsWebfontsKit.css"/>
+    <link rel="stylesheet" href="/css/sprites.css"/>
+    <link rel="stylesheet" href="/css/site.css"/>
+  </head>
+  <body class="ballhaus">
+    <div id="container">
+      <div id="preview-marker" ng-cloak ng-show="previewMode()">Preview</div>
+      <div id="header">
+        <ul class="service-bar">
+          <li><a href="/" class="ir service-bar-icon service-bar-icon-home" title="Startseite">Startseite</a></li>
+          <li><ul class="social-link-list">
+            <li><a href="https://www.facebook.com/ballhausnaunynstrasse" class="ir service-bar-icon service-bar-icon-facebook" title="Das Ballhaus Naunynstraße auf Facebook" target="_blank">Facebook</a></li>
+            <li><a href="https://twitter.com/ballhausnow" class="ir service-bar-icon service-bar-icon-twitter" title="Das Ballhaus Naunynstraße auf Twitter" target="_blank">Twitter</a></li>
+            <li><a href="http://vimeo.com/ballhausnow/videos" class="ir service-bar-icon service-bar-icon-vimeo" title="Das Ballhaus Naunynstraße auf Vimeo" target="_blank">Vimeo</a></li>
+          </ul></li>
+          <li><a href="/english" class="ir service-bar-english">English</a></li>
+          <li><a href="/kontakt" class="ir service-bar-kontakt">Kontakt</a></li>
+          <li><a href="/impressum" class="ir service-bar-impressum">Impressum</a></li>
+          <li><form class="search-form" ng-submit="search()" ng-controller="SearchFormController"><input ng-model="term" class="search-input"/> <button type="submit" class="search-button ir" value="Such!"/></form></li>
+        </ul>
+        <a href="/"><img id="logo" src="/img/header-ballhaus.png" width="992" height="83"/></a>
+      </div>
+      <div id="site-menu-street">
+        <div id="site-menu" ng-cloak>
+          <!-- achtung, bei änderungen public/partials/cms/pages.html und currentMenuItem-Aufrufe anpassen -->
+          <menu>
+            <sub-menu name="programm" link="/spielplan">
+              <menu-item>Spielplan</menu-item>
+              <menu-item>Repertoire</menu-item>
+              <menu-item>Reihen</menu-item>
+              <menu-item>Archiv</menu-item>
+            </sub-menu>
+            <menu-item to='kuenstlerinnen'>Künstlerinnen</menu-item>
+            <sub-menu name="haus" link="/haus">
+              <menu-item>Geschichte</menu-item>
+              <menu-item>Team</menu-item>
+              <menu-item>Auszeichnungen</menu-item>
+              <menu-item>Postmigranten on Tour</menu-item>
+              <menu-item>Partner</menu-item>
+            </sub-menu>
+            <menu-item>Tickets</menu-item>
+            <sub-menu name="presse" link="/presse">
+              <menu-item>Pressemitteilungen</menu-item>
+              <menu-item>Bildmaterial</menu-item>
+            </sub-menu>
+          </menu>
+        </div>
+      </div>
+      <div>
+        <div id="main" ng-view>
+        </div>
+        <div id="right" ng-cloak>
+          <div ng-show="Page.customSidebar()" ng-bind-html-unsafe="Page.sidebarContent()"></div>
+          <div ng-hide="Page.customSidebar()">
+            <div>
+              <form method="POST" class="form-inline newsletter-form" ng-controller="NewsletterController" ng-submit="subscribe()">
+                <h2>Newsletter bestellen</h2>
+                <div class="newsletter-controls">
+                  <input ng-model="address" name="address" type="text" class="newsletter-address" type="email" placeholder="Email-Adresse" required>
+                  <button type="submit" class="newsletter-submit ir">OK</button>
+                  <p class="newsletter-success" ng-cloak ng-show="success">Newsletter abonniert!</p>
+                </div>
+              </form>
+            </div>
+            <div>
+              <p>
+                <a href="http://akademie-der-autodidakten.de/" target="_blank" class="ir sidebar-link-akademie">Akademie der Autodidakten</a>
+              </p>
+            </div>
+          </div>
+          <home-sidebar class="home-sidebar" for="Page.marginals()"></home-sidebar>
+        </div>
+      </div>
+      <div id="push"></div>
+    </div>
+    <div id="footer">
+    </div>
+
+    <script src="/lib/jquery-1.9.1.min.js"></script>
+    <script src="/lib/angular/angular.js"></script>
+    <script src="/lib/angular/angular-resource.js"></script>
+    <script src="/lib/angular/angular-sanitize.js"></script>
+    <script src="/lib/ui-bootstrap-tpls-0.2.0.min.js"></script>
+    <script src="/lib/bootstrap-dropdown.js"></script>
+    <script src="/lib/angular-strap.js"></script>
+    <script src="/lib/bootstrap-datepicker.js"></script>
+    <script src="/lib/bootstrap-timepicker.js"></script>
+    <script src="/lib/moment-with-langs.min.js"></script>
+    <script src="/lib/moment-timezone.min.js"></script>
+    <script src="/lib/moment-timezone-data.js"></script>
+    <script src="/lib/icebox.js"></script>
+    <script src="/lib/super.min.js"></script>
+    <script src="/js/config-ballhaus.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/site.js"></script>
+    <script src="/js/db.js"></script>
+    <script src="/lib/lunr/lunr.min.js"></script>
+  </body>
+</html>

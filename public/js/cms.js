@@ -50,6 +50,8 @@ var app = angular.module('cmsApp', ['ui',
                                [ 'event/:eventId', EditEventController ],
                                [ 'pieces' ],
                                [ 'piece/:pieceId', EditPieceController ],
+                               [ 'projects' ],
+                               [ 'project/:pieceId', EditPieceController ],
                                [ 'enactment/:enactmentId', EditEnactmentController ],
                                [ 'people', PeopleController ],
                                [ 'homepage', EditHomepageController ],
@@ -62,9 +64,13 @@ var app = angular.module('cmsApp', ['ui',
                                [ 'video/:videoId', VideoController ],
                                [ 'logos' ],
                              ].forEach(function (pageDef) {
-                                 var def = { name: pageDef[0],
+                                 var pageName = pageDef[0];
+                                 if (pageName == 'pages') {
+                                     pageName = 'pages-' + siteConfig.name;
+                                 }
+                                 var def = { name: pageName,
                                              resolve: { database: function($q, db) { return db.ensure(); } },
-                                             templateUrl: '/partials/cms/' + pageDef[0].replace(/\/.*$/, "") + '.html' };
+                                             templateUrl: '/partials/cms/' + pageName.replace(/\/.*$/, "") + '.html' };
                                  if (pageDef[1]) {
                                      def.controller = pageDef[1];
                                  }
@@ -95,6 +101,7 @@ app.value('ui.config', {
 
 function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
 
+    $scope.logo = siteConfig.logo;
     $scope.discardChanges = function () {
         $dialog
             .messageBox('Daten werden geladen', 'Die Daten werden vom Server neu geladen',
@@ -204,6 +211,23 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
             .dialog({ controller: 'NewNamedObjectController',
                       resolve: { defaults: function () { return { } } },
                       templateUrl: '/dialogs/new-piece.html' })
+            .open()
+            .then(function(name) {
+                if (name) {
+                    var link = utils.urlify(name);
+                    new db.Piece({ name: name,
+                                   link: link });
+                    db.pushToServer(function () {
+                        $location.path('/cms/piece/' + link);
+                    });
+                }
+            });
+    }
+    $scope.newProject = function () {
+        $dialog
+            .dialog({ controller: 'NewNamedObjectController',
+                      resolve: { defaults: function () { return { } } },
+                      templateUrl: '/dialogs/new-project.html' })
             .open()
             .then(function(name) {
                 if (name) {
@@ -365,8 +389,9 @@ EditEventController.$inject = ['$scope', '$dialog', '$routeParams', 'db'];
 
 function EditPieceController($scope, $dialog, $routeParams, db) {
     $scope.piece = db.get(db.Piece, $routeParams.pieceId);
+    var pieceLabel = (siteConfig.name == 'ada') ? 'Projekt' : 'Stück';
     $scope.deletePiece = function () {
-        confirm($dialog, 'Stück löschen', 'Das Stück "' + $scope.piece.name + '" und alle Aufführungen wirklich löschen?',
+        confirm($dialog, pieceLabel + ' löschen', 'Das ' + pieceLabel + ' "' + $scope.piece.name + '" und alle Aufführungen wirklich löschen?',
                 function () {
                     console.log('delete piece', $scope.piece.name);
                     $scope.piece.remove();
@@ -529,7 +554,7 @@ angular.module('cmsApp.filters', []).
     });
 
 angular.module('cmsApp.directives', [])
-    .directive("ref", [ '$compile', 'db', function ($compile, db) {
+    .directive("ref", [ '$compile', function ($compile) {
         return {
             restrict: 'E',
             replace: true,
@@ -553,27 +578,30 @@ angular.module('cmsApp.directives', [])
             }
         };
     }])
-    .directive("menuLink", function () {
+    .directive("menuLink", [ 'db', function (db) {
         return {
             restrict: 'E',
             replace: true,
             transclude: true,
             scope: true,
-            template: '<li ng-class="active()"><a href="/cms/{{to}}" ng-transclude></a></li>',
+            template: '<li ng-class="getClass()"><a href="/cms/{{to}}" ng-transclude></a></li>',
             link: function ($scope, element, attributes) {
                 $scope.directoryMatch = new RegExp('^(' + attributes.to + '|' + attributes.subs + ')$');
-                $scope.active = function () {
+                $scope.getClass = function () {
+                    var classes = [];
+                    if (attributes.site && attributes.site != siteConfig.name) {
+                        classes.push('hidden');
+                    }
                     var urlMatch = window.location.href.match('/cms/([^/]+)');
                     if (urlMatch && $scope.directoryMatch.test(urlMatch[1])) {
-                        return "active";
-                    } else {
-                        return "";
+                        classes.push("active");
                     }
+                    return classes.join(' ');
                 }
                 $scope.to = attributes.to;
             }
         };
-    })
+    }])
     .directive("optionalText", [ '$compile', function($compile) {
         return {
             restrict: 'E',
@@ -1113,7 +1141,7 @@ angular.module('cmsApp.directives', [])
                 } else {
                     $scope.previewLink = attributes.prefix;
                 }
-                $scope.realLink = 'http://ballhausnaunynstrasse.de' + $scope.previewLink;
+                $scope.realLink = siteConfig.url + $scope.previewLink;
                 var contents = angular.element('<a class="preview" target="bhn-preview" href="{{previewLink}}">{{realLink}}</a>');
                 element.replaceWith(contents);
                 $compile(contents)($scope);

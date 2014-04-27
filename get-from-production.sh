@@ -1,3 +1,10 @@
 #!/bin/sh
 
-rsync -av 'ballhaus.netzhansa.com:~ballhaus/ballhaus/{ballhaus.dat,thumbnails,images}' .
+site=$1
+
+if [ "$site" = "" ]
+then
+    site=ballhaus
+fi
+
+rsync -av "ballhaus.netzhansa.com:~ballhaus/$site/{ballhaus.dat,thumbnails,images}" .
