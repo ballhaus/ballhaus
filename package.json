@@ -24,6 +24,7 @@
         "nodemailer": "*",
         "xpath": "*",
         "xmldom": "*",
-        "node-sprite-generator": "*"
+        "node-sprite-generator": "*",
+        "soap": "*"
     }
 }

@@ -21,6 +21,8 @@ var Flickr = require('flickr').Flickr;
 var uuid = require('node-uuid');
 var xpath = require('xpath');
 var dom = require('xmldom').DOMParser;
+var nodemailer = require('nodemailer');
+var soap = require('soap');
 
 var config = require('./config.json');
 var sha1 = require('./public/lib/sha1.js');
@@ -419,19 +421,88 @@ app.get('/ticket-data',
             getNextPage();
         });
 
-var mailer = require('nodemailer').createTransport("Sendmail", "/usr/sbin/sendmail");
+var mailer = nodemailer.createTransport("Sendmail", "/usr/sbin/sendmail");
+
+function subscribeNewsletter(email, doidata, handler) {
+    console.log(doidata);
+    try {
+        Step(
+            function () {
+                soap.createClient(config.cleverreach.url, this);
+            },
+            function(err, client) {
+                if (err) throw err;
+                this.client = client;
+                this.client.receiverAdd({ apiKey: config.cleverreach.apiKey,
+                                          groupId: config.cleverreach.groupId,
+                                          subscriberData: {
+                                              email: email,
+                                              active: false,
+                                              deactivated: 1
+                                          }
+                                        }, this);
+            },
+            function(err, result) {
+                if (err) throw err;
+                console.log('receiverAdd result', result);
+                this.client.formsSendActivationMail({ apiKey: config.cleverreach.apiKey,
+                                                      formId: config.cleverreach.formId,
+                                                      email: email,
+                                                      doidata: doidata
+                                                    }, this);
+            },
+            function (err, result) {
+                if (err) throw err;
+                console.log('formsSendActivationMail result', result);
+                handler && handler(err, result);
+            });
+    }
+    catch (e) {
+        handler(e);
+    }
+        
+}
+
+function unsubscribeNewsletter(email, handler) {
+    Step(
+        function () {
+            soap.createClient(config.cleverreach.url, this);
+        },
+        function (err, client) {
+            if (err) throw err;
+            this.client = client;
+            this.client.receiverDelete({ apiKey: config.cleverreach.apiKey,
+                                         groupId: config.cleverreach.groupId,
+                                         email: email },
+                                       this);
+        },
+        function (err, result) {
+            if (err) throw err;
+            console.log('done', result);
+            handler && handler(err, result);
+        });
+}
 
 app.post('/newsletter-subscription', function (req, res) {
     console.log(req.body);
-    req.body.address
-    mailer.sendMail({
-        from: req.body.address,
-        to: ['hallo@ballhausnaunynstrasse.de'],
-        subject: 'Newsletter abonnieren',
-        text: 'Ich möchte bitte euren Newsletter abonnieren'
-    }, function (error, response) {
-        res.send({success: !error});
-    });
+
+    subscribeNewsletter(req.body.address,
+                        {
+                            user_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+                            user_agent: req.headers['user-agent'],
+                            referer: req.headers['referer']
+                        },
+                        function (err, data) {
+                            if (err) {
+                                mailer.sendMail({
+                                    from: 'ballhaus@netzhansa.com',
+                                    to: ['hans.huebner@gmail.com'],
+                                    subject: 'Fehler beim Newsletter abbonieren',
+                                    text: JSON.stringify(err) + "\n\n" + JSON.stringify(data)
+                                });
+                            }
+                            res.send({ success: !err });
+                        });
 });
 
 var redirects = { '21/810': '/stueck/liga_der_verdammten' };
