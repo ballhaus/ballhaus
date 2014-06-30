@@ -17,7 +17,7 @@ var dirty = require('dirty');
 var icebox = require('icebox');
 var gm = require('gm');
 var moment = require('moment');
-var Flickr = require('flickr').Flickr;
+var Flickr = require('flickrapi');
 var uuid = require('node-uuid');
 var xpath = require('xpath');
 var dom = require('xmldom').DOMParser;
@@ -32,8 +32,6 @@ var sessionTimeout = 15 * 60 * 1000;
 
 var maxImageWidth = 630;
 var maxImageHeight = 420;
-
-var flickr = new Flickr(config.flickr.apiKey, '');
 
 var app = express();
 
@@ -345,35 +343,41 @@ function forwardJson (url, req, res) {
 }
 
 app.get('/flickr-sets', function (req, res) {
-    flickr.executeAPIRequest('flickr.photosets.getList',
-                             { user_id: config.flickr.userId },
-                             false,
-                             function (error, response) {
-                                 if (error) throw error;
-                                 res.send(response.photosets.photoset);
-                             });
+    Flickr.tokenOnly({ api_key: config.flickr.apiKey },
+                     function (err, flickr) {
+                         if (err) throw err;
+                         flickr.photosets.getList({ user_id: config.flickr.userId },
+                                                  function (error, response) {
+                                                      if (error) throw error;
+                                                      res.send(response.photosets.photoset);
+                                                  });
+                     });
 });
 app.get('/flickr-set/:setId', function (req, res) {
     var setId = req.params.setId;
-    flickr.executeAPIRequest('flickr.photosets.getPhotos',
-                             { photoset_id: setId,
-                               extras: 'license,date_upload,date_taken,owner_name,icon_server,original_format,last_update,geo,tags,machine_tags,o_dims,views,media,path_alias,url_sq,url_t,url_s,url_m,url_o' },
-                             false,
-                             function (error, response) {
-                                 if (error) throw error;
-                                 res.send(response.photoset.photo);
-                             });
+    Flickr.tokenOnly({ api_key: config.flickr.apiKey },
+                     function (err, flickr) {
+                         if (err) throw err;
+                         flickr.photosets.getPhotos({ photoset_id: setId,
+                                                      extras: 'license,date_upload,date_taken,owner_name,icon_server,original_format,last_update,geo,tags,machine_tags,o_dims,views,media,path_alias,url_sq,url_t,url_s,url_m,url_o' },
+                                                    function (error, response) {
+                                                        if (error) throw error;
+                                                        res.send(response.photoset.photo);
+                                                    });
+                     });
 });
 
 app.get('/download-flickr-set/:setId', function (req, res) {
     var setId = req.params.setId;
     Step(
         function () {
-            flickr.executeAPIRequest('flickr.photosets.getPhotos',
-                                     { photoset_id: setId,
-                                       extras: 'url_m' },
-                                     false,
-                                     this)
+            Flickr.tokenOnly({ api_key: config.flickr.apiKey }, this);
+        },
+        function (err, flickr) {
+            if (err) throw err;
+            flickr.photosets.getPhotos({ photoset_id: setId,
+                                         extras: 'url_m' },
+                                       this);
         },
         function (error, response) {
             if (error) throw error;
