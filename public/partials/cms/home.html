@@ -1,17 +1,6 @@
 <form name='login'>
   <fieldset ng-controller="LoginController">
     <div name="login" class="login">
-      <div style="display: {{displayState('locked')}}">
-        <legend>System ist gesperrt</legend>
-        Datenbank wird derzeit von {{loggedInUser}} bearbeitet.
-        <br/>
-        <br/>
-        <p>
-          <button ng-click="logout(true)" class="btn btn-primary btn-danger">Sperre aufheben</button>
-        </p>
-        <br/>
-        Achtung, Änderungen von {{loggedInUser}} gehen verloren!
-      </div>
       <div style="display: {{displayState('loggedOut')}}">
         <legend>Anmeldung</legend>
         <div class="control-group">
@@ -27,9 +16,20 @@
             <alert type="error">Ungültiger Benutzername oder ungültiges Passwort.</alert>
           </div>
           <p>
-            <button ng-click="login()" class="btn btn-primary">Anmelden</button>
+            <button type="submit" ng-click="login()" class="btn btn-primary">Anmelden</button>
           </p>
         </div>
+      </div>
+      <div style="display: {{displayState('locked')}}">
+        <legend>System ist gesperrt</legend>
+        Datenbank wird derzeit von {{loggedInUser}} bearbeitet.
+        <br/>
+        <br/>
+        <p>
+          a<button ng-click="logout(true)" class="btn btn-primary btn-danger">Sperre aufheben</button>
+        </p>
+        <br/>
+        Achtung, Änderungen von {{loggedInUser}} gehen verloren!
       </div>
       <div style="display: {{displayState('loggedIn')}}">
         <legend>Abmeldung</legend>
