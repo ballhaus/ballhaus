@@ -5,6 +5,7 @@
       <div class="date">{{event.date | formatDate:"dddd"}}<br/>{{event.date | formatDate:"Do MMMM"}}<br/>{{event.date | formatDate:"H:mm"}} Uhr</div>
       <div class="big-column">
         <div class="item-tags">{{event.tags | join:" / " | orSpace }}</div>
+        <div class="item-surtitle">{{event.surtitles() | join:" - " | orSpace}}</div>
         <div class="item-name">{{event.name}}</div>
         <div class="item-by" ng-bind-html-unsafe="event.by | translate | orSpace"></div>
       </div>
