@@ -199,7 +199,7 @@ app.factory('db',
                      return this.name;
                  };
 
-                 db.Enactment.prototype.surtitles = function () {
+                 db.Event.prototype.surtitles = function () {
                      return [ this.surtitle ];
                  }
 
