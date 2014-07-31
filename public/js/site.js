@@ -29,7 +29,7 @@ function sendMessageToPhantom(type, options) {
 var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.directives', 'ngSanitize'])
 .filter('join', function () {
     return function (input, arg) {
-        return input && input.join(arg);
+        return input && input.filter(function (x) { return x }).join(arg);
     };
 })
 .filter('dontBreak', function () {
