@@ -199,6 +199,10 @@ app.factory('db',
                      return this.name;
                  };
 
+                 db.Enactment.prototype.surtitles = function () {
+                     return [ this.surtitle ];
+                 }
+
                  db.Event.prototype.isCurrent = function () {
                      return !moment(this.date).isBefore(moment(), 'day');
                  };
