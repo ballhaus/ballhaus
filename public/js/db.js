@@ -217,6 +217,14 @@ app.factory('db',
                      return this.name || this.piece.name;
                  }
 
+                 db.Enactment.prototype.surtitles = function () {
+                     if (this.surtitle == this.piece.surtitle) {
+                         return [ this.piece.surtitle ];
+                     } else {
+                         return [ this.surtitle, this.piece.surtitle ];
+                     }
+                 }
+
                  db.Enactment.prototype.isCurrent = function () {
                      return !moment(this.date).isBefore(moment(), 'day');
                  };
