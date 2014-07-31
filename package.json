@@ -21,7 +21,7 @@
         "flickrapi": "*",
         "node-uuid": "*",
         "read": "*",
-        "nodemailer": "*",
+        "nodemailer": "0.7.0",
         "xpath": "*",
         "xmldom": "*",
         "node-sprite-generator": "*",
