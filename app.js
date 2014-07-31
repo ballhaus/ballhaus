@@ -428,7 +428,6 @@ app.get('/ticket-data',
 var mailer = nodemailer.createTransport("Sendmail", "/usr/sbin/sendmail");
 
 function subscribeNewsletter(email, doidata, handler) {
-    console.log(doidata);
     try {
         Step(
             function () {
@@ -488,8 +487,6 @@ function unsubscribeNewsletter(email, handler) {
 }
 
 app.post('/newsletter-subscription', function (req, res) {
-    console.log(req.body);
-
     subscribeNewsletter(req.body.address,
                         {
                             user_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
