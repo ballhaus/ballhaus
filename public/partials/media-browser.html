@@ -1,6 +1,6 @@
 <div class="media-browser" ng-show="media">
   <div ng-repeat="medium in media" ng-show="$index == mediumIndex">
-    <div class="display" ng-class="{'display-only-medium': media.length == 1}" ng-click="gotoMedium(1)">
+    <div class="display" ng-class="{'display-only-medium': media.length == 1}" ng-click="gotoMedium(1, true)">
       <div ng-show="medium.type == 'picture'">
           <backend-image image="medium"></backend-image>
       </div>

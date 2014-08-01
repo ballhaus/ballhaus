@@ -880,7 +880,7 @@ app
             scope: { image: '=' }
         };
     })
-    .directive("mediaBrowser", function () {
+    .directive("mediaBrowser", function ($timeout) {
         return {
             restrict: 'E',
             replace: true,
@@ -922,11 +922,31 @@ app
                 $scope.$watch('model.images', initMedia);
                 $scope.$watch('model.video', initMedia);
 
+                function setNextMediumTimeout () {
+                    $scope.nextPicturePromise = $timeout(function () {
+                        $scope.gotoMedium(1);
+                        setNextMediumTimeout();
+                    }, 4000);
+                }
+
+                function cancelSlideshow () {
+                    if ($scope.nextPicturePromise) {
+                        $timeout.cancel($scope.nextPicturePromise);
+                        $scope.nextPicturePromise = undefined;
+                    }
+                }
+
+                setNextMediumTimeout();
+
                 $scope.clickMedium = function () {
+                    cancelSlideshow();
                     $scope.mediumIndex = this.$index;
                 };
 
-                $scope.gotoMedium = function (direction) {
+                $scope.gotoMedium = function (direction, clicked) {
+                    if (clicked) {
+                        cancelSlideshow();
+                    }
                     $scope.mediumIndex = ($scope.mediumIndex + direction + $scope.media.length) % $scope.media.length;
                 };
             }
