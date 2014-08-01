@@ -348,8 +348,11 @@ app.get('/flickr-sets', function (req, res) {
                          if (err) throw err;
                          flickr.photosets.getList({ user_id: config.flickr.userId },
                                                   function (error, response) {
-                                                      if (error) throw error;
-                                                      res.send(response.photosets.photoset);
+                                                      if (error) {
+                                                          res.send(500, error);
+                                                      } else {
+                                                          res.send(response.photosets.photoset);
+                                                      }
                                                   });
                      });
 });
@@ -361,8 +364,11 @@ app.get('/flickr-set/:setId', function (req, res) {
                          flickr.photosets.getPhotos({ photoset_id: setId,
                                                       extras: 'license,date_upload,date_taken,owner_name,icon_server,original_format,last_update,geo,tags,machine_tags,o_dims,views,media,path_alias,url_sq,url_t,url_s,url_m,url_o' },
                                                     function (error, response) {
-                                                        if (error) throw error;
-                                                        res.send(response.photoset.photo);
+                                                        if (error) {
+                                                            res.send(500, error);
+                                                        } else {
+                                                            res.send(response.photoset.photo);
+                                                        }
                                                     });
                      });
 });
