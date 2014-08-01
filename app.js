@@ -132,6 +132,12 @@ app.get('/', function (req, res) {
     }
 });
 
+function internal_server_error(req, res, where, error) {
+    console.log('error occured at:', where, 'while handling url', req.url);
+    console.log(error);
+    res.send(500, 'internal server error');
+}
+
 var thaw = require('./thaw');
 var Image = thaw.Image;
 var Person = thaw.Person;
@@ -232,10 +238,13 @@ app.post('/image', function (req, res) {
                                      height: this.size.height
                                    });
              image.makeThumbnail(function (err) {
-                 if (err) throw err;
-                 res.json({ success: true,
-                            image: image
-                          })
+                 if (err) {
+                     internal_server_error(req, res, 'cannot make thumbnail', err);
+                 } else {
+                     res.json({ success: true,
+                                image: image
+                              });
+                 }
              });
          });
 });
@@ -275,25 +284,32 @@ app.get('/logos', function (req, res) {
     Step(
         function () { fs.readdir('logo/', this) },
         function (err, files) {
-            if (err) throw err;
-            var group = this.group();
-            files.forEach(function (file) {
-                var handler = group();
-                gm('logo/' + file).size(function (err, image) {
-                    if (err) {
-                        handler(null, null);
-                    } else {
-                        image.filename = file;
-                        handler(null, image);
-                    }
+            if (err) {
+                internal_server_error(req, res, 'cannot read logo/ directory', err);
+            } else {
+                var group = this.group();
+                files.forEach(function (file) {
+                    var handler = group();
+                    gm('logo/' + file).size(function (err, image) {
+                        if (err) {
+                            handler(null, null);
+                        } else {
+                            image.filename = file;
+                            handler(null, image);
+                        }
+                    });
                 });
-            });
+            }
         },
         function (err, images) {
-            res.json({
-                success: true,
-                logos: images.filter(function (image) { return image; })
-            });
+            if (err) {
+                internal_server_error(req, res, 'creating logos failed', err);
+            } else {
+                res.json({
+                    success: true,
+                    logos: images.filter(function (image) { return image; })
+                });
+            }
         });
 });
 
@@ -324,15 +340,21 @@ var repo = gift('.');
 app.get('/version', function (req, res) {
     Step(function () { repo.status(this); },
          function (err, status) {
-             if (err) throw err;
-             this.status = status;
-             repo.commits('HEAD', 1, this);
+             if (err) {
+                 internal_server_error(req, res, 'repo.status', err);
+             } else {
+                 this.status = status;
+                 repo.commits('HEAD', 1, this);
+             }
          },
          function (err, commits) {
-             if (err) throw err;
-             res.send({ status: this.status,
-                        lastCommit: commits[0]
-                      });
+             if (err) {
+                 internal_server_error(req, res, 'repo.commits', err);
+             } else {
+                 res.send({ status: this.status,
+                            lastCommit: commits[0]
+                          });
+             }
          });
 });
 
@@ -345,31 +367,37 @@ function forwardJson (url, req, res) {
 app.get('/flickr-sets', function (req, res) {
     Flickr.tokenOnly({ api_key: config.flickr.apiKey },
                      function (err, flickr) {
-                         if (err) throw err;
-                         flickr.photosets.getList({ user_id: config.flickr.userId },
-                                                  function (error, response) {
-                                                      if (error) {
-                                                          res.send(500, error);
-                                                      } else {
-                                                          res.send(response.photosets.photoset);
-                                                      }
-                                                  });
+                         if (err) {
+                             internal_server_error(req, res, 'Flickr.tokenOnly', err);
+                         } else {
+                             flickr.photosets.getList({ user_id: config.flickr.userId },
+                                                      function (error, response) {
+                                                          if (error) {
+                                                              internal_server_error(req, res, 'flickr.photosets.getList', error);
+                                                          } else {
+                                                              res.send(response.photosets.photoset);
+                                                          }
+                                                      });
+                         }
                      });
 });
 app.get('/flickr-set/:setId', function (req, res) {
     var setId = req.params.setId;
     Flickr.tokenOnly({ api_key: config.flickr.apiKey },
                      function (err, flickr) {
-                         if (err) throw err;
-                         flickr.photosets.getPhotos({ photoset_id: setId,
-                                                      extras: 'license,date_upload,date_taken,owner_name,icon_server,original_format,last_update,geo,tags,machine_tags,o_dims,views,media,path_alias,url_sq,url_t,url_s,url_m,url_o' },
-                                                    function (error, response) {
-                                                        if (error) {
-                                                            res.send(500, error);
-                                                        } else {
-                                                            res.send(response.photoset.photo);
-                                                        }
-                                                    });
+                         if (err) {
+                             internal_server_error(req, res, 'Flickr.tokenOnly', err);
+                         } else {
+                             flickr.photosets.getPhotos({ photoset_id: setId,
+                                                          extras: 'license,date_upload,date_taken,owner_name,icon_server,original_format,last_update,geo,tags,machine_tags,o_dims,views,media,path_alias,url_sq,url_t,url_s,url_m,url_o' },
+                                                        function (error, response) {
+                                                            if (error) {
+                                                                internal_server_error(req, res, 'flickr.photosets.getPhotos', error);
+                                                            } else {
+                                                                res.send(response.photoset.photo);
+                                                            }
+                                                        });
+                         }
                      });
 });
 
@@ -380,23 +408,32 @@ app.get('/download-flickr-set/:setId', function (req, res) {
             Flickr.tokenOnly({ api_key: config.flickr.apiKey }, this);
         },
         function (err, flickr) {
-            if (err) throw err;
-            flickr.photosets.getPhotos({ photoset_id: setId,
-                                         extras: 'url_m' },
-                                       this);
+            if (err) {
+                internal_server_error(req, res, 'Flickr.tokenOnly', err);
+            } else {
+                flickr.photosets.getPhotos({ photoset_id: setId,
+                                             extras: 'url_m' },
+                                           this);
+            }
         },
         function (error, response) {
-            if (error) throw error;
-            var group = this.group();
-            response.photoset.photo.forEach(function (photo) {
-                var url = photo.url_m;
-                var filename = url.replace(/.*\//, '');
-                Image.importFromWeb(url, filename, group());
-            });
+            if (error) {
+                internal_server_error(req, res, 'flickr.photosets.getPhotos', error);
+            } else {
+                var group = this.group();
+                response.photoset.photo.forEach(function (photo) {
+                    var url = photo.url_m;
+                    var filename = url.replace(/.*\//, '');
+                    Image.importFromWeb(url, filename, group());
+                });
+            }
         },
         function (err, images) {
-            if (err) throw err;
-            res.send(icebox.freeze(images));
+            if (err) {
+                internal_server_error(req, res, 'Image.importFromWeb', err);
+            } else {
+                res.send(icebox.freeze(images));
+            }
         });
 });
 
@@ -440,30 +477,39 @@ function subscribeNewsletter(email, doidata, handler) {
                 soap.createClient(config.cleverreach.url, this);
             },
             function(err, client) {
-                if (err) throw err;
-                this.client = client;
-                this.client.receiverAdd({ apiKey: config.cleverreach.apiKey,
-                                          groupId: config.cleverreach.groupId,
-                                          subscriberData: {
-                                              email: email,
-                                              active: false,
-                                              deactivated: 1
-                                          }
-                                        }, this);
+                if (err) {
+                    handler(err);
+                } else {
+                    this.client = client;
+                    this.client.receiverAdd({ apiKey: config.cleverreach.apiKey,
+                                              groupId: config.cleverreach.groupId,
+                                              subscriberData: {
+                                                  email: email,
+                                                  active: false,
+                                                  deactivated: 1
+                                              }
+                                            }, this);
+                }
             },
             function(err, result) {
-                if (err) throw err;
-                console.log('receiverAdd result', result);
-                this.client.formsSendActivationMail({ apiKey: config.cleverreach.apiKey,
-                                                      formId: config.cleverreach.formId,
-                                                      email: email,
-                                                      doidata: doidata
-                                                    }, this);
+                if (err) {
+                    handler(err);
+                } else {
+                    console.log('receiverAdd result', result);
+                    this.client.formsSendActivationMail({ apiKey: config.cleverreach.apiKey,
+                                                          formId: config.cleverreach.formId,
+                                                          email: email,
+                                                          doidata: doidata
+                                                        }, this);
+                }
             },
             function (err, result) {
-                if (err) throw err;
-                console.log('formsSendActivationMail result', result);
-                handler && handler(err, result);
+                if (err) {
+                    handler(err);
+                } else {
+                    console.log('formsSendActivationMail result', result);
+                    handler(undefined, result);
+                }
             });
     }
     catch (e) {
@@ -478,17 +524,23 @@ function unsubscribeNewsletter(email, handler) {
             soap.createClient(config.cleverreach.url, this);
         },
         function (err, client) {
-            if (err) throw err;
-            this.client = client;
-            this.client.receiverDelete({ apiKey: config.cleverreach.apiKey,
-                                         groupId: config.cleverreach.groupId,
-                                         email: email },
-                                       this);
+            if (err) {
+                handler(err);
+            } else {
+                this.client = client;
+                this.client.receiverDelete({ apiKey: config.cleverreach.apiKey,
+                                             groupId: config.cleverreach.groupId,
+                                             email: email },
+                                           this);
+            }
         },
         function (err, result) {
-            if (err) throw err;
-            console.log('done', result);
-            handler && handler(err, result);
+            if (err) {
+                handler(err);
+            } else {
+                console.log('done', result);
+                handler(undefined, result);
+            }
         });
 }
 
@@ -610,40 +662,6 @@ app.post('/logout',
                  loginStatus = {};
                  res.json({});
              }
-         });
-
-// Import legacy artists
-app.post('/import-legacy-artists',
-         function (req, res) {
-             var people;
-             console.log('req.files.file', req.files.file.path);
-             Step(
-                 function () {
-                     var doc = new dom().parseFromString(fs.readFileSync(req.files.file.path, 'utf8'));
-                     people = xpath.select('/people/person[picture/path != "" and bio != "" and name != ""]', doc);
-                     var group = this.group();
-                     people.forEach(function (person) {
-                         var path = xpath.select('picture/path/text()', person).toString();
-                         var localPath = path.replace(/.*\//, '');
-                         Image.importFromWeb('http://old.ballhausnaunynstrasse.de/' + path,
-                                             localPath,
-                                             group());
-                         
-                     });
-                 },
-                 function (err, images) {
-                     if (err) throw err;
-                     res.json(people.map(function (person) {
-                         var name = xpath.select('name/text()', person).toString();
-                         var credits = xpath.select('picture/credits/text()', person).toString();
-                         var bio = xpath.select('bio/p', person).map(function (node) { return node.toString(); }).join("\n");
-                         var image = images.shift();
-                         image.credits = credits;
-                         return new Person({ name: name,
-                                             bio: { de: bio },
-                                             image: image });
-                     }));
-                 });
          });
 
 http.createServer(app).listen(app.get('port'), function() {
