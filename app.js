@@ -364,57 +364,44 @@ function forwardJson (url, req, res) {
     });
 }
 
+var flickr;
+Flickr.tokenOnly({ api_key: config.flickr.apiKey },
+                 function (err, flickr_) {
+                     if (err) throw(err);
+                     flickr = flickr_;
+                 });
+
 app.get('/flickr-sets', function (req, res) {
-    Flickr.tokenOnly({ api_key: config.flickr.apiKey },
-                     function (err, flickr) {
-                         if (err) {
-                             internal_server_error(req, res, 'Flickr.tokenOnly', err);
-                         } else {
-                             flickr.photosets.getList({ user_id: config.flickr.userId },
-                                                      function (error, response) {
-                                                          if (error) {
-                                                              internal_server_error(req, res, 'flickr.photosets.getList', error);
-                                                          } else {
-                                                              res.send(response.photosets.photoset);
-                                                          }
-                                                      });
-                         }
-                     });
+    flickr.photosets.getList({ user_id: config.flickr.userId },
+                             function (error, response) {
+                                 if (error) {
+                                     internal_server_error(req, res, 'flickr.photosets.getList', error);
+                                 } else {
+                                     res.send(response.photosets.photoset);
+                                 }
+                             });
 });
+
 app.get('/flickr-set/:setId', function (req, res) {
     var setId = req.params.setId;
-    Flickr.tokenOnly({ api_key: config.flickr.apiKey },
-                     function (err, flickr) {
-                         if (err) {
-                             internal_server_error(req, res, 'Flickr.tokenOnly', err);
-                         } else {
-                             flickr.photosets.getPhotos({ photoset_id: setId,
-                                                          extras: 'license,date_upload,date_taken,owner_name,icon_server,original_format,last_update,geo,tags,machine_tags,o_dims,views,media,path_alias,url_sq,url_t,url_s,url_m,url_o' },
-                                                        function (error, response) {
-                                                            if (error) {
-                                                                internal_server_error(req, res, 'flickr.photosets.getPhotos', error);
-                                                            } else {
-                                                                res.send(response.photoset.photo);
-                                                            }
-                                                        });
-                         }
-                     });
+    flickr.photosets.getPhotos({ photoset_id: setId,
+                                 extras: 'license,date_upload,date_taken,owner_name,icon_server,original_format,last_update,geo,tags,machine_tags,o_dims,views,media,path_alias,url_sq,url_t,url_s,url_m,url_o' },
+                               function (error, response) {
+                                   if (error) {
+                                       internal_server_error(req, res, 'flickr.photosets.getPhotos', error);
+                                   } else {
+                                       res.send(response.photoset.photo);
+                                   }
+                               });
 });
 
 app.get('/download-flickr-set/:setId', function (req, res) {
     var setId = req.params.setId;
     Step(
         function () {
-            Flickr.tokenOnly({ api_key: config.flickr.apiKey }, this);
-        },
-        function (err, flickr) {
-            if (err) {
-                internal_server_error(req, res, 'Flickr.tokenOnly', err);
-            } else {
-                flickr.photosets.getPhotos({ photoset_id: setId,
-                                             extras: 'url_m' },
-                                           this);
-            }
+            flickr.photosets.getPhotos({ photoset_id: setId,
+                                         extras: 'url_m' },
+                                       this);
         },
         function (error, response) {
             if (error) {
