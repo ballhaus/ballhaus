@@ -652,6 +652,7 @@ angular.module('cmsApp.directives', [])
                     html += '<button class="btn btn-small btn-primary" ng-click="selectVideo()">Video auswählen</button>';
                     if (video) {
                         html += ' <button class="btn btn-small btn-danger" ng-click="clearVideo()">Video entfernen</button>';
+                        html += ' <input type="checkbox" ng-model="video.show_first"/> Video zuerst anzeigen'
                     }
                     html += '</div>';
                     contents = angular.element(html);

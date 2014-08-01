@@ -892,20 +892,28 @@ app
                 var maxVideoHeight = 376;
 
                 function initMedia() {
-                    $scope.media = ($scope.model && $scope.model.images || []).slice();
+                    if ($scope.model) {
+                        $scope.media = ($scope.model.images || []).slice();
 
-                    $scope.media = $scope.media.map(function (picture) {
-                        picture = intoRect({width: maxWidth, height: maxHeight}, picture);
-                        picture.type = 'picture';
-                        return picture;
-                    });
+                        $scope.media = $scope.media.map(function (picture) {
+                            picture = intoRect({width: maxWidth, height: maxHeight}, picture);
+                            picture.type = 'picture';
+                            return picture;
+                        });
 
-                    if ($scope.model && $scope.model.video && ($scope.model.video.vimeoId || $scope.model.video.url)) {
-                        $scope.model.video.type = 'video';
-                        $scope.model.video.vimeoId = $scope.model.video.vimeoId || ($scope.model.video.url && $scope.model.video.url.match(/\/(\d+)$/)[1]);
-                        $scope.model.video.width = maxWidth;
-                        $scope.model.video.height = maxVideoHeight;
-                        $scope.media.push($scope.model.video);
+                        if ($scope.model.video && ($scope.model.video.vimeoId || $scope.model.video.url)) {
+                            $scope.model.video.type = 'video';
+                            $scope.model.video.vimeoId = $scope.model.video.vimeoId || ($scope.model.video.url && $scope.model.video.url.match(/\/(\d+)$/)[1]);
+                            $scope.model.video.width = maxWidth;
+                            $scope.model.video.height = maxVideoHeight;
+                            if ($scope.model.video.show_first) {
+                                $scope.media.unshift($scope.model.video);
+                            } else {
+                                $scope.media.push($scope.model.video);
+                            }
+                        }
+                    } else {
+                        $scope.media = [];
                     }
 
                     $scope.mediumIndex = 0;
