@@ -1131,6 +1131,21 @@ angular.module('cmsApp.directives', [])
             }
         };
     }])
+    .directive("pageSelector", ['db', function (db) {
+        return {
+            restrict: 'E',
+            scope: { model: '=model' },
+            replace: true,
+            templateUrl: '/partials/cms/page-selector.html',
+            link: function ($scope, element, attrs, controller) {
+                $scope.pages = db.pages().filter(function (page) { return !page.linkedFromMenu; });
+                $scope.pages.unshift(undefined);
+                if (!$scope.model || !$scope.model.page) {
+                    $scope.model = { page: $scope.model };
+                }
+            }
+        };
+    }])
     .directive("previewLink", [ '$compile', function ($compile) {
         return {
             restrict: 'E',
