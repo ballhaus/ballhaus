@@ -481,6 +481,11 @@ body.ada #site-menu-street {
     text-transform: uppercase;
 }
 
+.item-surtitle {
+    font-size: 14px;
+    color: #eb0033;
+}
+
 .simple-list {
     font: 16px/20px Verdana, Geneva, sans-serif;
 }
