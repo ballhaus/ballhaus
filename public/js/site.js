@@ -936,7 +936,9 @@ app
                     }
                 }
 
-                setNextMediumTimeout();
+                if (!$scope.model.video.show_first) {
+                    setNextMediumTimeout();
+                }
 
                 $scope.clickMedium = function () {
                     cancelSlideshow();
