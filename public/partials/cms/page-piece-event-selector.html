@@ -1,0 +1,17 @@
+<div class="form-inline">
+  <select ng-model="model.type" class="input-medium">
+    <option value="">(nicht definiert)</option>
+    <option value="Page">Seite</option>
+    <option value="Piece">Stück</option>
+    <option value="Event">Veranstaltung</option>
+  </select>
+  <select ng-show="model.type == 'Piece'" ng-model="model.object" class="input-xlarge">
+    <option ng-repeat="piece in pieces" ng-selected="model.object == piece.id" value="{{piece.id}}">{{piece.name}}</option>
+  </select>
+  <select ng-show="model.type == 'Page'" ng-model="model.object" class="input-xlarge">
+    <option ng-repeat="page in pages" ng-selected="model.object == page.id" value="{{page.id}}">{{page.name.de}}</option>
+  </select>
+  <select ng-show="model.type == 'Event'" ng-model="model.object" class="input-xlarge">
+    <option ng-repeat="event in events" ng-selected="model.object == event.id" value="{{event.id}}">{{event.name}}</option>
+  </select>
+</div>

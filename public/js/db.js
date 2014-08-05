@@ -498,6 +498,24 @@ app.factory('db',
                      } else {
                          db.homepage = new db.Homepage;
                      }
+
+                     var homepage = db.homepage;
+                     /* schema migration */
+                     if (homepage.page1) {
+                         console.log('migrate', homepage);
+                         function migrateToArray(keybase, arraykey) {
+                             homepage[arraykey] = [];
+                             for (var i = 1; homepage[keybase + i]; i++) {
+                                 var key = keybase + i;
+                                 homepage[arraykey][i - 1] = { content: { type: 'Page', object: homepage[key].id } };
+                                 delete homepage[key];
+                             }
+                         }
+                         migrateToArray('page', 'box');
+                         migrateToArray('marginal', 'marginal');
+                         console.log('migrated', homepage);
+                     }
+
                      db.tags = function () { return siteConfig.tags; };
 
                      if (db.freeze) {

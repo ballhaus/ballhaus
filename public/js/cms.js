@@ -1131,20 +1131,34 @@ angular.module('cmsApp.directives', [])
             }
         };
     }])
-    .directive("pageSelector", ['db', function (db) {
+    .directive("boxContentsSelector", ['db', function (db) {
         return {
             restrict: 'E',
             scope: { model: '=model' },
             replace: true,
-            templateUrl: '/partials/cms/page-selector.html',
-            link: function ($scope, element, attrs, controller) {
-                $scope.pages = db.pages().filter(function (page) { return !page.linkedFromMenu; });
-                $scope.pages.unshift(undefined);
-                if (!$scope.model || !$scope.model.page) {
-                    $scope.model = { page: $scope.model };
-                }
+            templateUrl: '/partials/cms/box-contents-selector.html',
+            link: function ($scope) {
+                console.log('boxContentsSelector, model', $scope.model);
             }
         };
+    }])
+    .directive("pagePieceEventSelector", ['db', function (db) {
+        return {
+            restrict: 'E',
+            scope: { model: '=model' },
+            replace: true,
+            templateUrl: '/partials/cms/page-piece-event-selector.html',
+            link: function ($scope, element, attrs, controller) {
+                var now = new Date;
+                /* this should really go into the enclosing scope */
+                $scope.pieces = db.pieces().sort(function (a, b) { return a.name.localeCompare(b.name); });
+                $scope.pages = db.pages().filter(function (page) { return !page.linkedFromMenu; }).sort(function (a, b) { return a.name.de.localeCompare(b.name.de); });
+                $scope.events = db.events().filter(function (event) {
+                    return event.date.getTime() > now.getTime() && event.constructor.name != 'Enactment';
+                })
+                    .sort(function (a, b) { return a.name.localeCompare(b.name); });
+            }
+        }
     }])
     .directive("previewLink", [ '$compile', function ($compile) {
         return {

@@ -67,7 +67,11 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
 })
 .filter('onlyTeaser', function () {
     return function (input) {
-        return input && input.substr(0, input.indexOf('\u06DD'));
+        if (input && input.indexOf('\u06DD') != -1) {
+            return input.substr(0, input.indexOf('\u06DD'));
+        } else {
+            return input;
+        }
     };
 })
 .filter('noTeaser', function () {
@@ -110,14 +114,26 @@ function intoRect(rect, item) {
 
 function HomeController($scope, db, Page, schedule) {
     var homepage = db.homepage;
-    var start = 1;
+    var start = 0;
     var firstBox;
+
+    function selectContent(content) {
+        console.log('selectContent', content);
+        if (content) {
+            if (content.other_content_date && content.other_content.object && (content.other_content_date.getTime() > (new Date).getTime())) {
+                return db.get(db[content.other_content.type], parseInt(content.other_content.object));
+            } else if (content.content.object) {
+                return db.get(db[content.content.type], parseInt(content.content.object));
+            }
+        }
+    }
+
     if (homepage.layout === 1) {
-        $scope.headColumn = cleanColumn({width: 670, height: 426}, [ homepage.page1 ]);
+        $scope.headColumn = cleanColumn({width: 670, height: 426}, [ selectContent(homepage.box[0]) ]);
         ++start;
     }
     if (homepage.layout === 2) {
-        firstBox = homepage.page1;
+        firstBox = selectContent(homepage.box[0]);
         ++start;
     }
     if (!firstBox) {
@@ -144,15 +160,15 @@ function HomeController($scope, db, Page, schedule) {
         $scope.columns = [
             [
                 firstBox,
-                homepage['page' + (start+1)]
+                selectContent(homepage.box[start + 1])
             ], [
-                homepage['page' + (start)],
-                homepage['page' + (start+2)]
+                selectContent(homepage.box[start]),
+                selectContent(homepage.box[start + 2])
             ]];
 
         if ([0, 2].indexOf(homepage.layout) !== -1) {
-            $scope.columns[0].push(homepage['page' + (start+3)]);
-            $scope.columns[1].push(homepage['page' + (start+4)]);
+            $scope.columns[0].push(selectContent(homepage.box[start + 3]));
+            $scope.columns[1].push(selectContent(homepage.box[start + 4]));
         }
 
         $scope.columns = $scope.columns.map(function (c) {
@@ -175,7 +191,9 @@ function HomeController($scope, db, Page, schedule) {
 
     Page.setTitle('');
     Page.marginals(cleanColumn({width: 121, height: 96}, [
-        homepage.marginal1, homepage.marginal2, homepage.marginal3
+        selectContent(homepage.marginal[0]),
+        selectContent(homepage.marginal[1]),
+        selectContent(homepage.marginal[2])
     ]));
     sendMessageToPhantom('pageLoaded', { path: window.location.pathname });
 }
@@ -936,7 +954,7 @@ app
                     }
                 }
 
-                if (!$scope.model.video.show_first) {
+                if (!$scope.model.video || !$scope.model.video.show_first) {
                     setNextMediumTimeout();
                 }
 

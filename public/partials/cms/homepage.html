@@ -7,46 +7,46 @@
       <table>
         <tr>
           <td>Nächste Aufführung</td>
-          <td><page-selector model="homepage.page1"></page-selector></td>
+          <td><box-contents-selector model="homepage.box[0]"></box-contents-selector></td>
         </tr>
         <tr>
-          <td><page-selector model="homepage.page2"></page-selector></td>
-          <td><page-selector model="homepage.page3"></page-selector></td>
+          <td><box-contents-selector model="homepage.box[1]"></box-contents-selector></td>
+          <td><box-contents-selector model="homepage.box[2]"></box-contents-selector></td>
         </tr>
         <tr>
-          <td><page-selector model="homepage.page4"></page-selector></td>
-          <td><page-selector model="homepage.page5"></page-selector></td>
+          <td><box-contents-selector model="homepage.box[3]"></box-contents-selector></td>
+          <td><box-contents-selector model="homepage.box[4]"></box-contents-selector></td>
         </tr>
       </table>
     </div>
     <div data-tab="Ein- und Zweispaltig">
       <table>
         <tr>
-          <td colspan="2"><page-selector model="homepage.page1"></page-selector></td>
+          <td colspan="2"><box-contents-selector model="homepage.box[0]"></box-contents-selector></td>
         </tr>
         <tr>
           <td>Nächste Aufführung</td>
-          <td><page-selector model="homepage.page2"></page-selector></td>
+          <td><box-contents-selector model="homepage.box[1]"></box-contents-selector></td>
         </tr>
         <tr>
-          <td><page-selector model="homepage.page3"></page-selector></td>
-          <td><page-selector model="homepage.page4"></page-selector></td>
+          <td><box-contents-selector model="homepage.box[2]"></box-contents-selector></td>
+          <td><box-contents-selector model="homepage.box[3]"></box-contents-selector></td>
         </tr>
       </table>
     </div>
     <div data-tab="Theaterferien">
       <table>
         <tr>
-          <td><page-selector model="homepage.page1"></page-selector></td>
-          <td><page-selector model="homepage.page2"></page-selector></td>
+          <td><box-contents-selector model="homepage.box[0]"></box-contents-selector></td>
+          <td><box-contents-selector model="homepage.box[1]"></box-contents-selector></td>
         </tr>
         <tr>
-          <td><page-selector model="homepage.page3"></page-selector></td>
-          <td><page-selector model="homepage.page4"></page-selector></td>
+          <td><box-contents-selector model="homepage.box[2]"></box-contents-selector></td>
+          <td><box-contents-selector model="homepage.box[3]"></box-contents-selector></td>
         </tr>
         <tr>
-          <td><page-selector model="homepage.page5"></page-selector></td>
-          <td><page-selector model="homepage.page6"></page-selector></td>
+          <td><box-contents-selector model="homepage.box[4]"></box-contents-selector></td>
+          <td><box-contents-selector model="homepage.box[5]"></box-contents-selector></td>
         </tr>
       </table>
     </div>
@@ -54,11 +54,18 @@
 </div>
 <div>
   <h3>Content für Marginalspalte</h3>
-  <page-selector model="homepage.marginal1"></page-selector>
-  <br/>
-  <page-selector model="homepage.marginal2"></page-selector>
-  <br/>
-  <page-selector model="homepage.marginal3"></page-selector>
+  <fieldset>
+    <legend>Erster Eintrag</legend>
+    <box-contents-selector model="homepage.marginal[0]"></box-contents-selector>
+  </fieldset>
+  <fieldset>
+    <legend>Zweiter Eintrag</legend>
+    <box-contents-selector model="homepage.marginal[1]"></box-contents-selector>
+  </fieldset>
+  <fieldset>
+    <legend>Dritter Eintrag</legend>
+    <box-contents-selector model="homepage.marginal[2]"></box-contents-selector>
+  </fieldset>
 </div>
 <div>
   <button class="btn btn-small btn-success" ng-disabled="!hasChanged()" ng-click="saveChanges()">Online stellen</button>
