@@ -624,19 +624,23 @@ app.get('/user-salt/:name',
 
 app.post('/login',
          function (req, res) {
+	     function login_failed (status, message) {
+		 console.log('POST /login', status, message);
+		 res.send(status, message);
+	     }
              if (loginStatus.name) {
-                 res.send(400, 'Daten werden gerade von ' + loginStatus.name + ' bearbeitet');
+                 login_failed(400, 'Daten werden gerade von ' + loginStatus.name + ' bearbeitet');
              } else if (req.body.name && !req.body.name.match(/^[a-z0-9]+$/)) {
-                 res.send(400, 'Ungültiger Benutzername');
+                 login_failed(400, 'Ungültiger Benutzername');
              } else if (req.session.user && (req.body.password == sha1.sha1(req.session.user.password + req.session.salt))) {
                  loginStatus = { name: req.body.name,
                                  superuser: req.session.user.superuser,
                                  uuid: uuid.v1() };
+                 console.log(loginStatus.name, 'logged in');
                  req.session.loggedIn = true;
                  res.json(loginStatus);
-                 console.log(loginStatus.name, 'logged in');
              } else {
-                 res.send(401, 'Invalid login');
+                 login_failed(401, 'Invalid login');
              }
          });
 
