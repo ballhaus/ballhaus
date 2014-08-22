@@ -809,7 +809,7 @@ app
                         html = '<static-page page-name="page"></static-page>';
                     } else if (pageName === 'english') {
                         $scope.Page.setTitle('English page');
-                        html = '<p>Please find an English version of the play/performance descriptions below the German texts. English surtitles will be provided in all performances tagged with "mit engl. ÜT".</p>';
+                        html = '<p>Please find an English version of the play/performance descriptions below the German texts. English surtitles will be provided in all performances tagged with "English Surtitles".</p>';
                     } else {
                         $scope.Page.setTitle('Seite nicht gefunden');
                         html = '<p>Die Seite "' + pageName + '" wurde nicht gefunden</p>';
