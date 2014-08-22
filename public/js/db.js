@@ -199,13 +199,13 @@ app.factory('db',
                      return this.name;
                  };
 
-                 db.Event.prototype.surtitles = function () {
-                     return [ this.surtitle ];
-                 }
-
                  db.Event.prototype.isCurrent = function () {
                      return !moment(this.date).isBefore(moment(), 'day');
                  };
+
+                 db.Event.prototype.getTags = function () {
+                     return this.tags;
+                 }
 
                  db.Event.prototype.processParticipants = db.processParticipants;
 
@@ -221,17 +221,14 @@ app.factory('db',
                      return this.name || this.piece.name;
                  }
 
-                 db.Enactment.prototype.surtitles = function () {
-                     if (this.surtitle == this.piece.surtitle) {
-                         return [ this.piece.surtitle ];
-                     } else {
-                         return [ this.surtitle, this.piece.surtitle ];
-                     }
-                 }
-
                  db.Enactment.prototype.isCurrent = function () {
                      return !moment(this.date).isBefore(moment(), 'day');
                  };
+
+                 db.Enactment.prototype.getTags = function () {
+                     console.log('getTags', this);
+                     return this.tags;
+                 }
 
                  db.Enactment.prototype.processParticipants = db.processParticipants;
 

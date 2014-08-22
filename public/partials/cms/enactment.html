@@ -3,8 +3,8 @@
     <table class="cms-table table table-striped table-bordered table-condensed">
       <tbody>
         <tr>
-          <th>Übertitel</th>
-          <td colspan="2"><input type="text" class="input-xxlarge" ng-model="enactment.surtitle"/></td>
+          <th>Premierenhinweis</th>
+          <td colspan="2"><input type="text" class="input-xxlarge" ng-model="enactment.premiere_notice"/></td>
         </tr>
         <tr>
           <th>Stück</th>
@@ -20,6 +20,13 @@
           <th>Wann</th>
           <td colspan="2">
             <date-time-picker ng-model="enactment.date"/>
+          </td>
+        </tr>
+        <tr>
+          <th></th>
+          <td colspan="2">
+            <input type="checkbox" ng-model="enactment.english_surtitles"/> mit
+            englischen Überititeln
           </td>
         </tr>
         <tr>
