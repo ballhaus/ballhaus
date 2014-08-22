@@ -286,3 +286,7 @@ image-button {
 .hidden {
     display: none;
 }
+
+.date-triggered-contents-selector div {
+    display: inline-block;
+}
