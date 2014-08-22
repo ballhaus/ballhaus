@@ -473,11 +473,12 @@ body.ada #site-menu-street {
     border-bottom: solid black 2px;
     clear: both;
     font: 16px/24px Verdana, Geneva, sans-serif;
+    min-height: 4.5em;
 }
 
 .item-tags {
     font-size: 16px;
-    color: #5f5f5f;
+    color: #868686;
     text-transform: uppercase;
 }
 
@@ -576,7 +577,7 @@ body.ada #site-menu-street {
 }
 
 .big-list .item-tags {
-     font-size: 15px;
+     font-size: 14px;
 }
 
 .big-list .item-by {
