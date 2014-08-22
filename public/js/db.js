@@ -516,6 +516,19 @@ app.factory('db',
                          console.log('migrated', homepage);
                      }
 
+                     function expire_timed_content(arraykey) {
+                         for (var i = 0; i < 8; i++) {
+                             var content = homepage[arraykey][i];
+                             if (content && content.other_content_date && content.other_content.object && (content.other_content_date.getTime() < (new Date).getTime())) {
+                                 delete content.other_content_date;
+                                 content.content = content.other_content;
+                                 delete content.other_content;
+                             }
+                         }
+                     }
+                     expire_timed_content('box');
+                     expire_timed_content('marginal');
+
                      db.tags = function () { return siteConfig.tags; };
 
                      if (db.freeze) {

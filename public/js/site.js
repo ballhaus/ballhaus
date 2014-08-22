@@ -118,13 +118,8 @@ function HomeController($scope, db, Page, schedule) {
     var firstBox;
 
     function selectContent(content) {
-        console.log('selectContent', content);
-        if (content) {
-            if (content.other_content_date && content.other_content.object && (content.other_content_date.getTime() < (new Date).getTime())) {
-                return db.get(db[content.other_content.type], parseInt(content.other_content.object));
-            } else if (content.content.object) {
-                return db.get(db[content.content.type], parseInt(content.content.object));
-            }
+        if (content && content.content.object) {
+            return db.get(db[content.content.type], parseInt(content.content.object));
         }
     }
 

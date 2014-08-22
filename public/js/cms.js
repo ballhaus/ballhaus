@@ -1136,10 +1136,7 @@ angular.module('cmsApp.directives', [])
             restrict: 'E',
             scope: { model: '=model' },
             replace: true,
-            templateUrl: '/partials/cms/box-contents-selector.html',
-            link: function ($scope) {
-                console.log('boxContentsSelector, model', $scope.model);
-            }
+            templateUrl: '/partials/cms/box-contents-selector.html'
         };
     }])
     .directive("pagePieceEventSelector", ['db', function (db) {
