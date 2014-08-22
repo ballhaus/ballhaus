@@ -472,7 +472,8 @@ body.ada #site-menu-street {
     padding: 16px 20px;
     border-bottom: solid black 2px;
     clear: both;
-    font: 16px/24px Verdana, Geneva, sans-serif;
+    font: 16px Verdana, Geneva, sans-serif;
+    line-height: 24px;
     min-height: 4.5em;
 }
 
@@ -482,8 +483,9 @@ body.ada #site-menu-street {
     text-transform: uppercase;
 }
 
-.item-surtitle {
+.item-premiere-notice {
     font-size: 14px;
+    text-transform: uppercase;
     color: #eb0033;
 }
 
@@ -560,6 +562,7 @@ body.ada #site-menu-street {
 .events .date {
     float: left;
     font-size: 16px;
+    line-height: 24px;
     width: 125px;
 }
 
@@ -581,8 +584,7 @@ body.ada #site-menu-street {
 }
 
 .big-list .item-by {
-    line-height: 21px;
-    padding-top: 2px;
+    line-height: 24px;
     font-size: 14px;
 }
 
