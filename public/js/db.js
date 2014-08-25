@@ -208,7 +208,6 @@ app.factory('db',
                      if (this.english_surtitles) {
                          tags.push('ENGL. SURTITLES');
                      }
-                     console.log('getTags', this, 'surtitles', this.english_surtitles, 'tags', tags)
                      return tags;
                  }
 
