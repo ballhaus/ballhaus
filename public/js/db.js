@@ -204,7 +204,12 @@ app.factory('db',
                  };
 
                  db.Event.prototype.getTags = function () {
-                     return this.tags;
+                     var tags = this.tags ? this.tags.slice() : [];
+                     if (this.english_surtitles) {
+                         tags.push('ENGL. SURTITLES');
+                     }
+                     console.log('getTags', this, 'surtitles', this.english_surtitles, 'tags', tags)
+                     return tags;
                  }
 
                  db.Event.prototype.processParticipants = db.processParticipants;
@@ -224,11 +229,6 @@ app.factory('db',
                  db.Enactment.prototype.isCurrent = function () {
                      return !moment(this.date).isBefore(moment(), 'day');
                  };
-
-                 db.Enactment.prototype.getTags = function () {
-                     console.log('getTags', this);
-                     return this.tags;
-                 }
 
                  db.Enactment.prototype.processParticipants = db.processParticipants;
 
