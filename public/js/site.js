@@ -128,7 +128,9 @@ function HomeController($scope, db, Page, schedule, linker) {
     }
 
     if (homepage.layout === 1) {
-        $scope.headColumn = cleanColumn({width: 670, height: 426}, [ selectContent(homepage.box[0]) ]);
+        var content = selectContent(homepage.box[0]);
+        content.maybe_show_video = 1;
+        $scope.headColumn = cleanColumn({width: 670, height: 426}, [ content ]);
         ++start;
     }
     if (homepage.layout === 2) {
@@ -707,7 +709,18 @@ app
             restrict: 'E',
             replace: true,
             scope: {item: '='},
-            templateUrl: '/partials/home-item.html'
+            templateUrl: '/partials/home-item.html',
+            link: function ($scope, element, attributes) {
+                var item = $scope.item;
+                if (item.maybe_show_video
+                    && ((item.video && item.video.show_first)
+                        || (item.piece && item.piece.video && item.piece.video.show_first))) {
+                    $scope.medium = item.video;
+                    $scope.show_video_first = true;
+                } else {
+                    $scope.medium = item.images[0];
+                }
+            }
         };
     })
     .directive("artistsLetterList", function (artists) {

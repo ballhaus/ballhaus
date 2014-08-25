@@ -4,7 +4,13 @@
       <div ng-show="item.nextPiece"
            class="home-next-piece-date"
            ng-class="{'home-next-piece-today': item.howSoon == 'today'}">{{item.dateIntro}} {{item.date | formatDate:'dd, l'}}</div>
-      <backend-image image="item.images[0]"></backend-image>
+      <div ng-show="!show_video_first">
+        <backend-image image="medium"></backend-image>
+      </div>
+      <div ng-show="show_video_first">
+        <iframe src="//player.vimeo.com/video/{{medium.vimeoId}}?title=0&byline=0&portrait=0"
+                width="670" height="426" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+      </div>
     </div>
     <h2 ng-bind-html-unsafe="item.name | translate"></h1>
     <div ng-bind-html-unsafe="item.by | translate"></div>
