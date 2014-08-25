@@ -112,14 +112,18 @@ function intoRect(rect, item) {
     return res;
 }
 
-function HomeController($scope, db, Page, schedule) {
+function HomeController($scope, db, Page, schedule, linker) {
     var homepage = db.homepage;
     var start = 0;
     var firstBox;
 
     function selectContent(content) {
         if (content && content.content.object) {
-            return db.get(db[content.content.type], parseInt(content.content.object));
+            content = db.get(db[content.content.type], parseInt(content.content.object));
+            console.log('content', content);
+            return angular.extend({}, content.__proto__, content, {
+                link: linker.linkTo(content)
+            });
         }
     }
 
@@ -134,7 +138,8 @@ function HomeController($scope, db, Page, schedule) {
     if (!firstBox) {
         schedule.getUpcoming().then(function (upcoming) {
             if (upcoming && upcoming.length > 0) {
-                firstBox = Object.create(upcoming[0]);
+                var event = upcoming[0];
+                firstBox = Object.create(event);
                 firstBox.nextPiece = true;
                 firstBox.date = moment(firstBox.date);
                 firstBox.howSoon = firstBox.date.isSame(moment(), 'day') ? 'today' : (
@@ -241,7 +246,6 @@ function PressPdfController($scope, db, Page) {
             return event.presse;
         })
         .map(function (event) {
-            console.log('event ' + event);
             return {
                 name: event.name || (event.piece && event.piece.name),
                 date: event.date && moment(event.date).tz('Europe/Berlin').format('Do MMMM YYYY'),
@@ -275,7 +279,7 @@ app.service('linker', function (db) {
         } else if (obj instanceof db.Event) {
             return '/veranstaltung/' + obj.link;
         } else {
-            return '/';
+            return '/' + (obj.link || '');
         }
     };
 });
