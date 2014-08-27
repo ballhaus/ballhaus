@@ -1,6 +1,6 @@
 <div class="piece-details">
   <media-browser model="piece"></media-browser>
-  <p class="item-tags" ng-bind-html-unsafe="piece.tags | join:' / '"></p>
+  <p class="item-tags" ng-bind-html-unsafe="piece | tags | join:' / '"></p>
   <div class="item-name-wrapper">
     <h1 class="item-name">{{piece.name}}</h1>
     <ticket-link for="piece"></ticket-link>

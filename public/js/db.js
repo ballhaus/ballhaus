@@ -203,14 +203,6 @@ app.factory('db',
                      return !moment(this.date).isBefore(moment(), 'day');
                  };
 
-                 db.Event.prototype.getTags = function () {
-                     var tags = this.tags ? this.tags.slice() : [];
-                     if (this.english_surtitles) {
-                         tags.push('ENGL. SURTITLES');
-                     }
-                     return tags;
-                 }
-
                  db.Event.prototype.processParticipants = db.processParticipants;
 
                  // //////////////////////////////////////////////////////////////////////

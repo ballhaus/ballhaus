@@ -4,7 +4,7 @@
     <a ng-href="{{event.link}}">
       <div class="date">{{event.date | formatDate:"dddd"}}<br/>{{event.date | formatDate:"Do MMMM"}}<br/>{{event.date | formatDate:"H:mm"}} Uhr</div>
       <div class="big-column">
-        <div class="item-tags">{{event.getTags() | join:" / " }}</div>
+        <div class="item-tags">{{event | tags | join:" / " }}</div>
         <div ng-show="event.premiere_notice" class="item-premiere-notice">{{event.premiere_notice}}</div>
         <div class="item-name">{{event.name}}</div>
         <div class="item-by" ng-bind-html-unsafe="event.by | translate | orSpace"></div>

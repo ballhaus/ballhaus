@@ -65,6 +65,20 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
 .filter('translate', function () {
     return translate;
 })
+.filter('tags', function () {
+    return function (object) {
+        var tags = [];
+        if (object.tags && object.tags.length) {
+            tags = object.tags.slice();
+        } else if (object.piece && object.piece.tags && object.piece.tags.length) {
+            tags = object.piece.tags.slice();
+        }
+        if (object.english_surtitles || (object.piece && object.piece.english_surtitles)) {
+            tags.push('ENGL. SURTITLES');
+        }
+        return tags;
+    }
+})
 .filter('teaser', function () {
     return function (input) {
         if (input.teaser && input.teaser[language]) {
@@ -125,7 +139,6 @@ function HomeController($scope, db, Page, schedule, linker) {
     function selectContent(content) {
         if (content && content.content.object) {
             content = db.get(db[content.content.type], parseInt(content.content.object));
-            console.log('content', content);
             return angular.extend({}, content.__proto__, content, {
                 link: linker.linkTo(content)
             });
