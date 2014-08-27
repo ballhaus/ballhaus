@@ -1,11 +1,11 @@
 <div ng-class="{'non-empty': for.length > 0}">
   <div ng-repeat="item in for">
     <a href="{{item.link}}">
-      <div ng-show="(item.contents | translate | onlyTeaser)">
+      <div ng-show="item | teaser">
         <h2>{{item.name | translate}}</h2>
-        <div ng-bind-html-unsafe="item.contents | translate | onlyTeaser"></div>
+        <div ng-bind-html-unsafe="item | teaser"></div>
       </div>
-      <div ng-hide="(item.contents | translate | onlyTeaser)">
+      <div ng-hide="item | teaser">
         <div class="sidebar-box-wrapper"><h2 class="sidebar-box">{{item.name | translate}}</h2></div>
       </div>
     </a>

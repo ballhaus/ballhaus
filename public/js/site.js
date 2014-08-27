@@ -65,12 +65,17 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
 .filter('translate', function () {
     return translate;
 })
-.filter('onlyTeaser', function () {
+.filter('teaser', function () {
     return function (input) {
-        if (input && input.indexOf('\u06DD') != -1) {
-            return input.substr(0, input.indexOf('\u06DD'));
+        if (input.teaser && input.teaser[language]) {
+            return input.teaser[language];
         } else {
-            return input;
+            var description = input.description && input.description[language];
+            if (description && description.indexOf('\u06DD') != -1) {
+                return description.substr(0, description.indexOf('\u06DD'));
+            } else {
+                return description;
+            }
         }
     };
 })
