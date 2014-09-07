@@ -74,7 +74,7 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
             tags = object.piece.tags.slice();
         }
         if (object.english_surtitles || (object.piece && object.piece.english_surtitles)) {
-            tags.push('ENGL. SURTITLES');
+            tags.push('ENGLISH SURTITLES');
         }
         return tags;
     }
