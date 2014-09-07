@@ -3,7 +3,7 @@
 <div>
   <h3>Layout auswählen</h3>
   <div ng-model="homepage.layout" class="homepage-layout" bs-tabs>
-    <div data-tab="Zweispaltig">
+    <div data-tab="Zweispaltig + nächste">
       <table>
         <tr>
           <td>Nächste Aufführung</td>
@@ -19,7 +19,7 @@
         </tr>
       </table>
     </div>
-    <div data-tab="Ein- und Zweispaltig">
+    <div data-tab="Ein- und Zweispaltig + nächste">
       <table>
         <tr>
           <td colspan="2"><box-contents-selector model="homepage.box[0]"></box-contents-selector></td>
@@ -34,7 +34,7 @@
         </tr>
       </table>
     </div>
-    <div data-tab="Theaterferien">
+    <div data-tab="Zweispaltig">
       <table>
         <tr>
           <td><box-contents-selector model="homepage.box[0]"></box-contents-selector></td>
@@ -47,6 +47,21 @@
         <tr>
           <td><box-contents-selector model="homepage.box[4]"></box-contents-selector></td>
           <td><box-contents-selector model="homepage.box[5]"></box-contents-selector></td>
+        </tr>
+      </table>
+    </div>
+    <div data-tab="Ein- und Zweispaltig">
+      <table>
+        <tr>
+          <td colspan="2"><box-contents-selector model="homepage.box[0]"></box-contents-selector></td>
+        </tr>
+        <tr>
+          <td><box-contents-selector model="homepage.box[1]"></box-contents-selector></td>
+          <td><box-contents-selector model="homepage.box[2]"></box-contents-selector></td>
+        </tr>
+        <tr>
+          <td><box-contents-selector model="homepage.box[3]"></box-contents-selector></td>
+          <td><box-contents-selector model="homepage.box[4]"></box-contents-selector></td>
         </tr>
       </table>
     </div>
