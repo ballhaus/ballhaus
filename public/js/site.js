@@ -84,7 +84,7 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
         if (input.teaser && input.teaser[language]) {
             return input.teaser[language];
         } else {
-            var description = input.description && input.description[language];
+            var description = (input.description && input.description[language]) || (input.contents && input.contents[language]);
             if (description && description.indexOf('\u06DD') != -1) {
                 return description.substr(0, description.indexOf('\u06DD'));
             } else {
