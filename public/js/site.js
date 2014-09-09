@@ -151,7 +151,7 @@ function HomeController($scope, db, Page, schedule, linker) {
         $scope.headColumn = cleanColumn({width: 670, height: 426}, [ content ]);
         ++start;
     }
-    if (homepage.layout > 2) {
+    if (homepage.layout >= 2) {
         firstBox = selectContent(homepage.box[0]);
         ++start;
     }
