@@ -137,7 +137,7 @@ function HomeController($scope, db, Page, schedule, linker) {
     var firstBox;
 
     function selectContent(content) {
-        if (content && content.content.object) {
+        if (content && content.content.type && content.content.object) {
             content = db.get(db[content.content.type], parseInt(content.content.object));
             return angular.extend({}, content.__proto__, content, {
                 link: linker.linkTo(content)
