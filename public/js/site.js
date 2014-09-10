@@ -145,7 +145,7 @@ function HomeController($scope, db, Page, schedule, linker) {
         }
     }
 
-    if (homepage.layout === 1) {
+    if (homepage.layout == 1 || homepage.layout == 3) {
         var content = selectContent(homepage.box[0]);
         content.maybe_show_video = 1;
         $scope.headColumn = cleanColumn({width: 670, height: 426}, [ content ]);
