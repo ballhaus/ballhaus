@@ -85,10 +85,13 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
             return input.teaser[language];
         } else {
             var description = (input.description && input.description[language]) || (input.contents && input.contents[language]);
-            if (description && description.indexOf('\u06DD') != -1) {
-                return description.substr(0, description.indexOf('\u06DD'));
-            } else {
-                return description;
+/* haesslicher hack:  teasermarkierung am anfang -> kein teaser, rote box auf hp */
+            if (!description.match(/^<p><span>\u06DD/)) {
+                if (description && description.indexOf('\u06DD') != -1) {
+                    return description.substr(0, description.indexOf('\u06DD'));
+                } else {
+                    return description;
+                }
             }
         }
     };
