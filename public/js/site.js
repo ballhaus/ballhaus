@@ -86,7 +86,7 @@ var app = angular.module('siteApp', ['ui.bootstrap', 'ngResource', '$strap.direc
         } else {
             var description = (input.description && input.description[language]) || (input.contents && input.contents[language]);
 /* haesslicher hack:  teasermarkierung am anfang -> kein teaser, rote box auf hp */
-            if (!description.match(/^<p><span>\u06DD/)) {
+            if (!description.match(/^(<[^>]+>\s*)*\u06DD/)) {
                 if (description && description.indexOf('\u06DD') != -1) {
                     return description.substr(0, description.indexOf('\u06DD'));
                 } else {
