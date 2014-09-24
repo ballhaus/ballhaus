@@ -508,7 +508,7 @@ app.factory('db',
                          for (var i = 0; i < 8; i++) {
                              var content = homepage[arraykey][i];
                              if (content && content.other_content_date) {
-                                 if (content.other_content.object && (content.other_content_date.getTime() < (new Date).getTime())) {
+                                 if (content.other_content && content.other_content.object && (content.other_content_date.getTime() < (new Date).getTime())) {
                                      delete content.other_content_date;
                                      content.content = content.other_content;
                                      delete content.other_content;
