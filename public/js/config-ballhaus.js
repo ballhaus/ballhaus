@@ -12,6 +12,7 @@ var siteConfig = {
             { name: 'Denken' },
             { name: 'akademie der autodidakten' },
             { name: 'project in/out' },
-            { name: 'Festival Black Lux' }
+            { name: 'Festival Black Lux' },
+            { name: 'We are tomorrow' }
           ]
 };
