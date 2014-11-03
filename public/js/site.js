@@ -155,7 +155,7 @@ function HomeController($scope, db, Page, schedule, linker) {
         ++start;
     }
     if (homepage.layout >= 2) {
-        firstBox = selectContent(homepage.box[0]);
+        firstBox = selectContent(homepage.box[homepage.layout - 2]);
         ++start;
     }
     if (!firstBox) {
