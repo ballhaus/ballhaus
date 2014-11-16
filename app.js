@@ -88,8 +88,15 @@ app.configure(function() {
     app.use(express.session({cookie: { path: '/', httpOnly: true, expires: false }}));
     app.use(function (req, res, next) {
         req.botRequest = req.headers['user-agent'] && req.headers['user-agent'].match(/bot\//);
-        var browserPageRequest = req.accepted && req.accepted.length && req.accepted[0].value == 'text/html' && !req.botRequest;
-        if (req.method == 'GET') {
+        var browserPageRequest = req.accepted
+            && req.accepted.length
+            && req.accepted[0].value == 'text/html'
+            && !req.botRequest
+            && !req.url.match('\.(jp[e]g|gif|png|css|js)$')
+            && !req.url.match('^/image/');
+        if (req.method == 'GET')
+
+ {
                 if (browserPageRequest && req.url.match('^/cms')) {
                     console.log('REDIRECTING TO CMS');
                     res.render('cms');
