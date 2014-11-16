@@ -911,7 +911,7 @@ app
         return {
             restrict: 'E',
             replace: true,
-            template: ' <img ng-src="/image/{{for.images[0].name}}?thumbnail=1" width="{{for.imageSize.width}}" height="{{for.imageSize.height}}" />',
+            template: ' <img ng-src="/image/{{for.images[0].id}}?thumbnail=1" width="{{for.imageSize.width}}" height="{{for.imageSize.height}}" />',
             scope: { 'for': '=' }
         };
     })
@@ -927,7 +927,7 @@ app
         return {
             restrict: 'E',
             replace: true,
-            template: '<img ng-show="image" ng-src="/image/{{image.name}}" width="{{image.width}}" height="{{image.height}}" />',
+            template: '<img ng-show="image" ng-src="/image/{{image.id}}" width="{{image.width}}" height="{{image.height}}" />',
             scope: { image: '=' }
         };
     })

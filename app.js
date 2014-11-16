@@ -93,7 +93,7 @@ app.configure(function() {
             && req.accepted[0].value == 'text/html'
             && !req.botRequest
             && !req.url.match('\.(jp[e]g|gif|png|css|js)$')
-            && !req.url.match('^/image/');
+            && !req.url.match('^/ima?ge?/');
         if (req.method == 'GET')
 
  {
@@ -194,10 +194,22 @@ app.post('/db', function (req, res) {
     });
 });
 
-// Image upload/download
+// Image upload/download and access
+
+var objects = undefined;
 
 app.get('/image/:name', function (req, res) {
+    if (objects === undefined) {
+        objects = [];
+        db.map(function(object) { objects[object.id] = object; });
+    }
     var name = req.params.name;
+    if (name.match(/^[0-9]+/)) {
+        var image = objects[parseInt(name)];
+        if (image) {
+            name = image.name;
+        }
+    }
     var filename = path.resolve((req.query.thumbnail ? 'thumbnails/' : 'images/') + name);
     fs.stat(filename, function (err) {
         if (err) {
@@ -209,6 +221,7 @@ app.get('/image/:name', function (req, res) {
 });
 
 app.post('/image', function (req, res) {
+    objects = undefined;
     var name = req.files.qqfile.name;
     Step(function () { gm(req.files.qqfile.path).size(this); },
          function (err, size) {
