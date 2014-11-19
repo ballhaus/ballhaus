@@ -39,6 +39,8 @@ var access_logfile = fs.createWriteStream(__dirname + '/logs/access.log', { flag
 
 var nsg = require('node-sprite-generator');
 
+var objects;
+
 app.configure(function() {
     app.use(express.logger({ stream: access_logfile }));
     app.set('port', process.env.PORT || config.port || 3000);
@@ -94,9 +96,10 @@ app.configure(function() {
             && !req.botRequest
             && !req.url.match('\.(jp[e]g|gif|png|css|js)$')
             && !req.url.match('^/ima?ge?/');
-        if (req.method == 'GET')
-
- {
+        if (req.method == 'POST') {
+            objects = undefined;
+        }
+        if (req.method == 'GET') {
                 if (browserPageRequest && req.url.match('^/cms')) {
                     console.log('REDIRECTING TO CMS');
                     res.render('cms');
@@ -196,10 +199,8 @@ app.post('/db', function (req, res) {
 
 // Image upload/download and access
 
-var objects = undefined;
-
 app.get('/image/:name', function (req, res) {
-    if (objects === undefined) {
+    if (!objects) {
         objects = [];
         db.map(function(object) { objects[object.id] = object; });
     }
@@ -221,7 +222,6 @@ app.get('/image/:name', function (req, res) {
 });
 
 app.post('/image', function (req, res) {
-    objects = [];
     var name = req.files.qqfile.name;
     Step(function () { gm(req.files.qqfile.path).size(this); },
          function (err, size) {
