@@ -221,7 +221,7 @@ app.get('/image/:name', function (req, res) {
 });
 
 app.post('/image', function (req, res) {
-    objects = undefined;
+    objects = [];
     var name = req.files.qqfile.name;
     Step(function () { gm(req.files.qqfile.path).size(this); },
          function (err, size) {
