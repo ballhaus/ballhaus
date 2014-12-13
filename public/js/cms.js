@@ -69,7 +69,7 @@ var app = angular.module('cmsApp', ['ui',
                                      pageName = 'pages-' + siteConfig.name;
                                  }
                                  var def = { name: pageName,
-                                             resolve: { database: function($q, db) { return db.ensure(); } },
+                                             resolve: { database: function($q, db) { return true; } },
                                              templateUrl: '/partials/cms/' + pageName.replace(/\/.*$/, "") + '.html' };
                                  if (pageDef[1]) {
                                      def.controller = pageDef[1];
@@ -162,6 +162,7 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
         $http
             .get('/login-status', { params: { url: window.location.pathname } })
             .success(function (loginStatus) {
+                console.log('statusPolled', statusPolled, 'localStorage.lockId', localStorage.lockId, 'loginStatus.uuid', loginStatus.uuid);
                 if (statusPolled && localStorage.lockId && (loginStatus.uuid != localStorage.lockId)) {
                     delete localStorage.lockId;
                     db.close();
@@ -181,7 +182,6 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                     if (loginStatus.uuid == localStorage.lockId) {
                         $rootScope.superuser = loginStatus.superuser;
                         $rootScope.state = 'loggedIn';
-                        db.ensure();
                     } else {
                         $rootScope.state = 'locked';
                         $rootScope.loggedInUser = loginStatus.name;
@@ -318,11 +318,10 @@ function LoginController($scope, $rootScope, $dialog, $http, $location, db) {
                     .post('/login', { name: $scope.name,
                                       password: sha1(sha1($scope.password + muffineer.userSalt) + muffineer.sessionSalt) })
                     .success(function (loginStatus) {
+                        console.log('login success', loginStatus);
                         $rootScope.state = 'loggedIn';
                         localStorage.lockId = loginStatus.uuid;
-                        db.open(true).then(function () {
-                            $location.path('/cms/events');
-                        });
+                        $location.path('/cms/events');
                     })
                     .error(function (message, status) {
                         if (status == 401) {
@@ -337,7 +336,6 @@ function LoginController($scope, $rootScope, $dialog, $http, $location, db) {
     $scope.uploadChanges = true;
 
     $scope.logout = function (force) {
-        db.close();
         delete localStorage.lockId;
         $http.post(force ? '/logout?force=1' : '/logout')
             .success(function () {

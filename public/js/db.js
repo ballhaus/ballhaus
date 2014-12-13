@@ -2,10 +2,8 @@ var dB;
 
 app.factory('db',
              function ($resource, $http, $rootScope, $q) {
-                 var db = { objects: [] };
+                 var db = { };
 
-                 var deferred = $q.defer();
-                 db.promise = deferred.promise;
 
                  var cmsMode = window.location.href.match(/cms/);
                  console.log('cmsMode: ' + cmsMode);
@@ -19,6 +17,10 @@ app.factory('db',
                  db.hideSpinner = function () {
                      jQuery('#spinner').hide();
                  }
+
+                 db.hasChanged = function () {
+                     return false;               // fixme, remove this
+                 }
                  
                  db.version = '(unknown)';
                  $resource('/version').get(function (version) {
@@ -30,117 +32,19 @@ app.factory('db',
                      }
                  });
 
-                 db.nextId = function () {
-                     var nextId = (db.Extent.lastId || 0) + 1;
-                     while (db.Extent.extent[nextId]) {
-                         nextId++;
-                     }
-                     return nextId;
-                 }
-
-                 db.Extent = function Extent (attributes) {
-                     for (var key in attributes) {
-                         this[key] = attributes[key];
-                     }
-                     if (!('id' in this)) {
-                         this.id = db.nextId();
-                     }
-                     this.thawed();
-                 }
-                 db.Extent.extent = {};
-                 db.Extent.prototype.thawed = function () {
-                     var object = this;
-                     if (!object.id || db.Extent.extent[object.id]) {
-                         var newId = db.nextId();
-                         console.log('object id ' + object.id + ' from thawed object unavailable, assigning new id ' + newId);
-                         object.id = newId;
-                     }
-                     db.Extent.extent[object.id] = object;
-                     db.Extent.lastId = Math.max(db.Extent.lastId || 0, object.id);
-                     if (!object.constructor.extent) {
-                         object.constructor.extent = {};
-                     }
-                     object.constructor.extent[object.id] = object;
-                     db.objects.unshift(object);
-                 }
-
-                 db.Extent.prototype.cmsLink = function () {
-                     return "/cms/" + this.constructor.name.toLowerCase() + "/" + this.id;
+                 function entityType(constructor) {
+                     return (constructor.name || ieConstructorName(constructor)).toLowerCase();
                  }
 
                  db.get = function (constructor, id) {
-                     var constructorName = constructor.name || ieConstructorName(constructor)
-                     if (db.Extent.extent[id]) {
-                         return db.Extent.extent[id];
-                     } else {
-                         for (var i in db.Extent.extent) {
-                             var object = db.Extent.extent[i];
-                             if (object.link
-                                 && object.link == id
-                                 && object.constructor == constructor) {
-                                 return object;
-                             }
-                         }
-                     }
-                     console.log('db.get ' + constructorName + ' ' + id + ' not found');
-                     return null;
+                     return $resource('/db/' + entityType(constructor) + '/' + id).get();
                  }
                  db.findObjects = function (constructor) {
-                     var retval = [];
-                     for (var id in db.Extent.extent) {
-                         var object = db.Extent.extent[id];
-                         if (object.constructor == constructor) {
-                             retval.push(object);
-                         }
-                     }
-                     return retval;
+                     return $resource('/db/' + entityType(constructor)).get();
                  }
 
                  db.deleteObject = function (convict) {
-                     db.deleteObjects([convict]);
-                 }
-
-                 db.deleteObjects = function (convicts) {
-                     db.showSpinner();
-                     var seenObjects = [];
-                     function seen(object) {
-                         return seenObjects.indexOf(object) != -1;
-                     }
-                     function maybeChase(object) {
-                         if ((typeof object == 'object') && !seen(object)) {
-                             deleteFrom(object);
-                         }
-                     }
-                     function deleteFrom(parent) {
-                         if (parent) {
-                             seenObjects.push(parent);
-                             if (length in parent) {
-                                 var i = parent.length;
-                                 while (i--) {
-                                     if (convicts.indexOf(parent[i]) != -1) {
-                                         parent.splice(i, 1);
-                                     } else {
-                                         maybeChase(parent[i]);
-                                     }
-                                 }
-                             } else {
-                                 for (var key in parent) {
-                                     if (convicts.indexOf(parent[key]) != -1) {
-                                         delete parent[key];
-                                     } else {
-                                         maybeChase(parent[key]);
-                                     }
-                                 }
-                             }
-                         }
-                     }
-                     // Fixme: All roots must be traversed.  Maybe a list of roots should be kept?
-                     deleteFrom(db.Extent.extent);
-                     convicts.forEach(function (convict) {
-                         deleteFrom(convict.constructor.extent);
-                     });
-                     deleteFrom(db.objects);
-                     db.pushToServer();
+                     return $resource('/db/' + entityType(convict.constructor) + '/' + convict.id).delete();
                  }
 
                  db.processParticipants = function () {
@@ -191,9 +95,7 @@ app.factory('db',
                  db.Event = function Event (attributes) {
                      this.images = [];
                      this.tags = [];
-                     db.Extent.call(this, attributes);
                  };
-                 inherits(db.Event, db.Extent);
 
                  db.Event.prototype.title = function () {
                      return this.name;
@@ -209,7 +111,6 @@ app.factory('db',
                  // Enactment
 
                  db.Enactment = function Enactment (attributes) {
-                     db.Extent.call(this, attributes);
                  }
                  inherits(db.Enactment, db.Event);
 
@@ -227,9 +128,7 @@ app.factory('db',
                  // Person
 
                  db.Person = function Person (attributes) {
-                     db.Extent.call(this, attributes);
                  }
-                 inherits(db.Person, db.Extent);
 
                  db.Person.getByName = function (name) {
                      var all = db.findObjects(db.Person);
@@ -260,9 +159,7 @@ app.factory('db',
                  db.Piece = function Piece (attributes) {
                      this.enactments = [];
                      this.tags = [];
-                     db.Extent.call(this, attributes);
                  }
-                 inherits(db.Piece, db.Extent);
 
                  db.Piece.prototype.title = function () {
                      return this.name;
@@ -286,9 +183,7 @@ app.factory('db',
                  // ArchivedPiece
 
                  db.ArchivedPiece = function ArchivedPiece (attributes) {
-                     db.Extent.call(this, attributes);
                  }
-                 inherits(db.ArchivedPiece, db.Extent);
 
                  db.ArchivedPiece.prototype.processParticipants = db.processParticipants;
 
@@ -296,34 +191,26 @@ app.factory('db',
                  // Page
 
                  db.Page = function Page (attributes) {
-                     db.Extent.call(this, attributes);
                      this.tags = [];
                  }
-                 inherits(db.Page, db.Extent);
 
                  // //////////////////////////////////////////////////////////////////////
                  // Image
 
                  db.Image = function Image (attributes) {
-                     db.Extent.call(this, attributes);
                  }
-                 inherits(db.Image, db.Extent);
 
                  // //////////////////////////////////////////////////////////////////////
                  // Video
 
                  db.Video = function Video (attributes) {
-                     db.Extent.call(this, attributes);
                  }
-                 inherits(db.Video, db.Extent);
 
                  // //////////////////////////////////////////////////////////////////////
                  // Homepage
 
                  db.Homepage = function Homepage (attributes) {
-                     db.Extent.call(this, attributes);
                  }
-                 inherits(db.Homepage, db.Extent);
 
                  // //////////////////////////////////////////////////////////////////////
                  // Flickr Sets
@@ -451,6 +338,14 @@ app.factory('db',
                     return data;
                  }
 
+                 function getAllObjects(entityType) {
+                     return function() {
+                         return $resource('/db/' + entityType).get().$promise;
+                     }
+                 }
+
+                 db.pages = getAllObjects('page');
+                 
                  function initializeObjects(data) {
                      db.objects = [];
                      db.Extent.lastId = 0;
@@ -464,7 +359,6 @@ app.factory('db',
                      db.people = db.findObjects.bind(this, db.Person);
                      db.pieces = db.findObjects.bind(this, db.Piece);
                      db.images = db.findObjects.bind(this, db.Image);
-                     db.pages = db.findObjects.bind(this, db.Page);
 
 		     db.findObjects(db.ArchivedPiece).map(function (piece) {
 			 if (piece.description.de && piece.description.de.match(/English version below/)) {
@@ -518,8 +412,13 @@ app.factory('db',
                              }
                          }
                      }
-                     expire_timed_content('box');
-                     expire_timed_content('marginal');
+                     console.log(homepage);
+                     if (homepage.box) {
+                         expire_timed_content('box');
+                     }
+                     if (homepage.marginal) {
+                         expire_timed_content('marginal');
+                     }
 
                      db.tags = function () { return siteConfig.tags; };
 
@@ -540,39 +439,6 @@ app.factory('db',
                      if (db.serverState) {
                          db.localState = db.freeze();
                      }
-                 }
-
-                 setInterval(saveLocalState, 1000);
-
-                 db.hasChanged = function () {
-                     return db.serverState && db.localState && (db.localState != db.serverState);
-                 }
-
-                 db.open = function (editMode) {
-                     db.editMode = editMode;
-                     console.log('loading from server');
-                     $http.get('/db').success(function (state) {
-                         initializeObjects(state);
-                     });
-                     db.opened = true;
-
-                     return db.promise;
-                 }
-
-                 db.ensure = function () {
-                     if (!db.opened) {
-                         db.open();
-                     }
-                     return db.promise;
-                 }
-
-                 db.close = function () {
-                     db.opened = false;
-                 }
-
-                 db.restoreFromServer = function (handler) {
-                     db.close();
-                     db.open(db.editMode).then(handler);
                  }
 
                  db.processAllParticipations = function () {
