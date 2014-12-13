@@ -55,8 +55,8 @@ var app = angular.module('cmsApp', ['ui',
                                [ 'enactment/:enactmentId', EditEnactmentController ],
                                [ 'people', PeopleController ],
                                [ 'homepage', EditHomepageController ],
-                               [ 'pages' ],
-                               [ 'page/:pageName', EditPageController ],
+                               [ 'pages', PagesController ],
+                               [ 'page/:pageId', EditPageController ],
                                [ 'person/:personId', EditPersonController ],
                                [ 'videos' ],
                                [ 'tickets' ],
@@ -69,10 +69,13 @@ var app = angular.module('cmsApp', ['ui',
                                      pageName = 'pages-' + siteConfig.name;
                                  }
                                  var def = { name: pageName,
-                                             resolve: { database: function($q, db) { return true; } },
                                              templateUrl: '/partials/cms/' + pageName.replace(/\/.*$/, "") + '.html' };
-                                 if (pageDef[1]) {
+                                 var controller = pageDef[1];
+                                 if (controller) {
                                      def.controller = pageDef[1];
+                                     if (controller.resolve) {
+                                         def.resolve = controller.resolve;
+                                     }
                                  }
                                  $routeProvider.when('/cms/' + pageDef[0], def);
                              });
@@ -135,25 +138,6 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
         var formData = new FormData();
         // Take the first selected file
         formData.append("file", files[0]);
-
-        $http.post('/import-legacy-artists', formData, {
-            withCredentials: true,
-            headers: {'Content-Type': undefined },
-            transformRequest: angular.identity
-        })
-            .success(function (data) {
-                console.log('success', data);
-                data.forEach(function (personData) {
-                    personData.images = [new db.Image(personData.image)];
-                    personData.link = utils.urlify(personData.name);
-                    delete personData['image'];
-                    new db.Person(personData);
-                });
-            })
-            .error(function (error) {
-                console.log('error', error);
-            });
-
     }
 
     var statusPolled;                                       // "Sitzung beendet"-Meldung nicht anzeigen, wenn CMS frisch geladen wird
@@ -180,8 +164,6 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                 statusPolled = true;
                 if (loginStatus.uuid) {
                     if (loginStatus.uuid == localStorage.lockId) {
-                        $rootScope.superuser = loginStatus.superuser;
-                        $rootScope.state = 'loggedIn';
                     } else {
                         $rootScope.state = 'locked';
                         $rootScope.loggedInUser = loginStatus.name;
@@ -192,10 +174,9 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
                         window.location = '/cms/home';
                     }
                 }
-                setTimeout(pollLoginStatus, 1000);
             })
             .error(function () {
-                setTimeout(pollLoginStatus, 1000);
+                alert('cannot poll login status');
             });
     }
     
@@ -318,12 +299,15 @@ function LoginController($scope, $rootScope, $dialog, $http, $location, db) {
                     .post('/login', { name: $scope.name,
                                       password: sha1(sha1($scope.password + muffineer.userSalt) + muffineer.sessionSalt) })
                     .success(function (loginStatus) {
+                        $('#spinner').hide();
                         console.log('login success', loginStatus);
                         $rootScope.state = 'loggedIn';
                         localStorage.lockId = loginStatus.uuid;
+                        $rootScope.superuser = loginStatus.superuser;
                         $location.path('/cms/events');
                     })
                     .error(function (message, status) {
+                        $('#spinner').hide();
                         if (status == 401) {
                             $scope.loginFailure = 'block';
                         } else {
@@ -447,11 +431,9 @@ function EditHomepageController($scope, db) {
 }
 EditHomepageController.$inject = ['$scope', 'db'];
 
-function EditPageController($scope, $dialog, $routeParams, db) {
-    var pageName = $routeParams.pageName;
-    console.log('EditPageController', pageName);
-    $scope.page = db.get(db.Page, pageName);
-    console.log('page', $scope.page);
+function EditPageController($scope, $dialog, page) {
+    $scope.page = page;
+    console.log('EditPageController, page', $scope.page);
 
     $scope.deletePage = function () {
         confirm($dialog, 'Seite löschen', 'Die Seite wirklich löschen?',
@@ -461,7 +443,22 @@ function EditPageController($scope, $dialog, $routeParams, db) {
                 });
     }
 }
-EditPageController.$inject = ['$scope', '$dialog', '$routeParams', 'db'];
+EditPageController.$inject = ['$scope', '$dialog', 'page'];
+
+EditPageController.resolve = {
+    page: function ($resource, $q, $route) {
+        var deferred = $q.defer();
+        $resource('/db/page/' + $route.current.params.pageId)
+            .get(
+                function (data) {
+                    deferred.resolve(data);
+                },
+                function () {
+                    deferred.reject();
+                });
+        return deferred.promise;
+    }
+}
 
 function EditParticipantsController($scope, dialog, model) {
     console.log('EditParticipantsController, model', model);
@@ -525,6 +522,30 @@ function ConfigurationController($scope) {
     $scope.editor = getConfig('editor');
     $scope.changeEditor = function (editor) {
         setConfig('editor', editor);
+    }
+}
+
+function PagesController($scope, pages) {
+    console.log('PagesController, pages', pages);
+    $scope.pages = pages;
+}
+
+PagesController.resolve = {
+    pages: function($resource, $q) {
+        var deferred = $q.defer();
+        $resource('/db/page')
+            .query(
+                function (data) {
+                    var map = {};
+                    data.forEach(function (page) {
+                        map[page.link] = page;
+                    });
+                    deferred.resolve(map);
+                },
+                function () {
+                    deferred.reject();
+                });
+        return deferred.promise;
     }
 }
 
@@ -1101,31 +1122,34 @@ angular.module('cmsApp.directives', [])
                         });
                 }
 
-                var linkedPages = [];
+                var linkedPages = {};
                 $('.edit-menu a').each(function (x, node) {
-                    linkedPages.push(db.get(db.Page, $(node).attr('page')));
+                    linkedPages[$(node).attr('page')] = true;
                 });
+
                 $scope.freePages = [];
-                db.pages().forEach(function (page) {
-                    if ($.inArray(page, linkedPages) == -1) {
-                        $scope.freePages.push(page);
+                for (var link in $scope.pages) {
+                    if (linkedPages[link]) {
+                        $scope.pages[link].linkedFromMenu = true;
                     } else {
-                        page.linkedFromMenu = true;
+                        $scope.freePages.push(link);
                     }
-                });
+                }
             }
         }
     }])
-    .directive("pageEditRef", [ 'db', function (db) {
+    .directive("pageEditRef", [ function () {
         return {
             restrict: 'E',
             replace: true,
             scope: true,
             template: '<a href="/cms/page/{{id}}">{{title}}</a>',
             link: function ($scope, element, attributes) {
-                var page = db.get(db.Page, attributes.page);
-                $scope.id = page ? page.id : "";
-                $scope.title = page ? page.name.de : "unknown page " + attributes.link;
+                attributes.$observe('page', function(link) {
+                    var page = $scope.$parent.pages[link];
+                    $scope.id = page ? page.id : "";
+                    $scope.title = page ? page.name.de : "unknown page " + attributes.link;
+                });
             }
         };
     }])

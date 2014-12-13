@@ -338,28 +338,15 @@ app.factory('db',
                     return data;
                  }
 
-                 function getAllObjects(entityType) {
-                     return function() {
-                         return $resource('/db/' + entityType).get().$promise;
-                     }
-                 }
+                 db.pages = $resource('/db/page/:key');
+                 db.events = $resource('/db/event/:key');
+                 db.enactments = $resource('/db/enactment/:key');
+                 db.people = $resource('/db/person/:key');
+                 db.piece = $resource('/db/pieces/:key');
 
-                 db.pages = getAllObjects('page');
-                 
                  function initializeObjects(data) {
-                     db.objects = [];
-                     db.Extent.lastId = 0;
-                     db.Extent.extent = {};
-                     thaw(data, [ db.Event, db.Person, db.Piece, db.ArchivedPiece, db.Image, db.Enactment, db.Page, db.Video, db.Homepage ]);
 
-                     db.events = function () {
-                         return db.findObjects(db.Event).concat(db.findObjects(db.Enactment));
-                     }
-                     db.enactments = db.findObjects.bind(this, db.Enactment);
-                     db.people = db.findObjects.bind(this, db.Person);
-                     db.pieces = db.findObjects.bind(this, db.Piece);
-                     db.images = db.findObjects.bind(this, db.Image);
-
+                     // fixme piece archiving
 		     db.findObjects(db.ArchivedPiece).map(function (piece) {
 			 if (piece.description.de && piece.description.de.match(/English version below/)) {
 			     delete piece.description.en;
