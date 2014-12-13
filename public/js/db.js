@@ -338,11 +338,13 @@ app.factory('db',
                     return data;
                  }
 
-                 db.pages = $resource('/db/page/:key');
-                 db.events = $resource('/db/event/:key');
-                 db.enactments = $resource('/db/enactment/:key');
-                 db.people = $resource('/db/person/:key');
-                 db.piece = $resource('/db/pieces/:key');
+                 var actions = { save: { method: 'PUT' },
+                                 create: { method: 'POST' } }
+                 db.pages = $resource('/db/page/:id', null, actions);
+                 db.events = $resource('/db/event/:id', null, actions);
+                 db.enactments = $resource('/db/enactment/:id', null, actions);
+                 db.people = $resource('/db/person/:id', null, actions);
+                 db.piece = $resource('/db/pieces/:id', null, actions);
 
                  function initializeObjects(data) {
 

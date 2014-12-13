@@ -117,7 +117,7 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
 
     $scope.$on('$routeChangeStart', function (e) {
         console.log('$routeChangeStart');
-        if (db.hasChanged()) {
+        if (false) {                                        // fixme
             confirm($dialog, "Änderungen online stellen?", "Sollen die Änderungen übernommen werden?",
                     function () {
                         db.pushToServer();
@@ -131,7 +131,7 @@ function CmsController($scope, $rootScope, $dialog, $http, $location, db) {
     }
 
     $scope.hasChanged = function () {
-        return db.hasChanged();
+        return true;                                        // fixme
     }
 
     $scope.uploadFile = function(files) {
@@ -431,25 +431,27 @@ function EditHomepageController($scope, db) {
 }
 EditHomepageController.$inject = ['$scope', 'db'];
 
-function EditPageController($scope, $dialog, page) {
+function EditPageController($scope, $dialog, db, page) {
     $scope.page = page;
     console.log('EditPageController, page', $scope.page);
 
     $scope.deletePage = function () {
         confirm($dialog, 'Seite löschen', 'Die Seite wirklich löschen?',
                 function () {
-                    db.deleteObject($scope.page);
-                    window.history.back();
+                    db.pages.remove({ id: $scope.page.id },
+                                    function () {
+                                        window.history.back();
+                                    });
                 });
     }
 }
-EditPageController.$inject = ['$scope', '$dialog', 'page'];
 
 EditPageController.resolve = {
-    page: function ($resource, $q, $route) {
+    page: function ($resource, $q, $route, db) {
         var deferred = $q.defer();
-        $resource('/db/page/' + $route.current.params.pageId)
+        $resource('/db/page/:pageId')
             .get(
+                $route.current.params,
                 function (data) {
                     deferred.resolve(data);
                 },
@@ -526,7 +528,6 @@ function ConfigurationController($scope) {
 }
 
 function PagesController($scope, pages) {
-    console.log('PagesController, pages', pages);
     $scope.pages = pages;
 }
 
@@ -1098,7 +1099,7 @@ angular.module('cmsApp.directives', [])
             }
         }
     }])
-    .directive('pageDirectory', ['db', '$dialog', '$location', function (db, $dialog, $location) {
+    .directive('pageDirectory', ['db', '$dialog', '$location', '$resource', function (db, $dialog, $location, $resource) {
 
         return {
             restrict: 'E',
@@ -1111,13 +1112,14 @@ angular.module('cmsApp.directives', [])
                         .open()
                         .then(function (data) {
                             if (data) {
-                                console.log('new page, data', data);
+                                console.log('new page, data', data, 'db.pages', db.pages);
                                 var link = utils.urlify(data.name);
-                                new db.Page({ name: { de: data.name },
-                                              link: link });
-                                db.pushToServer(function () {
-                                    $location.path('/cms/page/' + link);
-                                });
+                                db.pages
+                                    .create({ name: { de: data.name },
+                                              link: link },
+                                            function (data) {
+                                                $location.path('/cms/page/' + link);
+                                            });
                             }
                         });
                 }
