@@ -773,7 +773,7 @@ angular.module('cmsApp.directives', [])
                                 if (!$scope.model) {
                                     $scope.model = [];
                                 }
-                                $scope.model.push(new db.Image(response.image));
+                                $scope.model.push(response.image);
                                 $scope.$$phase || $scope.$apply();
                             }
                         }
