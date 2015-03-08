@@ -446,6 +446,16 @@ function EditHomepageController($scope, db) {
     $scope.pages.unshift(undefined);
     $scope.pieces = db.pieces();
     $scope.homepage = db.homepage;
+    /* bs-tabs sometimes looses the selected index, so hack around that */
+    $scope.savedLayout = $scope.layout;
+
+    $scope.$watch(function () {
+        if (db.homepage.layout === undefined) {
+            db.homepage.layout = $scope.savedLayout;
+        } else {
+            $scope.savedLayout = db.homepage.layout;
+        }
+    });
 }
 EditHomepageController.$inject = ['$scope', 'db'];
 
