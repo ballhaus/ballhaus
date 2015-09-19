@@ -13,3 +13,4 @@ ballhaus*.dat
 config.json
 database-debug.log
 data
+public/sitemap.xml
