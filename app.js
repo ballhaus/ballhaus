@@ -444,7 +444,27 @@ app.get('/download-flickr-set/:setId', function (req, res) {
         });
 });
 
-app.get('/video', forwardJson.bind(this, 'http://vimeo.com/api/v2/' + config.vimeoUserName + '/videos.json'));
+app.get('/video',
+        function (req, res) {
+            var page = 1;
+            var videos = [];
+
+            function getNextPage() {
+                console.log('get page ', page, ' of the videos');
+                restler.get('http://vimeo.com/api/v2/' + config.vimeoUserName + '/videos.json?page=' + page++)
+                    .on('complete', function(data, response) {
+                        if (response.statusCode == 403) {
+                            res.send(videos);
+                        } else {
+                            videos = videos.concat(data);
+                            getNextPage();
+                        }
+                    });
+            }
+
+            getNextPage();
+        });
+
 app.get('/ticket-data',
         function (req, res) {
             var chunk_size = 200;
