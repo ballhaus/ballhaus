@@ -13,6 +13,7 @@ var siteConfig = {
             { name: 'akademie der autodidakten' },
             { name: 'project in/out' },
             { name: 'Festival Black Lux' },
-            { name: 'We are tomorrow' }
+            { name: 'We are tomorrow' },
+            { name: 'AFTER THE LAST SKY' }
           ]
 };
