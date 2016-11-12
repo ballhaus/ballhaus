@@ -189,9 +189,12 @@ function HomeController($scope, db, Page, schedule, linker) {
                 selectContent(homepage.box[start + 2])
             ]];
 
+        $scope.columns[0].push(selectContent(homepage.box[start + 3]));
+        $scope.columns[1].push(selectContent(homepage.box[start + 4]));
+
         if ([0, 2].indexOf(homepage.layout) !== -1) {
-            $scope.columns[0].push(selectContent(homepage.box[start + 3]));
-            $scope.columns[1].push(selectContent(homepage.box[start + 4]));
+            $scope.columns[0].push(selectContent(homepage.box[start + 5]));
+            $scope.columns[1].push(selectContent(homepage.box[start + 6]));
         }
 
         $scope.columns = $scope.columns.map(function (c) {
@@ -216,7 +219,10 @@ function HomeController($scope, db, Page, schedule, linker) {
     Page.marginals(cleanColumn({width: 121, height: 96}, [
         selectContent(homepage.marginal[0]),
         selectContent(homepage.marginal[1]),
-        selectContent(homepage.marginal[2])
+        selectContent(homepage.marginal[2]),
+        selectContent(homepage.marginal[3]),
+        selectContent(homepage.marginal[4]),
+        selectContent(homepage.marginal[5])
     ]));
     sendMessageToPhantom('pageLoaded', { path: window.location.pathname });
 }
