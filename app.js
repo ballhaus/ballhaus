@@ -472,7 +472,7 @@ app.get('/ticket-data',
             var tickets = [];
 
             function getNextPage() {
-                restler.get('https://api.reservix.de/api/1/sale/event?api-key=' + config.reservixApiKey + '&limit=' + chunk_size + '&page=' + page++)
+                restler.get('https://api.reservix.de/1/sale/event?api-key=' + config.reservixApiKey + '&limit=' + chunk_size + '&page=' + page++)
                     .on('complete', function (data) {
                         if (data.errorCode) {
                             console.log('error', data.errorCode, 'getting ticket data:', data.errorMessage);
