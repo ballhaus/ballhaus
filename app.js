@@ -486,13 +486,13 @@ app.get('/ticket-data',
                                 }
                                 res.send(tickets);
                             } else {
-                                setTimeout(getNextPage, 1000); /* Make sure we're not hitting Reservix too hard */
+                                setTimeout(getNextPage, 300); /* Make sure we're not hitting Reservix too hard */
                             }
                         }
                     });
             }
 
-            getNextPage();
+            setTimeout(getNextPage, 300); /* Rate limit Reservix requests */
         });
 
 var mailer = nodemailer.createTransport("Sendmail", "/usr/sbin/sendmail");
