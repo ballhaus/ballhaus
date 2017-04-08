@@ -465,6 +465,9 @@ app.get('/video',
             getNextPage();
         });
 
+var waitingForTickets = [];
+var cachedTickets;
+
 app.get('/ticket-data',
         function (req, res) {
             var chunk_size = 200;
@@ -476,7 +479,15 @@ app.get('/ticket-data',
                     .on('complete', function (data) {
                         if (data.errorCode) {
                             console.log('error', data.errorCode, 'getting ticket data:', data.errorMessage);
-                            res.send(data.errorCode, data.errorMessage);
+                            for (var i in waitingForTickets) {
+                                try {
+                                    waitingForTickets[i].send(data.errorCode, data.errorMessage);
+                                }
+                                catch (e) {
+                                    console.log('error', e, 'sending to client');
+                                }
+                            }
+                            waitingForTickets = [];
                         } else {
                             tickets = tickets.concat(data.data);
                             if (data.limit < chunk_size) {
@@ -484,15 +495,41 @@ app.get('/ticket-data',
                                     var ticket = tickets[i];
                                     ticket.date_time = ticket.startdate + ' ' + ticket.starttime + ':00';
                                 }
-                                res.send(tickets);
+                                requestingTickets = false;
+                                cachedTickets = tickets;
+                                console.log('got ticket data, sending to', waitingForTickets.length, 'clients');
+                                try {
+                                    for (var i in waitingForTickets) {
+                                        waitingForTickets[i].send(tickets);
+                                    }
+                                }
+                                catch (e) {
+                                    console.log('error', e, 'sending to client');
+                                }
+                                waitingForTickets = [];
+                                setTimeout(function () {
+                                    console.log('cached tickets timed out');
+                                    cachedTickets = null;
+                                }, 1000);
                             } else {
-                                setTimeout(getNextPage, 300); /* Make sure we're not hitting Reservix too hard */
+                                getNextPage();
                             }
                         }
                     });
             }
 
-            setTimeout(getNextPage, 300); /* Rate limit Reservix requests */
+            if (cachedTickets) {
+                console.log('got cached tickets');
+                res.send(tickets);
+            } else {
+                waitingForTickets.push(res);
+                if (waitingForTickets.length == 1) {
+                    console.log('requesting tickets from reservix');
+                    getNextPage();
+                } else {
+                    console.log('tickets are already being requested from reservix');
+                }
+            }
         });
 
 var mailer = nodemailer.createTransport("Sendmail", "/usr/sbin/sendmail");
