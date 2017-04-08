@@ -486,7 +486,7 @@ app.get('/ticket-data',
                                 }
                                 res.send(tickets);
                             } else {
-                                getNextPage();
+                                setTimeout(getNextPage, 1000); /* Make sure we're not hitting Reservix too hard */
                             }
                         }
                     });
