@@ -520,7 +520,7 @@ app.get('/ticket-data',
 
             if (cachedTickets) {
                 console.log('got cached tickets');
-                res.send(tickets);
+                res.send(cachedTickets);
             } else {
                 waitingForTickets.push(res);
                 if (waitingForTickets.length == 1) {
