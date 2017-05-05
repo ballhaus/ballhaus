@@ -479,15 +479,17 @@ app.get('/ticket-data',
                     .on('complete', function (data) {
                         if (data.errorCode) {
                             console.log('error', data.errorCode, 'getting ticket data:', data.errorMessage);
-                            for (var i in waitingForTickets) {
-                                try {
-                                    waitingForTickets[i].send(data.errorCode, data.errorMessage);
+                            setTimeout(function () {
+                                for (var i in waitingForTickets) {
+                                    try {
+                                        waitingForTickets[i].send(data.errorCode, data.errorMessage);
+                                    }
+                                    catch (e) {
+                                        console.log('error', e, 'sending to client');
+                                    }
                                 }
-                                catch (e) {
-                                    console.log('error', e, 'sending to client');
-                                }
-                            }
-                            waitingForTickets = [];
+                                waitingForTickets = [];
+                            }, 1000);
                         } else {
                             tickets = tickets.concat(data.data);
                             if (data.limit < chunk_size) {
