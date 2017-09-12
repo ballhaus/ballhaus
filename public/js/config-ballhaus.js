@@ -14,6 +14,7 @@ var siteConfig = {
             { name: 'project in/out' },
             { name: 'Festival Black Lux' },
             { name: 'We are tomorrow' },
-            { name: 'AFTER THE LAST SKY' }
+            { name: 'AFTER THE LAST SKY' },
+            { name: 'Republik Repair' }
           ]
 };
