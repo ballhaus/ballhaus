@@ -15,6 +15,7 @@ var siteConfig = {
             { name: 'Festival Black Lux' },
             { name: 'We are tomorrow' },
             { name: 'AFTER THE LAST SKY' },
-            { name: 'Republik Repair' }
+            { name: 'Republik Repair' },
+            { name: 'Asian Film Festival / Busy Bodies' }
           ]
 };
