@@ -16,6 +16,7 @@ var siteConfig = {
             { name: 'We are tomorrow' },
             { name: 'AFTER THE LAST SKY' },
             { name: 'Republik Repair' },
-            { name: 'Asian Film Festival / Busy Bodies' }
+            { name: 'Asian Film Festival / Busy Bodies' },
+            { name: 'PERMANENTE BEUNRUHIGUNG' }
           ]
 };
