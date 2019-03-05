@@ -17,6 +17,7 @@ var siteConfig = {
             { name: 'AFTER THE LAST SKY' },
             { name: 'Republik Repair' },
             { name: 'Asian Film Festival / Busy Bodies' },
-            { name: 'PERMANENTE BEUNRUHIGUNG' }
+            { name: 'PERMANENTE BEUNRUHIGUNG' },
+            { name: 'Postcolonial Poly Perspectives' }
           ]
 };
