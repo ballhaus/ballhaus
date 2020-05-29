@@ -19,7 +19,7 @@
         "super": "0.2.1",
         "http-get": "0.5.10",
         "flickrapi": "0.3.23",
-        "node-uuid": "1.4.1",
+        "node-uuid": "1.4.8",
         "read": "1.0.5",
         "nodemailer": "0.7.0",
         "xpath": "0.0.6",
