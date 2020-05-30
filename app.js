@@ -9,7 +9,7 @@ var events = require('events');
 var util = require('util');
 var express = require('express');
 var http = require('http');
-var express_dom = require('express-dom');
+var notemplate = require('express-notemplate');
 var Step = require('step');
 var gift = require('gift');
 var restler = require('restler');
@@ -50,7 +50,6 @@ app.configure(function() {
     app.use(express.bodyParser({ keepExtensions: true, uploadDir: __dirname + '/uploads' }));
     // nsg middleware has to run after bodyParser
     app.use(nsg.middleware({
-        compositor: 'jimp',
         src: [
           'public/img/menu-' + site + '/*.png',
           'public/img/service-bar/*.png',
@@ -127,7 +126,7 @@ app.configure(function() {
     app.use(app.router);
     app.set('views', process.cwd() + '/views');
     app.use('/uploads', express.static(__dirname + '/uploads'));
-    app.engine('html', express_dom().load());
+    app.engine('html', notemplate.__express);
     app.set('view engine', 'html');
 });
 
